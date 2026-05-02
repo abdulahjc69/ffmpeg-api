@@ -7,7 +7,6 @@ app.use(express.json());
 app.post("/video", (req, res) => {
   const rawText = req.body.text || "Hola mundo";
 
-  // limpiar texto problemático (acentos + símbolos)
   const text = rawText
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -16,7 +15,7 @@ app.post("/video", (req, res) => {
   const output = "output.mp4";
 
   const command = `
-    ffmpeg -y -loop 1 -i https://picsum.photos/1280/720 -t 2 \
+    ffmpeg -y -loop 1 -i https://images.unsplash.com/photo-1506744038136-46273834b3fb -t 2 \
     -vf "drawtext=text='${text}':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=(h-text_h)/2" \
     ${output}
   `;
