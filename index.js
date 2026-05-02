@@ -15,9 +15,7 @@ app.post("/video", (req, res) => {
   const output = "output.mp4";
 
   const command = `
-    ffmpeg -y -f lavfi -i color=c=black:s=1280x720:d=3 \
-    -vf "drawtext=text='${text}':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=(h-text_h)/2" \
-    ${output}
+  ffmpeg -y -loop 1 -i bg.png -t 5 -vf "drawtext=text='${text}':fontcolor=white:fontsize=60:x=(w-text_w)/2:y=(h-text_h)/2" -c:v libx264 -pix_fmt yuv420p ${output}
   `;
 
   exec(command, (error) => {
