@@ -6,6 +6,7 @@ app.use(express.json());
 
 app.post("/video", (req, res) => {
   const rawText = req.body.text || "Hola mundo";
+  const duration = req.body.duration || 5;
 
   const text = rawText
     .normalize("NFD")
@@ -15,7 +16,7 @@ app.post("/video", (req, res) => {
   const output = "output.mp4";
 
   const command = `
-  ffmpeg -y -loop 1 -framerate 1 -i bg.png -t 5 \
+  ffmpeg -y -loop 1 -framerate 1 -i bg.png -t ${duration} \
   -vf "scale=1280:720,drawtext=text='${text}':fontcolor=white:fontsize=70:borderw=3:bordercolor=black:x=(w-text_w)/2:y=h-150" \
   -c:v libx264 -pix_fmt yuv420p ${output}
   `;
