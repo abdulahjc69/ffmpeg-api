@@ -15,7 +15,7 @@ app.post("/video", (req, res) => {
   const output = "output.mp4";
 
   const command = `
-    ffmpeg -y -loop 1 -i https://images.unsplash.com/photo-1506744038136-46273834b3fb -t 2 \
+    ffmpeg -y -f lavfi -i color=c=black:s=1280x720:d=3 \
     -vf "drawtext=text='${text}':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=(h-text_h)/2" \
     ${output}
   `;
