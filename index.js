@@ -1,14 +1,16 @@
 const express = require("express");
 const { exec } = require("child_process");
-const fs = require("fs");
 
 const app = express();
 app.use(express.json());
 
 app.post("/video", (req, res) => {
-  const text = req.body.text || "Hola mundo";
+  let text = req.body.text || "Hola mundo";
 
-  const output = `video_${Date.now()}.mp4`;
+  // 🔥 ESCAPAR caracteres peligrosos
+  text = text.replace(/:/g, "\\:").replace(/'/g, "\\'");
+
+  const output = "output.mp4";
 
   const command = `
   ffmpeg -f lavfi -i color=c=black:s=1280x720:d=5 \
@@ -21,9 +23,7 @@ app.post("/video", (req, res) => {
       return res.status(500).send("Error generando video");
     }
 
-    res.download(output, () => {
-      fs.unlinkSync(output);
-    });
+    res.download(output);
   });
 });
 
