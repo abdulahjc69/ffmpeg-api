@@ -8,7 +8,7 @@ app.use(express.json());
 app.post("/video", (req, res) => {
   const text = req.body.text || "Hola mundo";
 
-  const output = "output.mp4";
+  const output = `video_${Date.now()}.mp4`;
 
   const command = `
   ffmpeg -f lavfi -i color=c=black:s=1280x720:d=5 \
@@ -21,7 +21,9 @@ app.post("/video", (req, res) => {
       return res.status(500).send("Error generando video");
     }
 
-    res.download(output);
+    res.download(output, () => {
+      fs.unlinkSync(output);
+    });
   });
 });
 
