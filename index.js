@@ -15,12 +15,14 @@ app.post("/video", (req, res) => {
   const output = "output.mp4";
 
   const command = `
-  ffmpeg -y -loop 1 -i bg.png -t 5 -vf "drawtext=text='${text}':fontcolor=white:fontsize=60:x=(w-text_w)/2:y=(h-text_h)/2" -c:v libx264 -pix_fmt yuv420p ${output}
+  ffmpeg -y -loop 1 -framerate 1 -i bg.png -t 5 \
+  -vf "scale=1280:720,drawtext=text='${text}':fontcolor=white:fontsize=60:x=(w-text_w)/2:y=(h-text_h)/2" \
+  -c:v libx264 -pix_fmt yuv420p ${output}
   `;
 
-  exec(command, (error) => {
+  exec(command, (error, stdout, stderr) => {
     if (error) {
-      console.error(error);
+      console.error("ERROR:", stderr);
       return res.status(500).send("Error generando video");
     }
 
