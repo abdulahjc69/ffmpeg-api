@@ -5,21 +5,25 @@ const app = express();
 app.use(express.json());
 
 app.post("/video", (req, res) => {
-  let text = req.body.text || "Hola mundo";
+  const rawText = req.body.text || "Hola mundo";
 
-  // 🔥 ESCAPAR caracteres peligrosos
-  text = text.replace(/:/g, "\\:").replace(/'/g, "\\'");
+  // limpiar texto problemático (acentos + símbolos)
+  const text = rawText
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9 .,!?]/g, "");
 
   const output = "output.mp4";
 
   const command = `
-  ffmpeg -f lavfi -i color=c=black:s=1280x720:d=5 \
-  -vf "drawtext=text='${text}':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=(h-text_h)/2" \
-  ${output}
+    ffmpeg -y -f lavfi -i color=c=black:s=1280x720:d=5 \
+    -vf "drawtext=text='${text}':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=(h-text_h)/2" \
+    ${output}
   `;
 
   exec(command, (error) => {
     if (error) {
+      console.error(error);
       return res.status(500).send("Error generando video");
     }
 
