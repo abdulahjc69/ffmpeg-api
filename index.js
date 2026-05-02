@@ -16,7 +16,7 @@ app.post("/video", (req, res) => {
 
   const command = `
   ffmpeg -y -loop 1 -framerate 1 -i bg.png -t 5 \
-  -vf "scale=1280:720,drawtext=text='${text}':fontcolor=white:fontsize=60:x=(w-text_w)/2:y=(h-text_h)/2" \
+  -vf "scale=1280:720,drawtext=text='${text}':fontcolor=white:fontsize=70:borderw=3:bordercolor=black:x=(w-text_w)/2:y=h-150" \
   -c:v libx264 -pix_fmt yuv420p ${output}
   `;
 
