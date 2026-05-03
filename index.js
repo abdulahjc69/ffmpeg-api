@@ -10,12 +10,12 @@ const app = express();
 app.use(express.json());
 
 // =============================
-// 🎬 GENERAR VIDEO (ESTABLE)
+// 🎬 GENERAR VIDEO (ULTRA LIGERO)
 // =============================
 app.post("/video", upload.single("image"), async (req, res) => {
   try {
     const text = req.body.text;
-    const duration = req.body.duration || 5;
+    const duration = 3; // 🔥 reducimos carga
 
     if (!text) {
       return res.status(400).send("Missing text");
@@ -23,20 +23,16 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     let imagePath = "bg.png";
 
-    // 📌 archivo directo
     if (req.file) {
       imagePath = req.file.path;
-    }
-
-    // 📌 URL (Cloudinary)
-    else if (req.body.image) {
+    } else if (req.body.image) {
       const response = await axios({
         url: req.body.image,
         method: "GET",
         responseType: "stream",
       });
 
-      const tempPath = "temp_image.png";
+      const tempPath = "temp.png";
       const writer = fs.createWriteStream(tempPath);
 
       response.data.pipe(writer);
@@ -49,25 +45,24 @@ app.post("/video", upload.single("image"), async (req, res) => {
       imagePath = tempPath;
     }
 
-    const output = "salida.mp4";
+    const output = "out.mp4";
 
-    // 🔥 TEXTO SEGURO (evita crash)
     const safeText = text
-      .substring(0, 100)
+      .substring(0, 50) // 🔥 aún más corto
       .replace(/:/g, "\\:")
       .replace(/'/g, "\\'")
       .replace(/\n/g, " ");
 
     const command = `
       ffmpeg -y -loop 1 -i ${imagePath} \
-      -vf "scale=720:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" \
-      -t ${duration} -preset ultrafast -crf 32 -pix_fmt yuv420p ${output}
+      -vf "scale=480:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=18:x=(w-text_w)/2:y=(h-text_h)/2" \
+      -t ${duration} -preset ultrafast -pix_fmt yuv420p ${output}
     `;
 
-    exec(command, (err) => {
+    exec(command, { timeout: 20000 }, (err) => {
       if (err) {
         console.error(err);
-        return res.status(500).send("Error generating video");
+        return res.status(500).send("FFmpeg crash");
       }
 
       res.sendFile(output, { root: __dirname });
@@ -76,64 +71,6 @@ app.post("/video", upload.single("image"), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
-  }
-});
-
-// =============================
-// 🔥 MERGE DE VIDEOS
-// =============================
-app.post("/merge", async (req, res) => {
-  const { videos } = req.body;
-
-  if (!videos || videos.length === 0) {
-    return res.status(400).send("No videos provided");
-  }
-
-  try {
-    const fileList = "files.txt";
-    const localFiles = [];
-
-    for (let i = 0; i < videos.length; i++) {
-      const url = videos[i];
-      const filePath = `video_${i}.mp4`;
-
-      const response = await axios({
-        url,
-        method: "GET",
-        responseType: "stream",
-      });
-
-      const writer = fs.createWriteStream(filePath);
-      response.data.pipe(writer);
-
-      await new Promise((resolve, reject) => {
-        writer.on("finish", resolve);
-        writer.on("error", reject);
-      });
-
-      localFiles.push(filePath);
-    }
-
-    const content = localFiles.map(v => `file '${v}'`).join("\n");
-    fs.writeFileSync(fileList, content);
-
-    const output = "final.mp4";
-
-    exec(
-      `ffmpeg -f concat -safe 0 -i ${fileList} -c copy ${output}`,
-      (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send("Error merging videos");
-        }
-
-        res.sendFile(output, { root: __dirname });
-      }
-    );
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error processing videos");
   }
 });
 
