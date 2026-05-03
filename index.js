@@ -10,11 +10,18 @@ const app = express();
 app.use(express.json());
 
 // =============================
-// 🎬 GENERAR VIDEO (OPTIMIZADO)
+// 🎬 GENERAR VIDEO (CORREGIDO TOTAL)
 // =============================
 app.post("/video", upload.single("image"), async (req, res) => {
-  const text = req.body.text;
+  let text = req.body.text || "";
   const duration = req.body.duration || 5;
+
+  // 🔥 limpiar texto (clave para evitar crash ffmpeg)
+  text = text
+    .replace(/'/g, "")
+    .replace(/\n/g, " ")
+    .replace(/\r/g, " ")
+    .substring(0, 120);
 
   const imagePath = req.file ? req.file.path : "bg.png";
 
@@ -24,7 +31,6 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
   const output = "salida.mp4";
 
-  // 🔥 FFmpeg optimizado (clave para evitar crash)
   const command = `
     ffmpeg -y -loop 1 -i ${imagePath} \
     -vf "scale=720:-1,drawtext=text='${text}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" \
@@ -33,7 +39,7 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
   exec(command, (err) => {
     if (err) {
-      console.error(err);
+      console.error("FFMPEG ERROR:", err);
       return res.status(500).send("Error generating video");
     }
 
@@ -85,7 +91,7 @@ app.post("/merge", async (req, res) => {
       `ffmpeg -f concat -safe 0 -i ${fileList} -c copy ${output}`,
       (err) => {
         if (err) {
-          console.error(err);
+          console.error("MERGE ERROR:", err);
           return res.status(500).send("Error merging videos");
         }
 
@@ -94,7 +100,7 @@ app.post("/merge", async (req, res) => {
     );
 
   } catch (error) {
-    console.error(error);
+    console.error("DOWNLOAD ERROR:", error);
     res.status(500).send("Error processing videos");
   }
 });
