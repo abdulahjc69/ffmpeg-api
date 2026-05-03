@@ -10,13 +10,12 @@ const app = express();
 app.use(express.json());
 
 // =============================
-// 🎬 GENERAR VIDEO (CORREGIDO)
+// 🎬 GENERAR VIDEO (OPTIMIZADO)
 // =============================
 app.post("/video", upload.single("image"), async (req, res) => {
   const text = req.body.text;
   const duration = req.body.duration || 5;
 
-  // 📌 imagen subida desde n8n
   const imagePath = req.file ? req.file.path : "bg.png";
 
   if (!text) {
@@ -25,10 +24,11 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
   const output = "salida.mp4";
 
+  // 🔥 FFmpeg optimizado (clave para evitar crash)
   const command = `
     ffmpeg -y -loop 1 -i ${imagePath} \
-    -vf "drawtext=text='${text}':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=(h-text_h)/2" \
-    -t ${duration} -pix_fmt yuv420p ${output}
+    -vf "scale=720:-1,drawtext=text='${text}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" \
+    -t ${duration} -preset ultrafast -crf 32 -pix_fmt yuv420p ${output}
   `;
 
   exec(command, (err) => {
