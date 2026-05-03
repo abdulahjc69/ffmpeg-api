@@ -10,41 +10,67 @@ const app = express();
 app.use(express.json());
 
 // =============================
-// 🎬 GENERAR VIDEO (CORREGIDO TOTAL)
+// 🎬 GENERAR VIDEO (FINAL FUNCIONAL)
 // =============================
 app.post("/video", upload.single("image"), async (req, res) => {
-  let text = req.body.text || "";
-  const duration = req.body.duration || 5;
+  try {
+    const text = req.body.text;
+    const duration = req.body.duration || 5;
 
-  // 🔥 limpiar texto (clave para evitar crash ffmpeg)
-  text = text
-    .replace(/'/g, "")
-    .replace(/\n/g, " ")
-    .replace(/\r/g, " ")
-    .substring(0, 120);
-
-  const imagePath = req.file ? req.file.path : "bg.png";
-
-  if (!text) {
-    return res.status(400).send("Missing text");
-  }
-
-  const output = "salida.mp4";
-
-  const command = `
-    ffmpeg -y -loop 1 -i ${imagePath} \
-    -vf "scale=720:-1,drawtext=text='${text}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" \
-    -t ${duration} -preset ultrafast -crf 32 -pix_fmt yuv420p ${output}
-  `;
-
-  exec(command, (err) => {
-    if (err) {
-      console.error("FFMPEG ERROR:", err);
-      return res.status(500).send("Error generating video");
+    if (!text) {
+      return res.status(400).send("Missing text");
     }
 
-    res.sendFile(output, { root: __dirname });
-  });
+    let imagePath = "bg.png";
+
+    // 📌 Si viene archivo desde n8n
+    if (req.file) {
+      imagePath = req.file.path;
+    }
+
+    // 📌 Si viene URL (Cloudinary)
+    else if (req.body.image) {
+      const response = await axios({
+        url: req.body.image,
+        method: "GET",
+        responseType: "stream",
+      });
+
+      const tempPath = "temp_image.png";
+      const writer = fs.createWriteStream(tempPath);
+
+      response.data.pipe(writer);
+
+      await new Promise((resolve, reject) => {
+        writer.on("finish", resolve);
+        writer.on("error", reject);
+      });
+
+      imagePath = tempPath;
+    }
+
+    const output = "salida.mp4";
+
+    // 🔥 FFmpeg optimizado para Railway
+    const command = `
+      ffmpeg -y -loop 1 -i ${imagePath} \
+      -vf "scale=720:-1,drawtext=text='${text.replace(/:/g, "\\:").replace(/'/g, "\\'")}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" \
+      -t ${duration} -preset ultrafast -crf 32 -pix_fmt yuv420p ${output}
+    `;
+
+    exec(command, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send("Error generating video");
+      }
+
+      res.sendFile(output, { root: __dirname });
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
 });
 
 // =============================
@@ -91,7 +117,7 @@ app.post("/merge", async (req, res) => {
       `ffmpeg -f concat -safe 0 -i ${fileList} -c copy ${output}`,
       (err) => {
         if (err) {
-          console.error("MERGE ERROR:", err);
+          console.error(err);
           return res.status(500).send("Error merging videos");
         }
 
@@ -100,7 +126,7 @@ app.post("/merge", async (req, res) => {
     );
 
   } catch (error) {
-    console.error("DOWNLOAD ERROR:", error);
+    console.error(error);
     res.status(500).send("Error processing videos");
   }
 });
