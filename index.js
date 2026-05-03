@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 
 // =============================
-// 🎬 GENERAR VIDEO (FINAL FUNCIONAL)
+// 🎬 GENERAR VIDEO (ESTABLE)
 // =============================
 app.post("/video", upload.single("image"), async (req, res) => {
   try {
@@ -23,12 +23,12 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     let imagePath = "bg.png";
 
-    // 📌 Si viene archivo desde n8n
+    // 📌 archivo directo
     if (req.file) {
       imagePath = req.file.path;
     }
 
-    // 📌 Si viene URL (Cloudinary)
+    // 📌 URL (Cloudinary)
     else if (req.body.image) {
       const response = await axios({
         url: req.body.image,
@@ -51,10 +51,16 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     const output = "salida.mp4";
 
-    // 🔥 FFmpeg optimizado para Railway
+    // 🔥 TEXTO SEGURO (evita crash)
+    const safeText = text
+      .substring(0, 100)
+      .replace(/:/g, "\\:")
+      .replace(/'/g, "\\'")
+      .replace(/\n/g, " ");
+
     const command = `
       ffmpeg -y -loop 1 -i ${imagePath} \
-      -vf "scale=720:-1,drawtext=text='${text.replace(/:/g, "\\:").replace(/'/g, "\\'")}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" \
+      -vf "scale=720:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" \
       -t ${duration} -preset ultrafast -crf 32 -pix_fmt yuv420p ${output}
     `;
 
