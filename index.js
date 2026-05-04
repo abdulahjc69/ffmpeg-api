@@ -3,11 +3,19 @@ const fs = require("fs");
 const { exec } = require("child_process");
 const axios = require("axios");
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
 
 const upload = multer({ dest: "uploads/" });
 
 const app = express();
 app.use(express.json());
+
+// CLOUDINARY CONFIG
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // HEALTHCHECK
 app.get("/", (req, res) => {
@@ -63,13 +71,30 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     const command = `ffmpeg -y -loop 1 -i ${imagePath} -vf "scale=480:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=18:x=(w-text_w)/2:y=(h-text_h)/2" -t ${duration} -preset ultrafast -pix_fmt yuv420p ${output}`;
 
-    exec(command, { timeout: 20000 }, (err) => {
+    exec(command, { timeout: 20000 }, async (err) => {
       if (err) {
         console.error(err);
         return res.status(500).send("FFmpeg crash");
       }
 
-      res.sendFile(output, { root: __dirname });
+      try {
+        const result = await cloudinary.uploader.upload(output, {
+          resource_type: "video",
+        });
+
+        // borrar archivos temporales
+        fs.unlinkSync(output);
+        if (req.file) fs.unlinkSync(req.file.path);
+        if (fs.existsSync("temp.png")) fs.unlinkSync("temp.png");
+
+        return res.json({
+          url: result.secure_url,
+        });
+
+      } catch (uploadError) {
+        console.error(uploadError);
+        return res.status(500).send("Upload failed");
+      }
     });
 
   } catch (error) {
@@ -78,7 +103,6 @@ app.post("/video", upload.single("image"), async (req, res) => {
   }
 });
 
-// ⚠️ IMPORTANTE
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
