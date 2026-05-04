@@ -39,8 +39,11 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     let imagePath = "bg.png";
 
+    // Si subes imagen
     if (req.file) {
       imagePath = req.file.path;
+
+    // Si pasas URL
     } else if (req.body.image) {
       const response = await axios({
         url: req.body.image,
@@ -69,11 +72,12 @@ app.post("/video", upload.single("image"), async (req, res) => {
       .replace(/'/g, "\\'")
       .replace(/\n/g, " ");
 
-    const command = `ffmpeg -y -loop 1 -i ${imagePath} -vf "scale=480:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=18:x=(w-text_w)/2:y=(h-text_h)/2" -t ${duration} -preset ultrafast -pix_fmt yuv420p ${output}`;
+    // 🔥 CORRECCIÓN CLAVE: fuente explícita
+    const command = `ffmpeg -y -loop 1 -i ${imagePath} -vf "scale=480:-1,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='${safeText}':fontcolor=white:fontsize=24:x=(w-text_w)/2:y=(h-text_h)/2" -t ${duration} -preset ultrafast -pix_fmt yuv420p ${output}`;
 
-    exec(command, { timeout: 20000 }, async (err) => {
+    exec(command, { timeout: 30000 }, async (err, stdout, stderr) => {
       if (err) {
-        console.error(err);
+        console.error("FFMPEG ERROR:", stderr);
         return res.status(500).send("FFmpeg crash");
       }
 
@@ -82,9 +86,9 @@ app.post("/video", upload.single("image"), async (req, res) => {
           resource_type: "video",
         });
 
-        // borrar archivos temporales
-        fs.unlinkSync(output);
-        if (req.file) fs.unlinkSync(req.file.path);
+        // limpiar archivos
+        if (fs.existsSync(output)) fs.unlinkSync(output);
+        if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
         if (fs.existsSync("temp.png")) fs.unlinkSync("temp.png");
 
         return res.json({
@@ -92,13 +96,13 @@ app.post("/video", upload.single("image"), async (req, res) => {
         });
 
       } catch (uploadError) {
-        console.error(uploadError);
+        console.error("UPLOAD ERROR:", uploadError);
         return res.status(500).send("Upload failed");
       }
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("SERVER ERROR:", error);
     res.status(500).send("Server error");
   }
 });
