@@ -9,8 +9,13 @@ const upload = multer({ dest: "uploads/" });
 const app = express();
 app.use(express.json());
 
+// 🔥 RUTA BASE (ESTO ARREGLA EL ERROR)
+app.get("/", (req, res) => {
+  res.send("OK");
+});
+
 // =============================
-// 🎬 GENERAR VIDEO (ESTABLE RAILWAY)
+// 🎬 GENERAR VIDEO
 // =============================
 app.post("/video", upload.single("image"), async (req, res) => {
   try {
@@ -23,13 +28,9 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     let imagePath = "bg.png";
 
-    // 🔥 CASO 1: imagen subida
     if (req.file) {
       imagePath = req.file.path;
-    }
-
-    // 🔥 CASO 2: imagen desde URL (Cloudinary)
-    else if (req.body.image) {
+    } else if (req.body.image) {
       const response = await axios({
         url: req.body.image,
         method: "GET",
@@ -51,9 +52,8 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     const output = "out.mp4";
 
-    // 🔥 texto seguro para FFmpeg
     const safeText = text
-      .substring(0, 60)
+      .substring(0, 50)
       .replace(/:/g, "\\:")
       .replace(/'/g, "\\'")
       .replace(/\n/g, " ");
@@ -66,7 +66,7 @@ app.post("/video", upload.single("image"), async (req, res) => {
 
     exec(command, { timeout: 20000 }, (err) => {
       if (err) {
-        console.error("FFmpeg error:", err);
+        console.error(err);
         return res.status(500).send("FFmpeg crash");
       }
 
@@ -74,23 +74,13 @@ app.post("/video", upload.single("image"), async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Server error:", error);
+    console.error(error);
     res.status(500).send("Server error");
   }
 });
 
 // =============================
-// 🔥 HEALTH CHECK (CLAVE PARA RAILWAY)
-// =============================
-app.get("/", (req, res) => {
-  res.send("OK");
-});
-
-// =============================
-// 🚀 PUERTO CORRECTO
-// =============================
-const PORT = process.env.PORT;
-
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
