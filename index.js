@@ -9,19 +9,17 @@ const upload = multer({ dest: "uploads/" });
 const app = express();
 app.use(express.json());
 
-// 🔥 HEALTHCHECK (Railway necesita esto rápido)
+// HEALTHCHECK
 app.get("/", (req, res) => {
   res.status(200).send("OK");
 });
 
-// 🔥 TEST RÁPIDO
+// TEST
 app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
-// =============================
-// 🎬 GENERAR VIDEO
-// =============================
+// VIDEO
 app.post("/video", upload.single("image"), async (req, res) => {
   try {
     const text = req.body.text;
@@ -63,11 +61,7 @@ app.post("/video", upload.single("image"), async (req, res) => {
       .replace(/'/g, "\\'")
       .replace(/\n/g, " ");
 
-    const command = `
-      ffmpeg -y -loop 1 -i ${imagePath} \
-      -vf "scale=480:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=18:x=(w-text_w)/2:y=(h-text_h)/2" \
-      -t ${duration} -preset ultrafast -pix_fmt yuv420p ${output}
-    `;
+    const command = `ffmpeg -y -loop 1 -i ${imagePath} -vf "scale=480:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=18:x=(w-text_w)/2:y=(h-text_h)/2" -t ${duration} -preset ultrafast -pix_fmt yuv420p ${output}`;
 
     exec(command, { timeout: 20000 }, (err) => {
       if (err) {
@@ -84,11 +78,9 @@ app.post("/video", upload.single("image"), async (req, res) => {
   }
 });
 
-// =============================
-// 🚨 CLAVE: Railway necesita esto EXACTO
-// =============================
-const PORT = process.env.PORT;
+// ⚠️ IMPORTANTE
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log("Server running on port", PORT);
+  console.log(`Server running on port ${PORT}`);
 });
