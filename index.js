@@ -9,7 +9,7 @@ const upload = multer({ dest: "uploads/" });
 const app = express();
 app.use(express.json());
 
-// 🔥 RUTA BASE (ESTO ARREGLA EL ERROR)
+// ✅ RUTA BASE (para que Railway responda OK)
 app.get("/", (req, res) => {
   res.send("OK");
 });
@@ -80,7 +80,10 @@ app.post("/video", upload.single("image"), async (req, res) => {
 });
 
 // =============================
+// 🔥 IMPORTANTE PARA RAILWAY
+// =============================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log("Server running on port", PORT);
 });
