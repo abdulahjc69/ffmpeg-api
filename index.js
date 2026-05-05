@@ -1,14 +1,14 @@
 const express = require("express");
-const fs = require("fs");
-const { exec } = require("child_process");
 const axios = require("axios");
-const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+const { spawn } = require("child_process");
 const cloudinary = require("cloudinary").v2;
 
-const upload = multer({ dest: "uploads/" });
-
 const app = express();
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -16,73 +16,120 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-app.get("/", (req, res) => res.send("OK"));
-app.get("/ping", (req, res) => res.send("pong"));
+async function downloadFile(url, outputPath) {
+  const response = await axios({
+    method: "GET",
+    url,
+    responseType: "stream",
+  });
 
-app.post("/video", upload.none(), async (req, res) => {
+  return new Promise((resolve, reject) => {
+    const writer = fs.createWriteStream(outputPath);
+    response.data.pipe(writer);
+    writer.on("finish", resolve);
+    writer.on("error", reject);
+  });
+}
+
+function runFfmpeg(args) {
+  return new Promise((resolve, reject) => {
+    const ffmpeg = spawn("ffmpeg", args);
+
+    let stderr = "";
+
+    ffmpeg.stderr.on("data", (data) => {
+      stderr += data.toString();
+    });
+
+    ffmpeg.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(stderr));
+      }
+    });
+  });
+}
+
+function cleanText(text) {
+  return String(text || "")
+    .replace(/"/g, "")
+    .replace(/'/g, "")
+    .replace(/:/g, "\\:")
+    .replace(/\n/g, " ")
+    .trim();
+}
+
+app.get("/", (req, res) => {
+  res.json({ status: "ok", message: "FFmpeg API running" });
+});
+
+app.post("/video", async (req, res) => {
   try {
-    const text = req.body.text;
     const imageUrl = req.body.image;
     const audioUrl = req.body.audio;
+    const text = cleanText(req.body.text);
+    const duration = Number(req.body.duration || 5);
 
-    if (!text || !imageUrl || !audioUrl) {
-      return res.status(400).send("Missing data");
+    if (!imageUrl || !audioUrl) {
+      return res.status(400).json({
+        error: "Missing image or audio",
+      });
     }
 
-    const imagePath = "image.png";
-    const audioPath = "audio.mp3";
-    const output = "out.mp4";
+    const workDir = "/tmp";
+    const imagePath = path.join(workDir, `image_${Date.now()}.png`);
+    const audioPath = path.join(workDir, `audio_${Date.now()}.mp3`);
+    const outputPath = path.join(workDir, `video_${Date.now()}.mp4`);
 
-    const imgRes = await axios({ url: imageUrl, responseType: "stream" });
-    const imgWriter = fs.createWriteStream(imagePath);
-    imgRes.data.pipe(imgWriter);
-    await new Promise((resolve, reject) => {
-      imgWriter.on("finish", resolve);
-      imgWriter.on("error", reject);
+    await downloadFile(imageUrl, imagePath);
+    await downloadFile(audioUrl, audioPath);
+
+    const drawText = `drawtext=text='${text}':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.45:boxborderw=20`;
+
+    await runFfmpeg([
+      "-y",
+      "-loop",
+      "1",
+      "-i",
+      imagePath,
+      "-i",
+      audioPath,
+      "-t",
+      String(duration),
+      "-vf",
+      `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,${drawText}`,
+      "-c:v",
+      "libx264",
+      "-c:a",
+      "aac",
+      "-pix_fmt",
+      "yuv420p",
+      "-shortest",
+      outputPath,
+    ]);
+
+    const uploadResult = await cloudinary.uploader.upload(outputPath, {
+      resource_type: "video",
+      folder: "youtube/videos",
     });
 
-    const audioRes = await axios({ url: audioUrl, responseType: "stream" });
-    const audioWriter = fs.createWriteStream(audioPath);
-    audioRes.data.pipe(audioWriter);
-    await new Promise((resolve, reject) => {
-      audioWriter.on("finish", resolve);
-      audioWriter.on("error", reject);
+    fs.unlinkSync(imagePath);
+    fs.unlinkSync(audioPath);
+    fs.unlinkSync(outputPath);
+
+    return res.json({
+      success: true,
+      video_url: uploadResult.secure_url,
     });
-
-    const safeText = text
-      .substring(0, 80)
-      .replace(/\\/g, "\\\\")
-      .replace(/:/g, "\\:")
-      .replace(/'/g, "\\'")
-      .replace(/\n/g, " ");
-
-    const command = `ffmpeg -y -loop 1 -i ${imagePath} -i ${audioPath} -vf "scale=720:-1,drawtext=text='${safeText}':fontcolor=white:fontsize=28:x=(w-text_w)/2:y=(h-text_h)/2" -c:v libx264 -c:a aac -shortest -pix_fmt yuv420p ${output}`;
-
-    exec(command, async (err, stdout, stderr) => {
-      console.log(stderr);
-
-      if (err) {
-        return res.status(500).send(stderr);
-      }
-
-      const result = await cloudinary.uploader.upload(output, {
-        resource_type: "video",
-      });
-
-      [imagePath, audioPath, output].forEach((file) => {
-        if (fs.existsSync(file)) fs.unlinkSync(file);
-      });
-
-      return res.json({ url: result.secure_url });
-    });
-  } catch (e) {
-    console.error(e);
-    return res.status(500).send("Error");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error.message);
   }
 });
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("Server running");
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
