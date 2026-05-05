@@ -42,26 +42,20 @@ function runFfmpeg(args) {
     });
 
     ffmpeg.on("close", (code) => {
-      if (code === 0) {
-        resolve();
-      } else {
-        reject(new Error(stderr));
-      }
+      if (code === 0) resolve();
+      else reject(new Error(stderr));
     });
   });
 }
 
 function cleanText(text) {
   return String(text || "")
-    .replace(/"/g, "")
-    .replace(/'/g, "")
-    .replace(/:/g, "\\:")
     .replace(/\n/g, " ")
     .trim();
 }
 
 app.get("/", (req, res) => {
-  res.json({ status: "ok", message: "FFmpeg API running" });
+  res.json({ status: "ok" });
 });
 
 app.post("/video", async (req, res) => {
@@ -72,64 +66,60 @@ app.post("/video", async (req, res) => {
     const duration = Number(req.body.duration || 5);
 
     if (!imageUrl || !audioUrl) {
-      return res.status(400).json({
-        error: "Missing image or audio",
-      });
+      return res.status(400).json({ error: "Missing image or audio" });
     }
 
     const workDir = "/tmp";
-    const imagePath = path.join(workDir, `image_${Date.now()}.png`);
-    const audioPath = path.join(workDir, `audio_${Date.now()}.mp3`);
-    const outputPath = path.join(workDir, `video_${Date.now()}.mp4`);
+    const timestamp = Date.now();
+
+    const imagePath = path.join(workDir, `image_${timestamp}.png`);
+    const audioPath = path.join(workDir, `audio_${timestamp}.mp3`);
+    const textPath = path.join(workDir, `text_${timestamp}.txt`);
+    const outputPath = path.join(workDir, `video_${timestamp}.mp4`);
 
     await downloadFile(imageUrl, imagePath);
     await downloadFile(audioUrl, audioPath);
 
-    const drawText = `drawtext=text='${text}':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.45:boxborderw=20`;
+    fs.writeFileSync(textPath, text, "utf8");
 
     await runFfmpeg([
       "-y",
-      "-loop",
-      "1",
-      "-i",
-      imagePath,
-      "-i",
-      audioPath,
-      "-t",
-      String(duration),
+      "-loop", "1",
+      "-i", imagePath,
+      "-i", audioPath,
+      "-t", String(duration),
       "-vf",
-      `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,${drawText}`,
-      "-c:v",
-      "libx264",
-      "-c:a",
-      "aac",
-      "-pix_fmt",
-      "yuv420p",
+      `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,drawtext=textfile=${textPath}:fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.45:boxborderw=20`,
+      "-c:v", "libx264",
+      "-c:a", "aac",
+      "-pix_fmt", "yuv420p",
       "-shortest",
       outputPath,
     ]);
 
-    const uploadResult = await cloudinary.uploader.upload(outputPath, {
+    const upload = await cloudinary.uploader.upload(outputPath, {
       resource_type: "video",
       folder: "youtube/videos",
     });
 
     fs.unlinkSync(imagePath);
     fs.unlinkSync(audioPath);
+    fs.unlinkSync(textPath);
     fs.unlinkSync(outputPath);
 
-    return res.json({
+    res.json({
       success: true,
-      video_url: uploadResult.secure_url,
+      video_url: upload.secure_url,
     });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error.message);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
   }
 });
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log("Server running on port", PORT);
 });
