@@ -1,7 +1,6 @@
 const express = require("express");
 const axios = require("axios");
 const fs = require("fs");
-const path = require("path");
 const { spawn } = require("child_process");
 const cloudinary = require("cloudinary").v2;
 
@@ -45,8 +44,8 @@ function runFfmpeg(args) {
     ffmpeg.on("error", reject);
 
     ffmpeg.on("close", (code) => {
-      if (code === 0) return resolve();
-      return reject(new Error(stderr || `FFmpeg exited with code ${code}`));
+      if (code === 0) resolve();
+      else reject(new Error(stderr || `FFmpeg exited with code ${code}`));
     });
   });
 }
@@ -58,6 +57,12 @@ function cleanText(value) {
     .replace(/'/g, "")
     .replace(/"/g, "")
     .trim();
+}
+
+function safeDelete(files) {
+  files.forEach((file) => {
+    if (fs.existsSync(file)) fs.unlinkSync(file);
+  });
 }
 
 app.get("/", (req, res) => {
@@ -92,10 +97,8 @@ app.post("/video", async (req, res) => {
       "-framerate", "25",
       "-i", imagePath,
       "-i", audioPath,
-
       "-filter_complex",
       `[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,drawtext=textfile='${textPath}':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.55:boxborderw=20[v];[1:a]apad,atrim=0:${duration}[a]`,
-
       "-map", "[v]",
       "-map", "[a]",
       "-t", String(duration),
@@ -126,9 +129,69 @@ app.post("/video", async (req, res) => {
       details: error.message,
     });
   } finally {
-    [imagePath, audioPath, textPath, outputPath].forEach((file) => {
-      if (fs.existsSync(file)) fs.unlinkSync(file);
+    safeDelete([imagePath, audioPath, textPath, outputPath]);
+  }
+});
+
+app.post("/merge", async (req, res) => {
+  const timestamp = Date.now();
+
+  const videos = Array.isArray(req.body.videos) ? req.body.videos : [];
+  const downloadedFiles = [];
+  const listPath = `/tmp/list_${timestamp}.txt`;
+  const outputPath = `/tmp/final_${timestamp}.mp4`;
+
+  try {
+    if (!videos.length) {
+      return res.status(400).json({ error: "Missing videos array" });
+    }
+
+    for (let i = 0; i < videos.length; i++) {
+      const videoPath = `/tmp/clip_${timestamp}_${i}.mp4`;
+      await downloadFile(videos[i], videoPath);
+      downloadedFiles.push(videoPath);
+    }
+
+    const listContent = downloadedFiles
+      .map((file) => `file '${file}'`)
+      .join("\n");
+
+    fs.writeFileSync(listPath, listContent, "utf8");
+
+    await runFfmpeg([
+      "-y",
+      "-f", "concat",
+      "-safe", "0",
+      "-i", listPath,
+      "-c:v", "libx264",
+      "-preset", "ultrafast",
+      "-threads", "2",
+      "-c:a", "aac",
+      "-b:a", "128k",
+      "-pix_fmt", "yuv420p",
+      "-movflags", "+faststart",
+      outputPath,
+    ]);
+
+    const upload = await cloudinary.uploader.upload(outputPath, {
+      resource_type: "video",
+      folder: "youtube/finales",
     });
+
+    return res.json({
+      success: true,
+      final_video_url: upload.secure_url,
+      clips_merged: videos.length,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Merge failed",
+      details: error.message,
+    });
+  } finally {
+    safeDelete([...downloadedFiles, listPath, outputPath]);
   }
 });
 
