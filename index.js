@@ -65,20 +65,28 @@ function safeDelete(files) {
   });
 }
 
+function uploadLargeVideo(filePath, folder) {
+  return cloudinary.uploader.upload_large(filePath, {
+    resource_type: "video",
+    folder,
+    chunk_size: 6000000,
+  });
+}
+
 function getKenBurnsFilter(duration, textPath) {
-  const fps = 25;
+  const fps = 24;
   const frames = Math.max(1, Math.ceil(duration * fps));
   const fadeOutStart = Math.max(0, duration - 0.35);
   const audioFadeOutStart = Math.max(0, duration - 0.35);
 
   return `
 [0:v]
-scale=1200:2134:force_original_aspect_ratio=increase,
-crop=1200:2134,
-zoompan=z='min(zoom+0.0015,1.12)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=1080x1920:fps=${fps},
+scale=900:1600:force_original_aspect_ratio=increase,
+crop=900:1600,
+zoompan=z='min(zoom+0.0012,1.10)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=720x1280:fps=${fps},
 trim=duration=${duration},
 setpts=PTS-STARTPTS,
-drawtext=textfile='${textPath}':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.55:boxborderw=20,
+drawtext=textfile='${textPath}':fontcolor=white:fontsize=34:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.55:boxborderw=16,
 fade=t=in:st=0:d=0.20,
 fade=t=out:st=${fadeOutStart}:d=0.35
 [v];
@@ -124,7 +132,7 @@ app.post("/video", async (req, res) => {
     await runFfmpeg([
       "-y",
       "-loop", "1",
-      "-framerate", "25",
+      "-framerate", "24",
       "-i", imagePath,
       "-i", audioPath,
 
@@ -135,19 +143,17 @@ app.post("/video", async (req, res) => {
 
       "-t", String(duration),
       "-c:v", "libx264",
-      "-preset", "ultrafast",
+      "-preset", "veryfast",
+      "-crf", "30",
       "-threads", "2",
       "-c:a", "aac",
-      "-b:a", "128k",
+      "-b:a", "96k",
       "-pix_fmt", "yuv420p",
       "-movflags", "+faststart",
       outputPath,
     ]);
 
-    const upload = await cloudinary.uploader.upload(outputPath, {
-      resource_type: "video",
-      folder: "youtube/videos",
-    });
+    const upload = await uploadLargeVideo(outputPath, "youtube/videos");
 
     return res.json({
       success: true,
@@ -196,19 +202,17 @@ app.post("/merge", async (req, res) => {
       "-safe", "0",
       "-i", listPath,
       "-c:v", "libx264",
-      "-preset", "ultrafast",
+      "-preset", "veryfast",
+      "-crf", "30",
       "-threads", "2",
       "-c:a", "aac",
-      "-b:a", "128k",
+      "-b:a", "96k",
       "-pix_fmt", "yuv420p",
       "-movflags", "+faststart",
       outputPath,
     ]);
 
-    const upload = await cloudinary.uploader.upload(outputPath, {
-      resource_type: "video",
-      folder: "youtube/finales",
-    });
+    const upload = await uploadLargeVideo(outputPath, "youtube/finales");
 
     return res.json({
       success: true,
