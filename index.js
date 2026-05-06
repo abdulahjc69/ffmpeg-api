@@ -50,6 +50,23 @@ function runFfmpeg(args) {
   });
 }
 
+function uploadLargeVideo(filePath, folder) {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_large(
+      filePath,
+      {
+        resource_type: "video",
+        folder,
+        chunk_size: 6000000,
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+  });
+}
+
 function cleanText(value) {
   return String(value || "")
     .replace(/\r?\n|\r/g, " ")
@@ -62,14 +79,6 @@ function cleanText(value) {
 function safeDelete(files) {
   files.forEach((file) => {
     if (fs.existsSync(file)) fs.unlinkSync(file);
-  });
-}
-
-function uploadLargeVideo(filePath, folder) {
-  return cloudinary.uploader.upload_large(filePath, {
-    resource_type: "video",
-    folder,
-    chunk_size: 6000000,
   });
 }
 
@@ -135,12 +144,9 @@ app.post("/video", async (req, res) => {
       "-framerate", "24",
       "-i", imagePath,
       "-i", audioPath,
-
       "-filter_complex", filterComplex,
-
       "-map", "[v]",
       "-map", "[a]",
-
       "-t", String(duration),
       "-c:v", "libx264",
       "-preset", "veryfast",
@@ -157,7 +163,10 @@ app.post("/video", async (req, res) => {
 
     return res.json({
       success: true,
-      video_url: upload.secure_url,
+      video_url: upload.secure_url || upload.url,
+      public_id: upload.public_id,
+      bytes: upload.bytes,
+      duration: upload.duration,
     });
 
   } catch (error) {
@@ -216,8 +225,11 @@ app.post("/merge", async (req, res) => {
 
     return res.json({
       success: true,
-      final_video_url: upload.secure_url,
+      final_video_url: upload.secure_url || upload.url,
+      public_id: upload.public_id,
       clips_merged: videos.length,
+      bytes: upload.bytes,
+      duration: upload.duration,
     });
 
   } catch (error) {
