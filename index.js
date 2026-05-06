@@ -65,6 +65,33 @@ function safeDelete(files) {
   });
 }
 
+function getKenBurnsFilter(duration, textPath) {
+  const fps = 25;
+  const frames = Math.max(1, Math.ceil(duration * fps));
+  const fadeOutStart = Math.max(0, duration - 0.35);
+  const audioFadeOutStart = Math.max(0, duration - 0.35);
+
+  return `
+[0:v]
+scale=1200:2134:force_original_aspect_ratio=increase,
+crop=1200:2134,
+zoompan=z='min(zoom+0.0015,1.12)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${frames}:s=1080x1920:fps=${fps},
+trim=duration=${duration},
+setpts=PTS-STARTPTS,
+drawtext=textfile='${textPath}':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.55:boxborderw=20,
+fade=t=in:st=0:d=0.20,
+fade=t=out:st=${fadeOutStart}:d=0.35
+[v];
+[1:a]
+apad,
+atrim=0:${duration},
+asetpts=PTS-STARTPTS,
+afade=t=in:st=0:d=0.15,
+afade=t=out:st=${audioFadeOutStart}:d=0.35
+[a]
+`.replace(/\s+/g, "");
+}
+
 app.get("/", (req, res) => {
   res.json({ status: "ok", service: "ffmpeg-api" });
 });
@@ -89,7 +116,10 @@ app.post("/video", async (req, res) => {
 
     await downloadFile(imageUrl, imagePath);
     await downloadFile(audioUrl, audioPath);
+
     fs.writeFileSync(textPath, text || " ", "utf8");
+
+    const filterComplex = getKenBurnsFilter(duration, textPath);
 
     await runFfmpeg([
       "-y",
@@ -97,10 +127,12 @@ app.post("/video", async (req, res) => {
       "-framerate", "25",
       "-i", imagePath,
       "-i", audioPath,
-      "-filter_complex",
-      `[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,drawtext=textfile='${textPath}':fontcolor=white:fontsize=42:x=(w-text_w)/2:y=h-(text_h*4):box=1:boxcolor=black@0.55:boxborderw=20[v];[1:a]apad,atrim=0:${duration}[a]`,
+
+      "-filter_complex", filterComplex,
+
       "-map", "[v]",
       "-map", "[a]",
+
       "-t", String(duration),
       "-c:v", "libx264",
       "-preset", "ultrafast",
