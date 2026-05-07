@@ -1,7 +1,7 @@
-const express = require("express");
-const axios = require("axios");
-const fs = require("fs");
-const { spawn } = require("child_process");
+const express    = require("express");
+const axios      = require("axios");
+const fs         = require("fs");
+const { spawn }  = require("child_process");
 const cloudinary = require("cloudinary").v2;
 
 const app = express();
@@ -10,13 +10,13 @@ app.use(express.urlencoded({ extended: true }));
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
+  api_key:    process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ─────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────
 
 async function downloadFile(url, outputPath, timeoutMs = 120000) {
   const response = await axios({
@@ -35,18 +35,18 @@ async function downloadFile(url, outputPath, timeoutMs = 120000) {
 
 function runFfmpeg(args) {
   return new Promise((resolve, reject) => {
-    const ffmpeg = spawn("ffmpeg", args);
+    const proc = spawn("ffmpeg", args);
     let stderr = "";
-    ffmpeg.stderr.on("data", (d) => { stderr += d.toString(); });
-    ffmpeg.on("error", reject);
-    ffmpeg.on("close", (code) => {
+    proc.stderr.on("data", (d) => { stderr += d.toString(); });
+    proc.on("error", reject);
+    proc.on("close", (code) => {
       if (code === 0) resolve();
-      else reject(new Error(stderr.slice(-1000) || `FFmpeg exited ${code}`));
+      else reject(new Error(stderr.slice(-1500) || `FFmpeg exit ${code}`));
     });
   });
 }
 
-function uploadLargeVideo(filePath, folder) {
+function uploadToCloudinary(filePath, folder) {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload_large(
       filePath,
@@ -59,61 +59,105 @@ function uploadLargeVideo(filePath, folder) {
 function cleanText(value) {
   return String(value || "")
     .replace(/\r?\n|\r/g, " ")
-    .replace(/:/g, " -")
-    .replace(/'/g, "")
-    .replace(/"/g, "")
+    .replace(/:/g,  " -")
+    .replace(/'/g,  "")
+    .replace(/"/g,  "")
     .trim();
 }
 
 function safeDelete(files) {
-  files.forEach((f) => { try { if (fs.existsSync(f)) fs.unlinkSync(f); } catch (_) {} });
+  files.forEach((f) => {
+    try { if (fs.existsSync(f)) fs.unlinkSync(f); } catch (_) {}
+  });
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Ken Burns filter — 1920×1080 landscape
-// effects: zoom_in | zoom_out | pan_left | pan_right | pan_up | diagonal_in
-// ─────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// KEN BURNS FILTER — landscape 1920×1080
+//
+// Efectos soportados (enviados por el workflow n8n):
+//   zoom_in | zoom_out | pan_left | pan_right | pan_up | diagonal_in
+//
+// Parámetros recibidos del workflow:
+//   effect           → string con el nombre del efecto
+//   zoom_speed       → velocidad de zoom (default 0.0008)
+//   output_resolution → resolución final (default 1920x1080)
+// ─────────────────────────────────────────────────────────────
 
-function getKenBurnsFilter(duration, textPath, effect, zoomSpeed) {
-  const fps = 24;
+function getKenBurnsFilter(duration, textPath, effect, zoomSpeed, resolution) {
+  const fps    = 24;
   const frames = Math.max(1, Math.ceil(duration * fps));
   const fadeOut = Math.max(0, duration - 0.35);
-  const speed = parseFloat(zoomSpeed) || 0.0008;
-  const W = 1920, H = 1080;
+  const speed  = parseFloat(zoomSpeed) || 0.0008;
+
+  // Leer resolución del workflow (workflow envía "1920x1080")
+  const parts = String(resolution || "1920x1080").split("x");
+  const W = parseInt(parts[0], 10) || 1920;
+  const H = parseInt(parts[1], 10) || 1080;
 
   const zpMap = {
-    zoom_in:     `z='min(1+on*${speed},1.15)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
-    zoom_out:    `z='max(1.15-on*${speed},1.00)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
-    pan_left:    `z=1.10:x='(iw-iw/zoom)*(1-on/${frames})':y='ih/2-(ih/zoom/2)'`,
-    pan_right:   `z=1.10:x='(iw-iw/zoom)*(on/${frames})':y='ih/2-(ih/zoom/2)'`,
-    pan_up:      `z=1.10:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/${frames})'`,
-    diagonal_in: `z='min(1+on*${speed},1.15)':x='(iw-iw/zoom)*(1-on/${frames})*0.5':y='(ih-ih/zoom)*(1-on/${frames})*0.5'`,
+    zoom_in:
+      `z='min(1+on*${speed},1.15)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
+    zoom_out:
+      `z='max(1.15-on*${speed},1.00)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
+    pan_left:
+      `z=1.10:x='(iw-iw/zoom)*(1-on/${frames})':y='ih/2-(ih/zoom/2)'`,
+    pan_right:
+      `z=1.10:x='(iw-iw/zoom)*(on/${frames})':y='ih/2-(ih/zoom/2)'`,
+    pan_up:
+      `z=1.10:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/${frames})'`,
+    diagonal_in:
+      `z='min(1+on*${speed},1.15)':x='(iw-iw/zoom)*(1-on/${frames})*0.5':y='(ih-ih/zoom)*(1-on/${frames})*0.5'`,
   };
 
   const zp = (zpMap[effect] || zpMap.zoom_in) + `:d=${frames}:s=${W}x${H}:fps=${fps}`;
 
   return (
-    `[0:v]scale=${W}:${H}:force_original_aspect_ratio=increase,` +
+    `[0:v]` +
+    `scale=${W}:${H}:force_original_aspect_ratio=increase,` +
     `crop=${W}:${H},` +
     `zoompan=${zp},` +
     `trim=duration=${duration},setpts=PTS-STARTPTS,` +
-    `drawtext=textfile='${textPath}':fontcolor=white:fontsize=42` +
-    `:x=(w-text_w)/2:y=h*0.82:box=1:boxcolor=black@0.60:boxborderw=18,` +
-    `fade=t=in:st=0:d=0.20,fade=t=out:st=${fadeOut}:d=0.35[v];` +
-    `[1:a]apad,atrim=0:${duration},asetpts=PTS-STARTPTS,` +
-    `afade=t=in:st=0:d=0.15,afade=t=out:st=${fadeOut}:d=0.35[a]`
+    `drawtext=textfile='${textPath}'` +
+      `:fontcolor=white` +
+      `:fontsize=42` +
+      `:x=(w-text_w)/2` +
+      `:y=h*0.82` +
+      `:box=1` +
+      `:boxcolor=black@0.60` +
+      `:boxborderw=18,` +
+    `fade=t=in:st=0:d=0.20,` +
+    `fade=t=out:st=${fadeOut}:d=0.35` +
+    `[v];` +
+    `[1:a]` +
+    `apad,atrim=0:${duration},asetpts=PTS-STARTPTS,` +
+    `afade=t=in:st=0:d=0.15,` +
+    `afade=t=out:st=${fadeOut}:d=0.35` +
+    `[a]`
   );
 }
 
-// ─────────────────────────────────────────────────────────────────
-// Routes
-// ─────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// ROUTES
+// ─────────────────────────────────────────────────────────────
 
 app.get("/", (req, res) => {
   res.json({ status: "ok", service: "ffmpeg-api", version: "3.0" });
 });
 
-// POST /video — genera un clip con Ken Burns + voz
+// ── POST /video ───────────────────────────────────────────────
+// Campos recibidos del workflow n8n (05_generar_video):
+//   image             → URL Cloudinary de la imagen (DALL-E 3, 1792×1024)
+//   audio             → URL Cloudinary del audio (ElevenLabs)
+//   text              → narración para drawtext (texto_limpio)
+//   duration          → duración de la escena en segundos (campo 'duracion' del director IA)
+//   effect            → efecto Ken Burns (efecto_ken_burns del director IA)
+//   zoom_speed        → velocidad de zoom (0.0008)
+//   output_resolution → resolución final (1920x1080)
+//
+// Respuesta usada por el workflow:
+//   video_url  → consumido por 06_agregar_videos1 (agrega array)
+// ─────────────────────────────────────────────────────────────
+
 app.post("/video", async (req, res) => {
   const ts = Date.now();
   const imagePath  = `/tmp/img_${ts}.jpg`;
@@ -123,14 +167,16 @@ app.post("/video", async (req, res) => {
 
   try {
     const { image: imageUrl, audio: audioUrl } = req.body;
-    const text      = cleanText(req.body.text);
-    const duration  = Math.max(1, Number(req.body.duration || 9));
-    const effect    = req.body.effect || "zoom_in";
-    const zoomSpeed = req.body.zoom_speed || 0.0008;
+    const text       = cleanText(req.body.text);
+    const duration   = Math.max(1, Number(req.body.duration   || 9));
+    const effect     = String(req.body.effect              || "zoom_in");
+    const zoomSpeed  = req.body.zoom_speed                 || 0.0008;
+    const resolution = String(req.body.output_resolution   || "1920x1080");
 
     if (!imageUrl || !audioUrl)
       return res.status(400).json({ error: "Missing image or audio" });
 
+    // Descarga imagen y audio en paralelo
     await Promise.all([
       downloadFile(imageUrl, imagePath),
       downloadFile(audioUrl, audioPath),
@@ -138,7 +184,7 @@ app.post("/video", async (req, res) => {
 
     fs.writeFileSync(textPath, text || " ", "utf8");
 
-    const filter = getKenBurnsFilter(duration, textPath, effect, zoomSpeed);
+    const filter = getKenBurnsFilter(duration, textPath, effect, zoomSpeed, resolution);
 
     await runFfmpeg([
       "-y",
@@ -146,39 +192,54 @@ app.post("/video", async (req, res) => {
       "-i", imagePath,
       "-i", audioPath,
       "-filter_complex", filter,
-      "-map", "[v]", "-map", "[a]",
+      "-map", "[v]",
+      "-map", "[a]",
       "-t", String(duration),
       "-c:v", "libx264", "-preset", "veryfast", "-crf", "28",
-      "-threads", "0",                  // usa todos los CPUs disponibles
+      "-threads", "0",
       "-c:a", "aac", "-b:a", "128k",
       "-pix_fmt", "yuv420p",
       "-movflags", "+faststart",
       outputPath,
     ]);
 
-    const upload = await uploadLargeVideo(outputPath, "youtube/videos");
+    const upload = await uploadToCloudinary(outputPath, "youtube/videos");
 
+    // video_url es el campo que consume 06_agregar_videos1 en el workflow
     return res.json({
-      success: true,
-      video_url: upload.secure_url || upload.url,
-      public_id: upload.public_id,
-      bytes: upload.bytes,
-      duration: upload.duration,
+      success:    true,
+      video_url:  upload.secure_url || upload.url,
+      public_id:  upload.public_id,
+      bytes:      upload.bytes,
+      duration:   upload.duration,
       effect_used: effect,
+      resolution_used: resolution,
     });
+
   } catch (err) {
-    console.error("[/video]", err.message);
-    return res.status(500).json({ error: "Video generation failed", details: err.message });
+    console.error("[/video ERROR]", err.message);
+    return res.status(500).json({
+      error:   "Video generation failed",
+      details: err.message,
+    });
   } finally {
     safeDelete([imagePath, audioPath, textPath, outputPath]);
   }
 });
 
-// POST /merge — une todos los clips SIN re-codificar (-c copy)
-// Mucho más rápido: no hay re-encoding, solo concatenación directa
+// ── POST /merge ───────────────────────────────────────────────
+// Campos recibidos del workflow n8n (06_merge_video):
+//   videos → array de URLs de clips (agrupado por 06_agregar_videos1)
+//
+// Respuesta usada por el workflow:
+//   final_video_url → consumido por 07_preparar, 07B_parsear, 09_pack
+//   clips_merged    → consumido por 07_preparar, 07B_parsear
+//   duration        → consumido por 07_preparar, 07B_parsear
+// ─────────────────────────────────────────────────────────────
+
 app.post("/merge", async (req, res) => {
   const ts = Date.now();
-  const videos = Array.isArray(req.body.videos) ? req.body.videos : [];
+  const videos     = Array.isArray(req.body.videos) ? req.body.videos : [];
   const downloaded = [];
   const listPath   = `/tmp/list_${ts}.txt`;
   const outputPath = `/tmp/final_${ts}.mp4`;
@@ -187,51 +248,68 @@ app.post("/merge", async (req, res) => {
     if (!videos.length)
       return res.status(400).json({ error: "Missing videos array" });
 
-    console.log(`[/merge] Iniciando descarga de ${videos.length} clips...`);
+    console.log(`[/merge] Descargando ${videos.length} clips...`);
 
-    // Descarga paralela en lotes de 10 para no saturar memoria
+    // Descarga en lotes de 10 para no saturar memoria ni red
     const BATCH = 10;
     for (let i = 0; i < videos.length; i += BATCH) {
       const batch = videos.slice(i, i + BATCH);
       const paths = batch.map((_, j) => `/tmp/clip_${ts}_${i + j}.mp4`);
       await Promise.all(batch.map((url, j) => downloadFile(url, paths[j], 180000)));
       downloaded.push(...paths);
-      console.log(`[/merge] Descargados ${Math.min(i + BATCH, videos.length)}/${videos.length}`);
+      console.log(`[/merge] ${Math.min(i + BATCH, videos.length)}/${videos.length} descargados`);
     }
 
-    fs.writeFileSync(listPath, downloaded.map((f) => `file '${f}'`).join("\n"), "utf8");
+    // Lista para ffmpeg concat
+    fs.writeFileSync(
+      listPath,
+      downloaded.map((f) => `file '${f}'`).join("\n"),
+      "utf8"
+    );
 
-    console.log(`[/merge] Concatenando ${downloaded.length} clips con stream copy...`);
+    console.log(`[/merge] Concatenando con stream copy (-c copy)...`);
 
-    // -c copy = NO re-encoding. 10x más rápido. Funciona porque todos los clips
-    // tienen el mismo codec, resolución y framerate (generados por nosotros).
+    // -c copy = sin re-encoding. Funciona porque todos los clips tienen
+    // el mismo codec (H264), resolución (1920×1080) y fps (24) — generados
+    // por nosotros en /video. Esto hace el merge ~10x más rápido.
     await runFfmpeg([
       "-y",
       "-f", "concat", "-safe", "0",
       "-i", listPath,
-      "-c", "copy",                     // stream copy, sin re-codificar
+      "-c", "copy",
       "-movflags", "+faststart",
       outputPath,
     ]);
 
-    console.log(`[/merge] Upload a Cloudinary...`);
-    const upload = await uploadLargeVideo(outputPath, "youtube/finales");
+    console.log(`[/merge] Subiendo a Cloudinary...`);
+    const upload = await uploadToCloudinary(outputPath, "youtube/finales");
 
+    // Estos 3 campos son los que consumen 07_preparar, 07B_parsear y 09_pack
     return res.json({
-      success: true,
+      success:         true,
       final_video_url: upload.secure_url || upload.url,
-      public_id: upload.public_id,
-      clips_merged: videos.length,
-      bytes: upload.bytes,
-      duration: upload.duration,
+      public_id:       upload.public_id,
+      clips_merged:    videos.length,
+      bytes:           upload.bytes,
+      duration:        upload.duration,
     });
+
   } catch (err) {
-    console.error("[/merge]", err.message);
-    return res.status(500).json({ error: "Merge failed", details: err.message });
+    console.error("[/merge ERROR]", err.message);
+    return res.status(500).json({
+      error:   "Merge failed",
+      details: err.message,
+    });
   } finally {
     safeDelete([...downloaded, listPath, outputPath]);
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => { console.log(`ffmpeg-api v3.0 running on port ${PORT}`); });
+// ─────────────────────────────────────────────────────────────
+// START
+// ─────────────────────────────────────────────────────────────
+
+const PORT = process.env.PORT || 3000; // Railway inyecta PORT=8080 via ENV
+app.listen(PORT, () => {
+  console.log(`ffmpeg-api v3.0 — puerto ${PORT}`);
+});
