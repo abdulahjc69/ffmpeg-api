@@ -1,23 +1,26 @@
 FROM node:18-slim
 
-# Instalar ffmpeg
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+# ── Sistema base + FFmpeg + fuentes para drawtext ──────────────────────────
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    fonts-dejavu-core \
+    fontconfig \
+    && fc-cache -fv \
+    && rm -rf /var/lib/apt/lists/*
 
-# Crear carpeta app
+# ── Directorio de trabajo ───────────────────────────────────────────────────
 WORKDIR /app
 
-# Copiar package.json
+# ── Dependencias Node ───────────────────────────────────────────────────────
 COPY package*.json ./
+RUN npm install --omit=dev
 
-# Instalar dependencias
-RUN npm install
-
-# Copiar resto del código
+# ── Código fuente ───────────────────────────────────────────────────────────
 COPY . .
 
-# Puerto Railway
+# ── Puerto Railway ──────────────────────────────────────────────────────────
 ENV PORT=8080
 EXPOSE 8080
 
-# Arrancar servidor
+# ── Arranque ────────────────────────────────────────────────────────────────
 CMD ["npm", "start"]
