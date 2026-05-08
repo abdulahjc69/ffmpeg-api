@@ -1,7 +1,7 @@
 {
   "name": "ffmpeg-api",
   "version": "3.0.0",
-  "description": "FFmpeg API para generación de clips de vídeo con Ken Burns y merge final",
+  "description": "FFmpeg API — Ken Burns + merge para pipeline YouTube Horror IA",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
