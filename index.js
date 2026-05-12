@@ -6,7 +6,7 @@ const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 cloudinary.config({
@@ -28,7 +28,7 @@ async function downloadFile(url, outputPath, timeoutMs = 120000, label = "file")
       timeout: timeoutMs,
       validateStatus: (status) => status >= 200 && status < 300,
       headers: {
-        "User-Agent": "Mozilla/5.0 ffmpeg-api/3.3-safe",
+        "User-Agent": "Mozilla/5.0 ffmpeg-api/3.4-cinematic-safe",
       },
     });
 
@@ -58,7 +58,7 @@ function runFfmpeg(args) {
 
     proc.on("close", (code) => {
       if (code === 0) resolve();
-      else reject(new Error(stderr.slice(-3500) || `FFmpeg exit ${code}`));
+      else reject(new Error(stderr.slice(-5000) || `FFmpeg exit ${code}`));
     });
   });
 }
@@ -166,10 +166,154 @@ function safeDelete(files) {
   });
 }
 
+function parseResolution(resolution) {
+  const parts = String(resolution || "1920x1080").split("x");
+  const W = parseInt(parts[0], 10) || 1920;
+  const H = parseInt(parts[1], 10) || 1080;
+  return { W, H };
+}
+
+function clamp(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
+
+function normalizeTextSegments(textSegments, fullText, duration) {
+  let segments = [];
+
+  if (Array.isArray(textSegments)) {
+    segments = textSegments
+      .map((s) => ({
+        text: cleanText(s.text || s.frase || s.caption || ""),
+        start: Number(s.start ?? s.inicio ?? 0),
+        end: Number(s.end ?? s.fin ?? 0),
+      }))
+      .filter((s) => s.text && s.end > s.start);
+  }
+
+  if (!segments.length && typeof textSegments === "string") {
+    try {
+      const parsed = JSON.parse(textSegments);
+      if (Array.isArray(parsed)) {
+        segments = parsed
+          .map((s) => ({
+            text: cleanText(s.text || s.frase || s.caption || ""),
+            start: Number(s.start ?? s.inicio ?? 0),
+            end: Number(s.end ?? s.fin ?? 0),
+          }))
+          .filter((s) => s.text && s.end > s.start);
+      }
+    } catch (_) {}
+  }
+
+  if (segments.length) {
+    return segments.map((s) => ({
+      text: s.text,
+      start: clamp(s.start, 0, duration),
+      end: clamp(s.end, 0.1, duration),
+    }));
+  }
+
+  const text = cleanText(fullText);
+  const words = text.split(" ").filter(Boolean);
+
+  if (!words.length) {
+    return [
+      {
+        text: " ",
+        start: 0.4,
+        end: Math.max(1, duration - 0.4),
+      },
+    ];
+  }
+
+  const chunks = [];
+  let current = "";
+
+  for (const word of words) {
+    const test = current ? `${current} ${word}` : word;
+
+    if (test.length > 48) {
+      if (current) chunks.push(current);
+      current = word;
+    } else {
+      current = test;
+    }
+  }
+
+  if (current) chunks.push(current);
+
+  const maxSegments = Math.max(1, Math.min(6, Math.ceil(duration / 3)));
+  const finalChunks = chunks.slice(0, maxSegments);
+
+  const safeStart = 0.45;
+  const safeEnd = Math.max(safeStart + 0.5, duration - 0.35);
+  const available = safeEnd - safeStart;
+  const each = available / finalChunks.length;
+
+  return finalChunks.map((chunk, i) => ({
+    text: chunk,
+    start: safeStart + i * each,
+    end: Math.min(safeEnd, safeStart + (i + 1) * each - 0.10),
+  }));
+}
+
+function createTextSegmentFiles(ts, segments) {
+  return segments.map((seg, index) => {
+    const path = `/tmp/txt_${ts}_${index}.txt`;
+    const text = wrapText(seg.text, 34, 2);
+    fs.writeFileSync(path, text || " ", "utf8");
+
+    return {
+      ...seg,
+      path,
+    };
+  });
+}
+
 // ─────────────────────────────────────────────────────────────
-// KEN BURNS FILTER — 1920x1080 landscape
-// Efectos:
-// zoom_in | zoom_out | pan_left | pan_right | pan_up | diagonal_in
+// MOVIMIENTOS DE CÁMARA
+// ─────────────────────────────────────────────────────────────
+
+function getZoomPanExpression(effect, frames, speed) {
+  const safeEffect = String(effect || "zoom_in");
+
+  const zpMap = {
+    zoom_in:
+      `z='min(1+on*${speed},1.12)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
+
+    zoom_out:
+      `z='max(1.12-on*${speed},1.00)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
+
+    push_in:
+      `z='min(1+on*${speed * 1.25},1.14)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
+
+    pull_out:
+      `z='max(1.14-on*${speed * 1.10},1.00)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
+
+    pan_left:
+      `z=1.10:x='(iw-iw/zoom)*(1-on/${frames})':y='ih/2-(ih/zoom/2)'`,
+
+    pan_right:
+      `z=1.10:x='(iw-iw/zoom)*(on/${frames})':y='ih/2-(ih/zoom/2)'`,
+
+    pan_up:
+      `z=1.10:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/${frames})'`,
+
+    pan_down:
+      `z=1.10:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(on/${frames})'`,
+
+    diagonal_in:
+      `z='min(1+on*${speed},1.12)':x='(iw-iw/zoom)*(1-on/${frames})*0.7':y='(ih-ih/zoom)*(1-on/${frames})*0.7'`,
+
+    diagonal_out:
+      `z='max(1.12-on*${speed},1.00)':x='(iw-iw/zoom)*(on/${frames})*0.7':y='(ih-ih/zoom)*(on/${frames})*0.7'`,
+  };
+
+  return zpMap[safeEffect] || zpMap.zoom_in;
+}
+
+// ─────────────────────────────────────────────────────────────
+// FILTRO ESTABLE /video
 // ─────────────────────────────────────────────────────────────
 
 function getKenBurnsFilter(duration, textPath, effect, zoomSpeed, resolution) {
@@ -181,37 +325,14 @@ function getKenBurnsFilter(duration, textPath, effect, zoomSpeed, resolution) {
   const fadeOut    = Math.max(0, duration - fadeOutDur);
 
   const speed = parseFloat(zoomSpeed) || 0.0005;
-
-  const parts = String(resolution || "1920x1080").split("x");
-  const W     = parseInt(parts[0], 10) || 1920;
-  const H     = parseInt(parts[1], 10) || 1080;
+  const { W, H } = parseResolution(resolution);
 
   const fontSize  = Math.max(30, Math.min(48, Math.floor(W / 44)));
   const boxBorder = Math.max(14, Math.floor(fontSize * 0.45));
   const bottomPad = Math.max(70, Math.floor(H * 0.075));
 
-  const zpMap = {
-    zoom_in:
-      `z='min(1+on*${speed},1.10)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
-
-    zoom_out:
-      `z='max(1.10-on*${speed},1.00)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'`,
-
-    pan_left:
-      `z=1.08:x='(iw-iw/zoom)*(1-on/${frames})':y='ih/2-(ih/zoom/2)'`,
-
-    pan_right:
-      `z=1.08:x='(iw-iw/zoom)*(on/${frames})':y='ih/2-(ih/zoom/2)'`,
-
-    pan_up:
-      `z=1.08:x='iw/2-(iw/zoom/2)':y='(ih-ih/zoom)*(1-on/${frames})'`,
-
-    diagonal_in:
-      `z='min(1+on*${speed},1.10)':x='(iw-iw/zoom)*(1-on/${frames})*0.5':y='(ih-ih/zoom)*(1-on/${frames})*0.5'`,
-  };
-
   const zp =
-    (zpMap[effect] || zpMap.zoom_in) +
+    getZoomPanExpression(effect, frames, speed) +
     `:d=${frames}:s=${W}x${H}:fps=${fps}`;
 
   return (
@@ -228,7 +349,7 @@ function getKenBurnsFilter(duration, textPath, effect, zoomSpeed, resolution) {
         `:x=(w-text_w)/2` +
         `:y=h-text_h-${bottomPad}` +
         `:box=1` +
-        `:boxcolor=black@0.62` +
+        `:boxcolor=black@0.55` +
         `:boxborderw=${boxBorder}` +
         `:shadowcolor=black@0.85` +
         `:shadowx=2` +
@@ -242,11 +363,119 @@ function getKenBurnsFilter(duration, textPath, effect, zoomSpeed, resolution) {
       `apad,` +
       `atrim=0:${duration},` +
       `asetpts=PTS-STARTPTS,` +
-      `volume=1.8,` +
+      `volume=1.6,` +
       `afade=t=in:st=0:d=${fadeInDur},` +
       `afade=t=out:st=${fadeOut}:d=${fadeOutDur}` +
     `[a]`
   );
+}
+
+// ─────────────────────────────────────────────────────────────
+// FILTRO CINEMÁTICO /video-cinematic
+// - movimiento variado
+// - grano
+// - viñeta
+// - neblina/suavizado visual
+// - texto por frases
+// ─────────────────────────────────────────────────────────────
+
+function buildDrawTextChain(inputLabel, outputLabel, segmentFiles, W, H, duration) {
+  const fontSize  = Math.max(30, Math.min(52, Math.floor(W / 42)));
+  const boxBorder = Math.max(10, Math.floor(fontSize * 0.38));
+  const bottomPad = Math.max(74, Math.floor(H * 0.082));
+
+  let current = inputLabel;
+  let chain = "";
+
+  segmentFiles.forEach((seg, index) => {
+    const next = index === segmentFiles.length - 1 ? outputLabel : `vtxt${index}`;
+
+    const start = Number(seg.start || 0).toFixed(2);
+    const end   = Number(seg.end || duration).toFixed(2);
+
+    chain +=
+      `[${current}]` +
+      `drawtext=textfile='${seg.path}'` +
+        `:font='DejaVu Serif'` +
+        `:fontcolor=white` +
+        `:fontsize=${fontSize}` +
+        `:line_spacing=9` +
+        `:x=(w-text_w)/2` +
+        `:y=h-text_h-${bottomPad}` +
+        `:box=1` +
+        `:boxcolor=black@0.34` +
+        `:boxborderw=${boxBorder}` +
+        `:shadowcolor=black@0.92` +
+        `:shadowx=3` +
+        `:shadowy=3` +
+        `:enable='between(t,${start},${end})'` +
+      `[${next}];`;
+
+    current = next;
+  });
+
+  return chain;
+}
+
+function getCinematicVideoFilter(duration, segmentFiles, effect, zoomSpeed, resolution) {
+  const fps    = 24;
+  const frames = Math.max(1, Math.ceil(duration * fps));
+
+  const fadeInDur  = 0.40;
+  const fadeOutDur = Math.min(0.75, Math.max(0.30, duration * 0.12));
+  const fadeOut    = Math.max(0, duration - fadeOutDur);
+
+  const speed = parseFloat(zoomSpeed) || 0.00048;
+  const { W, H } = parseResolution(resolution);
+
+  const zp =
+    getZoomPanExpression(effect, frames, speed) +
+    `:d=${frames}:s=${W}x${H}:fps=${fps}`;
+
+  let filter = "";
+
+  filter +=
+    `[0:v]` +
+      `scale=${W}:${H}:force_original_aspect_ratio=increase,` +
+      `crop=${W}:${H},` +
+      `zoompan=${zp},` +
+      `trim=duration=${duration},` +
+      `setpts=PTS-STARTPTS,` +
+      `eq=contrast=1.06:brightness=-0.025:saturation=0.92,` +
+      `noise=alls=4:allf=t+u,` +
+      `vignette=PI/5,` +
+      `split=2[vmain][vblur];`;
+
+  filter +=
+    `[vblur]` +
+      `boxblur=luma_radius=14:luma_power=1:chroma_radius=8:chroma_power=1,` +
+      `eq=brightness=0.035:saturation=0.75,` +
+      `format=rgba,` +
+      `colorchannelmixer=aa=0.12` +
+    `[vhaze];`;
+
+  filter +=
+    `[vmain][vhaze]overlay=0:0:format=auto[vatmo];`;
+
+  filter += buildDrawTextChain("vatmo", "vtext", segmentFiles, W, H, duration);
+
+  filter +=
+    `[vtext]` +
+      `fade=t=in:st=0:d=${fadeInDur},` +
+      `fade=t=out:st=${fadeOut}:d=${fadeOutDur}` +
+    `[v];`;
+
+  filter +=
+    `[1:a]` +
+      `apad,` +
+      `atrim=0:${duration},` +
+      `asetpts=PTS-STARTPTS,` +
+      `volume=1.45,` +
+      `afade=t=in:st=0:d=${fadeInDur},` +
+      `afade=t=out:st=${fadeOut}:d=${fadeOutDur}` +
+    `[a]`;
+
+  return filter;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -257,19 +486,17 @@ app.get("/", (req, res) => {
   res.json({
     status: "ok",
     service: "ffmpeg-api",
-    version: "3.3-safe",
-    endpoints: ["/video", "/merge", "/merge-cinematic"],
+    version: "3.4-cinematic-safe",
+    endpoints: ["/video", "/video-cinematic", "/merge", "/merge-cinematic"],
   });
 });
 
-// ── POST /video ───────────────────────────────────────────────
-// Recibe:
-// image, audio, text, duration, effect, zoom_speed, output_resolution
-// Mejora:
-// - detecta duración real del audio
-// - evita silencios largos finales
-// - zoom más suave
-// - fades más cinematográficos
+// ─────────────────────────────────────────────────────────────
+// POST /video
+// ESTABLE.
+// Se mantiene como respaldo.
+// Corrección importante:
+// - ya NO corta la voz si ElevenLabs genera audio más largo.
 // ─────────────────────────────────────────────────────────────
 
 app.post("/video", async (req, res) => {
@@ -315,7 +542,7 @@ app.post("/video", async (req, res) => {
     const audioDuration = await getMediaDuration(audioPath);
 
     const duration = audioDuration
-      ? Math.min(audioDuration + 0.6, durationRequested)
+      ? Math.max(durationRequested, audioDuration + 0.8)
       : durationRequested;
 
     console.log("[/video] audio duration:", audioDuration);
@@ -375,7 +602,7 @@ app.post("/video", async (req, res) => {
       resolution_used: resolution,
       text_used: textWrapped,
       audio_duration_detected: audioDuration,
-      mode: "video_ken_burns_v3_3_safe",
+      mode: "video_ken_burns_v3_4_safe",
     });
 
   } catch (err) {
@@ -391,11 +618,159 @@ app.post("/video", async (req, res) => {
   }
 });
 
-// ── POST /merge ───────────────────────────────────────────────
-// IMPORTANTE:
-// Este endpoint queda ESTABLE como versión segura.
-// Une clips sin transición compleja.
-// No lo rompemos.
+// ─────────────────────────────────────────────────────────────
+// POST /video-cinematic
+// NUEVO PRINCIPAL PARA PRUEBAS.
+// Recibe:
+// image, audio, text, duration, effect, zoom_speed, output_resolution,
+// text_segments opcional.
+// ─────────────────────────────────────────────────────────────
+
+app.post("/video-cinematic", async (req, res) => {
+  const ts = Date.now();
+
+  const imagePath  = `/tmp/img_cinematic_${ts}.jpg`;
+  const audioPath  = `/tmp/aud_cinematic_${ts}.mp3`;
+  const outputPath = `/tmp/vid_cinematic_${ts}.mp4`;
+
+  let textFiles = [];
+
+  try {
+    const { image: imageUrl, audio: audioUrl } = req.body;
+
+    const textOriginal = cleanText(req.body.text);
+
+    const durationRequested = Math.max(1, Number(req.body.duration || 18));
+    const effect            = String(req.body.effect || "zoom_in");
+    const zoomSpeed         = req.body.zoom_speed || 0.00048;
+    const resolution        = String(req.body.output_resolution || "1920x1080");
+
+    if (!imageUrl || !audioUrl) {
+      return res.status(400).json({
+        error: "Missing image or audio",
+        received: {
+          image: imageUrl || null,
+          audio: audioUrl || null,
+        },
+      });
+    }
+
+    console.log("[/video-cinematic] image:", imageUrl);
+    console.log("[/video-cinematic] audio:", audioUrl);
+    console.log("[/video-cinematic] duration requested:", durationRequested);
+    console.log("[/video-cinematic] effect:", effect);
+    console.log("[/video-cinematic] resolution:", resolution);
+
+    await Promise.all([
+      downloadFile(imageUrl, imagePath, 120000, "image"),
+      downloadFile(audioUrl, audioPath, 120000, "audio"),
+    ]);
+
+    const audioDuration = await getMediaDuration(audioPath);
+
+    const duration = audioDuration
+      ? Math.max(durationRequested, audioDuration + 0.8)
+      : durationRequested;
+
+    console.log("[/video-cinematic] audio duration:", audioDuration);
+    console.log("[/video-cinematic] clip duration:", duration);
+
+    const segments = normalizeTextSegments(
+      req.body.text_segments,
+      textOriginal,
+      duration
+    );
+
+    textFiles = createTextSegmentFiles(ts, segments);
+
+    const filter = getCinematicVideoFilter(
+      duration,
+      textFiles,
+      effect,
+      zoomSpeed,
+      resolution
+    );
+
+    await runFfmpeg([
+      "-y",
+      "-hide_banner",
+
+      "-loop", "1",
+      "-framerate", "24",
+      "-i", imagePath,
+
+      "-i", audioPath,
+
+      "-filter_complex", filter,
+
+      "-map", "[v]",
+      "-map", "[a]",
+
+      "-t", String(duration),
+
+      "-c:v", "libx264",
+      "-preset", "veryfast",
+      "-crf", "24",
+      "-threads", "0",
+
+      "-c:a", "aac",
+      "-b:a", "160k",
+      "-ar", "44100",
+
+      "-pix_fmt", "yuv420p",
+      "-movflags", "+faststart",
+
+      outputPath,
+    ]);
+
+    const upload = await uploadToCloudinary(outputPath, "youtube/videos");
+
+    return res.json({
+      success: true,
+      video_url: upload.secure_url || upload.url,
+      public_id: upload.public_id,
+      bytes: upload.bytes,
+      duration: upload.duration,
+      effect_used: effect,
+      resolution_used: resolution,
+      text_segments_used: textFiles.map((s) => ({
+        text: s.text,
+        start: s.start,
+        end: s.end,
+      })),
+      audio_duration_detected: audioDuration,
+      mode: "video_cinematic_v3_4_safe",
+      visual_layers: [
+        "ken_burns_motion",
+        "soft_haze",
+        "fine_grain",
+        "soft_vignette",
+        "segmented_text",
+      ],
+    });
+
+  } catch (err) {
+    console.error("[/video-cinematic ERROR]", err.message);
+
+    return res.status(500).json({
+      error: "Cinematic video generation failed",
+      details: err.message,
+    });
+
+  } finally {
+    safeDelete([
+      imagePath,
+      audioPath,
+      outputPath,
+      ...textFiles.map((t) => t.path),
+    ]);
+  }
+});
+
+// ─────────────────────────────────────────────────────────────
+// POST /merge
+// ESTABLE.
+// No tocar. Respaldo seguro.
 // ─────────────────────────────────────────────────────────────
 
 app.post("/merge", async (req, res) => {
@@ -477,13 +852,13 @@ app.post("/merge", async (req, res) => {
   }
 });
 
-// ── POST /merge-cinematic ─────────────────────────────────────
-// Endpoint nuevo de prueba.
-// Une clips con transición fade real entre escenas.
-// No sustituye /merge.
+// ─────────────────────────────────────────────────────────────
+// POST /merge-cinematic
+// Une clips con transiciones suaves.
 // Recibe:
 // videos: array de URLs
-// transition_duration opcional: 0.5 / 0.6 / 0.7
+// transition_duration opcional
+// transition opcional: fade, smoothleft, smoothright, fadeblack
 // ─────────────────────────────────────────────────────────────
 
 app.post("/merge-cinematic", async (req, res) => {
@@ -534,9 +909,21 @@ app.post("/merge-cinematic", async (req, res) => {
       const shortest = Math.min(...durations);
       const transitionDuration = Math.min(
         Math.max(0.3, requestedTransition),
-        0.8,
+        0.85,
         Math.max(0.25, shortest / 3)
       );
+
+      const allowedTransitions = new Set([
+        "fade",
+        "smoothleft",
+        "smoothright",
+        "fadeblack",
+      ]);
+
+      const requestedType = String(req.body.transition || "fade");
+      const transitionType = allowedTransitions.has(requestedType)
+        ? requestedType
+        : "fade";
 
       const W   = 1920;
       const H   = 1080;
@@ -571,7 +958,7 @@ app.post("/merge-cinematic", async (req, res) => {
         const offset = Math.max(0.1, cumulative - transitionDuration).toFixed(3);
 
         filters.push(
-          `[${lastV}][v${i}]xfade=transition=fade:duration=${transitionDuration}:offset=${offset}[vx${i}]`
+          `[${lastV}][v${i}]xfade=transition=${transitionType}:duration=${transitionDuration}:offset=${offset}[vx${i}]`
         );
 
         filters.push(
@@ -590,7 +977,7 @@ app.post("/merge-cinematic", async (req, res) => {
         "-map", `[${lastA}]`,
         "-c:v", "libx264",
         "-preset", "veryfast",
-        "-crf", "26",
+        "-crf", "25",
         "-c:a", "aac",
         "-b:a", "160k",
         "-ar", "44100",
@@ -601,6 +988,7 @@ app.post("/merge-cinematic", async (req, res) => {
 
       console.log("[/merge-cinematic] Renderizando con transiciones...");
       console.log("[/merge-cinematic] transitionDuration:", transitionDuration);
+      console.log("[/merge-cinematic] transitionType:", transitionType);
 
       await runFfmpeg(args);
     }
@@ -616,8 +1004,8 @@ app.post("/merge-cinematic", async (req, res) => {
       clips_merged: videos.length,
       bytes: upload.bytes,
       duration: upload.duration,
-      mode: "cinematic_xfade",
-      transition: "fade",
+      mode: "cinematic_xfade_v3_4_safe",
+      transition: req.body.transition || "fade",
     });
 
   } catch (err) {
@@ -636,5 +1024,5 @@ app.post("/merge-cinematic", async (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`ffmpeg-api v3.3-safe — puerto ${PORT}`);
+  console.log(`ffmpeg-api v3.4-cinematic-safe — puerto ${PORT}`);
 });
