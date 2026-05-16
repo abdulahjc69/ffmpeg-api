@@ -28,7 +28,7 @@ async function downloadFile(url, outputPath, timeoutMs = 120000, label = "file")
       timeout: timeoutMs,
       validateStatus: (status) => status >= 200 && status < 300,
       headers: {
-        "User-Agent": "Mozilla/5.0 ffmpeg-api/3.4-cinematic-safe",
+        "User-Agent": "Mozilla/5.0 ffmpeg-api/3.5-jimenez-audiovisual",
       },
     });
 
@@ -161,7 +161,7 @@ function wrapText(text, maxChars = 36, maxLines = 3) {
 function safeDelete(files) {
   files.forEach((f) => {
     try {
-      if (fs.existsSync(f)) fs.unlinkSync(f);
+      if (f && fs.existsSync(f)) fs.unlinkSync(f);
     } catch (_) {}
   });
 }
@@ -174,7 +174,14 @@ function parseResolution(resolution) {
 }
 
 function clamp(num, min, max) {
-  return Math.min(Math.max(num, min), max);
+  const n = Number(num);
+  if (!Number.isFinite(n)) return min;
+  return Math.min(Math.max(n, min), max);
+}
+
+function safeString(value, fallback = "") {
+  const text = String(value || "").trim();
+  return text || fallback;
 }
 
 function normalizeTextSegments(textSegments, fullText, duration) {
@@ -214,14 +221,25 @@ function normalizeTextSegments(textSegments, fullText, duration) {
   }
 
   const text = cleanText(fullText);
-  const words = text.split(" ").filter(Boolean);
 
-  if (!words.length) {
+  if (!text) {
     return [
       {
         text: " ",
         start: 0.4,
         end: Math.max(1, duration - 0.4),
+      },
+    ];
+  }
+
+  const words = text.split(" ").filter(Boolean);
+
+  if (words.length <= 8) {
+    return [
+      {
+        text,
+        start: Math.min(0.8, duration * 0.12),
+        end: Math.max(1.4, duration - 0.8),
       },
     ];
   }
@@ -375,14 +393,15 @@ function getKenBurnsFilter(duration, textPath, effect, zoomSpeed, resolution) {
 // - movimiento variado
 // - grano
 // - viñeta
-// - neblina/suavizado visual
-// - texto por frases
+// - overlay visual por escena
+// - texto breve en pantalla
+// - mezcla de voz + ambiente + efecto + música opcional
 // ─────────────────────────────────────────────────────────────
 
 function buildDrawTextChain(inputLabel, outputLabel, segmentFiles, W, H, duration) {
-  const fontSize  = Math.max(30, Math.min(52, Math.floor(W / 42)));
-  const boxBorder = Math.max(10, Math.floor(fontSize * 0.38));
-  const bottomPad = Math.max(74, Math.floor(H * 0.082));
+  const fontSize  = Math.max(34, Math.min(58, Math.floor(W / 38)));
+  const boxBorder = Math.max(10, Math.floor(fontSize * 0.34));
+  const bottomPad = Math.max(86, Math.floor(H * 0.09));
 
   let current = inputLabel;
   let chain = "";
@@ -403,9 +422,9 @@ function buildDrawTextChain(inputLabel, outputLabel, segmentFiles, W, H, duratio
         `:x=(w-text_w)/2` +
         `:y=h-text_h-${bottomPad}` +
         `:box=1` +
-        `:boxcolor=black@0.34` +
+        `:boxcolor=black@0.28` +
         `:boxborderw=${boxBorder}` +
-        `:shadowcolor=black@0.92` +
+        `:shadowcolor=black@0.95` +
         `:shadowx=3` +
         `:shadowy=3` +
         `:enable='between(t,${start},${end})'` +
@@ -417,15 +436,213 @@ function buildDrawTextChain(inputLabel, outputLabel, segmentFiles, W, H, duratio
   return chain;
 }
 
-function getCinematicVideoFilter(duration, segmentFiles, effect, zoomSpeed, resolution) {
-  const fps    = 24;
-  const frames = Math.max(1, Math.ceil(duration * fps));
+function getOverlayColor(visualOverlay) {
+  const key = String(visualOverlay || "none");
 
-  const fadeInDur  = 0.40;
+  const map = {
+    light_dust:       "0xC9A46A",
+    light_rain:       "0x7F8FA6",
+    soft_fog:         "0xDDE1DF",
+    warm_vignette:    "0xB98245",
+    parchment_grain:  "0xC2A06B",
+    candle_flicker:   "0xD08A32",
+    stone_shadow:     "0x3B3B3B",
+    birds_shadow:     "0x202020",
+    cloud_movement:   "0xAEB8C2",
+    old_film_grain:   "0xB89B6B",
+  };
+
+  return map[key] || null;
+}
+
+function buildVisualOverlayChain(inputLabel, outputLabel, W, H, duration, visualOverlay, overlayIntensity) {
+  const key = String(visualOverlay || "none");
+  const intensity = clamp(Number(overlayIntensity || 0), 0, 0.25);
+
+  if (key === "none" || intensity <= 0) {
+    return `[${inputLabel}]copy[${outputLabel}];`;
+  }
+
+  const color = getOverlayColor(key);
+
+  if (!color) {
+    return `[${inputLabel}]copy[${outputLabel}];`;
+  }
+
+  const alpha = intensity.toFixed(3);
+
+  let chain = "";
+
+  chain +=
+    `color=c=${color}:s=${W}x${H}:d=${duration},format=rgba,colorchannelmixer=aa=${alpha}[vov];`;
+
+  chain +=
+    `[${inputLabel}][vov]overlay=0:0:format=auto[vovbase];`;
+
+  if (key === "light_rain") {
+    chain +=
+      `[vovbase]noise=alls=5:allf=t+u,eq=brightness=-0.015:saturation=0.88[${outputLabel}];`;
+  } else if (key === "light_dust") {
+    chain +=
+      `[vovbase]noise=alls=7:allf=t+u,eq=brightness=0.012:saturation=0.92[${outputLabel}];`;
+  } else if (key === "soft_fog") {
+    chain +=
+      `[vovbase]boxblur=luma_radius=1:luma_power=1:chroma_radius=1:chroma_power=1[${outputLabel}];`;
+  } else if (key === "parchment_grain" || key === "old_film_grain") {
+    chain +=
+      `[vovbase]noise=alls=8:allf=t+u,eq=contrast=1.04:saturation=0.82[${outputLabel}];`;
+  } else if (key === "candle_flicker") {
+    chain +=
+      `[vovbase]eq=brightness=0.025:saturation=1.04[${outputLabel}];`;
+  } else if (key === "stone_shadow" || key === "birds_shadow") {
+    chain +=
+      `[vovbase]eq=brightness=-0.025:contrast=1.05:saturation=0.9[${outputLabel}];`;
+  } else if (key === "cloud_movement") {
+    chain +=
+      `[vovbase]eq=brightness=0.01:saturation=0.9[${outputLabel}];`;
+  } else if (key === "warm_vignette") {
+    chain +=
+      `[vovbase]vignette=PI/4[${outputLabel}];`;
+  } else {
+    chain +=
+      `[vovbase]copy[${outputLabel}];`;
+  }
+
+  return chain;
+}
+
+function normalizeSingleClipTransition(value, fallback) {
+  const allowed = new Set([
+    "fade_from_black_soft",
+    "fade_to_black_soft",
+    "crossfade_slow",
+    "dissolve_warm",
+    "film_burn_soft",
+    "parchment_wipe_soft",
+    "dust_transition",
+    "rain_dissolve",
+    "match_cut_stone",
+    "match_cut_sky",
+    "push_crossfade",
+  ]);
+
+  const v = String(value || "").trim();
+  return allowed.has(v) ? v : fallback;
+}
+
+function buildAudioMixChain(duration, audioPlan) {
+  const fadeInDur  = 0.35;
   const fadeOutDur = Math.min(0.75, Math.max(0.30, duration * 0.12));
   const fadeOut    = Math.max(0, duration - fadeOutDur);
 
-  const speed = parseFloat(zoomSpeed) || 0.00048;
+  const labels = [];
+  let chain = "";
+
+  chain +=
+    `[1:a]` +
+      `apad,` +
+      `atrim=0:${duration},` +
+      `asetpts=PTS-STARTPTS,` +
+      `volume=1.35,` +
+      `afade=t=in:st=0:d=${fadeInDur},` +
+      `afade=t=out:st=${fadeOut}:d=${fadeOutDur}` +
+    `[voice];`;
+
+  labels.push("[voice]");
+
+  if (audioPlan.ambientIndex !== null) {
+    const vol = clamp(audioPlan.ambientVolume, 0.00, 0.20).toFixed(3);
+
+    chain +=
+      `[${audioPlan.ambientIndex}:a]` +
+        `aloop=loop=-1:size=2147483647,` +
+        `atrim=0:${duration},` +
+        `asetpts=PTS-STARTPTS,` +
+        `volume=${vol},` +
+        `afade=t=in:st=0:d=0.6,` +
+        `afade=t=out:st=${Math.max(0, duration - 0.8)}:d=0.8` +
+      `[amb];`;
+
+    labels.push("[amb]");
+  }
+
+  if (audioPlan.sfxIndex !== null) {
+    const vol = clamp(audioPlan.sfxVolume, 0.00, 0.14).toFixed(3);
+
+    chain +=
+      `[${audioPlan.sfxIndex}:a]` +
+        `adelay=700|700,` +
+        `apad,` +
+        `atrim=0:${duration},` +
+        `asetpts=PTS-STARTPTS,` +
+        `volume=${vol},` +
+        `afade=t=in:st=0.7:d=0.25,` +
+        `afade=t=out:st=${Math.max(0, duration - 0.7)}:d=0.5` +
+      `[sfx];`;
+
+    labels.push("[sfx]");
+  }
+
+  if (audioPlan.musicIndex !== null) {
+    const vol = clamp(audioPlan.musicVolume, 0.00, 0.10).toFixed(3);
+
+    chain +=
+      `[${audioPlan.musicIndex}:a]` +
+        `aloop=loop=-1:size=2147483647,` +
+        `atrim=0:${duration},` +
+        `asetpts=PTS-STARTPTS,` +
+        `volume=${vol},` +
+        `afade=t=in:st=0:d=0.8,` +
+        `afade=t=out:st=${Math.max(0, duration - 0.9)}:d=0.9` +
+      `[mus];`;
+
+    labels.push("[mus]");
+  }
+
+  if (labels.length === 1) {
+    chain += `[voice]aformat=sample_rates=44100:channel_layouts=stereo[a]`;
+  } else {
+    chain +=
+      labels.join("") +
+      `amix=inputs=${labels.length}:duration=longest:dropout_transition=0,` +
+      `volume=1.0,` +
+      `alimiter=limit=0.92,` +
+      `aformat=sample_rates=44100:channel_layouts=stereo` +
+      `[a]`;
+  }
+
+  return chain;
+}
+
+function getCinematicVideoFilter(
+  duration,
+  segmentFiles,
+  effect,
+  zoomSpeed,
+  resolution,
+  visualOverlay,
+  overlayIntensity,
+  transitionIn,
+  transitionOut,
+  transitionDuration,
+  audioPlan
+) {
+  const fps    = 24;
+  const frames = Math.max(1, Math.ceil(duration * fps));
+
+  const requestedTransitionDuration = clamp(Number(transitionDuration || 1.0), 0.4, 1.5);
+
+  const fadeInDur  = normalizeSingleClipTransition(transitionIn, "fade_from_black_soft")
+    ? requestedTransitionDuration
+    : 0.45;
+
+  const fadeOutDur = normalizeSingleClipTransition(transitionOut, "crossfade_slow")
+    ? Math.min(requestedTransitionDuration, Math.max(0.35, duration * 0.18))
+    : Math.min(0.75, Math.max(0.30, duration * 0.12));
+
+  const fadeOut = Math.max(0, duration - fadeOutDur);
+
+  const speed = parseFloat(zoomSpeed) || 0.00055;
   const { W, H } = parseResolution(resolution);
 
   const zp =
@@ -442,20 +659,19 @@ function getCinematicVideoFilter(duration, segmentFiles, effect, zoomSpeed, reso
       `trim=duration=${duration},` +
       `setpts=PTS-STARTPTS,` +
       `eq=contrast=1.06:brightness=-0.025:saturation=0.92,` +
-      `noise=alls=4:allf=t+u,` +
-      `vignette=PI/5,` +
-      `split=2[vmain][vblur];`;
+      `noise=alls=3:allf=t+u,` +
+      `vignette=PI/5` +
+    `[vbase];`;
 
-  filter +=
-    `[vblur]` +
-      `boxblur=luma_radius=14:luma_power=1:chroma_radius=8:chroma_power=1,` +
-      `eq=brightness=0.035:saturation=0.75,` +
-      `format=rgba,` +
-      `colorchannelmixer=aa=0.12` +
-    `[vhaze];`;
-
-  filter +=
-    `[vmain][vhaze]overlay=0:0:format=auto[vatmo];`;
+  filter += buildVisualOverlayChain(
+    "vbase",
+    "vatmo",
+    W,
+    H,
+    duration,
+    visualOverlay,
+    overlayIntensity
+  );
 
   filter += buildDrawTextChain("vatmo", "vtext", segmentFiles, W, H, duration);
 
@@ -465,15 +681,7 @@ function getCinematicVideoFilter(duration, segmentFiles, effect, zoomSpeed, reso
       `fade=t=out:st=${fadeOut}:d=${fadeOutDur}` +
     `[v];`;
 
-  filter +=
-    `[1:a]` +
-      `apad,` +
-      `atrim=0:${duration},` +
-      `asetpts=PTS-STARTPTS,` +
-      `volume=1.45,` +
-      `afade=t=in:st=0:d=${fadeInDur},` +
-      `afade=t=out:st=${fadeOut}:d=${fadeOutDur}` +
-    `[a]`;
+  filter += buildAudioMixChain(duration, audioPlan);
 
   return filter;
 }
@@ -486,7 +694,7 @@ app.get("/", (req, res) => {
   res.json({
     status: "ok",
     service: "ffmpeg-api",
-    version: "3.4-cinematic-safe",
+    version: "3.5-jimenez-audiovisual",
     endpoints: ["/video", "/video-cinematic", "/merge", "/merge-cinematic"],
   });
 });
@@ -495,8 +703,6 @@ app.get("/", (req, res) => {
 // POST /video
 // ESTABLE.
 // Se mantiene como respaldo.
-// Corrección importante:
-// - ya NO corta la voz si ElevenLabs genera audio más largo.
 // ─────────────────────────────────────────────────────────────
 
 app.post("/video", async (req, res) => {
@@ -602,7 +808,7 @@ app.post("/video", async (req, res) => {
       resolution_used: resolution,
       text_used: textWrapped,
       audio_duration_detected: audioDuration,
-      mode: "video_ken_burns_v3_4_safe",
+      mode: "video_ken_burns_v3_5_safe",
     });
 
   } catch (err) {
@@ -620,30 +826,55 @@ app.post("/video", async (req, res) => {
 
 // ─────────────────────────────────────────────────────────────
 // POST /video-cinematic
-// NUEVO PRINCIPAL PARA PRUEBAS.
+// PRINCIPAL.
 // Recibe:
-// image, audio, text, duration, effect, zoom_speed, output_resolution,
-// text_segments opcional.
+// image, audio, text, texto_en_pantalla,
+// ambient_audio, sfx_audio, music_audio,
+// ambient_volume, sfx_volume, music_volume,
+// visual_overlay, overlay_intensity,
+// transition_in, transition_out, transition_duration,
+// effect, zoom_speed, output_resolution.
 // ─────────────────────────────────────────────────────────────
 
 app.post("/video-cinematic", async (req, res) => {
   const ts = Date.now();
 
-  const imagePath  = `/tmp/img_cinematic_${ts}.jpg`;
-  const audioPath  = `/tmp/aud_cinematic_${ts}.mp3`;
-  const outputPath = `/tmp/vid_cinematic_${ts}.mp4`;
+  const imagePath   = `/tmp/img_cinematic_${ts}.jpg`;
+  const audioPath   = `/tmp/aud_cinematic_${ts}.mp3`;
+  const ambientPath = `/tmp/amb_cinematic_${ts}.mp3`;
+  const sfxPath     = `/tmp/sfx_cinematic_${ts}.mp3`;
+  const musicPath   = `/tmp/mus_cinematic_${ts}.mp3`;
+  const outputPath  = `/tmp/vid_cinematic_${ts}.mp4`;
 
   let textFiles = [];
+
+  const downloadedOptionalFiles = [];
 
   try {
     const { image: imageUrl, audio: audioUrl } = req.body;
 
     const textOriginal = cleanText(req.body.text);
+    const screenText   = cleanText(req.body.texto_en_pantalla || req.body.screen_text || "");
 
     const durationRequested = Math.max(1, Number(req.body.duration || 18));
     const effect            = String(req.body.effect || "zoom_in");
-    const zoomSpeed         = req.body.zoom_speed || 0.00048;
+    const zoomSpeed         = req.body.zoom_speed || 0.00055;
     const resolution        = String(req.body.output_resolution || "1920x1080");
+
+    const ambientUrl = safeString(req.body.ambient_audio || req.body.ambiente_audio || "");
+    const sfxUrl     = safeString(req.body.sfx_audio || req.body.efecto_audio || "");
+    const musicUrl   = safeString(req.body.music_audio || req.body.musica_audio || "");
+
+    const ambientVolume = clamp(Number(req.body.ambient_volume || 0.10), 0, 0.20);
+    const sfxVolume     = clamp(Number(req.body.sfx_volume || 0), 0, 0.14);
+    const musicVolume   = clamp(Number(req.body.music_volume || 0), 0, 0.10);
+
+    const visualOverlay = safeString(req.body.visual_overlay || "none", "none");
+    const overlayIntensity = clamp(Number(req.body.overlay_intensity || 0), 0, 0.25);
+
+    const transitionIn = safeString(req.body.transition_in || "fade_from_black_soft", "fade_from_black_soft");
+    const transitionOut = safeString(req.body.transition_out || "crossfade_slow", "crossfade_slow");
+    const transitionDuration = clamp(Number(req.body.transition_duration || 1.0), 0.4, 1.5);
 
     if (!imageUrl || !audioUrl) {
       return res.status(400).json({
@@ -657,14 +888,51 @@ app.post("/video-cinematic", async (req, res) => {
 
     console.log("[/video-cinematic] image:", imageUrl);
     console.log("[/video-cinematic] audio:", audioUrl);
+    console.log("[/video-cinematic] ambient_audio:", ambientUrl || "none");
+    console.log("[/video-cinematic] sfx_audio:", sfxUrl || "none");
+    console.log("[/video-cinematic] music_audio:", musicUrl || "none");
     console.log("[/video-cinematic] duration requested:", durationRequested);
     console.log("[/video-cinematic] effect:", effect);
     console.log("[/video-cinematic] resolution:", resolution);
+    console.log("[/video-cinematic] visual_overlay:", visualOverlay);
+    console.log("[/video-cinematic] transition_in:", transitionIn);
+    console.log("[/video-cinematic] transition_out:", transitionOut);
 
-    await Promise.all([
+    const downloads = [
       downloadFile(imageUrl, imagePath, 120000, "image"),
-      downloadFile(audioUrl, audioPath, 120000, "audio"),
-    ]);
+      downloadFile(audioUrl, audioPath, 120000, "voice_audio"),
+    ];
+
+    let nextInputIndex = 2;
+
+    const audioPlan = {
+      ambientIndex: null,
+      sfxIndex: null,
+      musicIndex: null,
+      ambientVolume,
+      sfxVolume,
+      musicVolume,
+    };
+
+    if (ambientUrl) {
+      audioPlan.ambientIndex = nextInputIndex++;
+      downloads.push(downloadFile(ambientUrl, ambientPath, 120000, "ambient_audio"));
+      downloadedOptionalFiles.push(ambientPath);
+    }
+
+    if (sfxUrl && sfxVolume > 0) {
+      audioPlan.sfxIndex = nextInputIndex++;
+      downloads.push(downloadFile(sfxUrl, sfxPath, 120000, "sfx_audio"));
+      downloadedOptionalFiles.push(sfxPath);
+    }
+
+    if (musicUrl && musicVolume > 0) {
+      audioPlan.musicIndex = nextInputIndex++;
+      downloads.push(downloadFile(musicUrl, musicPath, 120000, "music_audio"));
+      downloadedOptionalFiles.push(musicPath);
+    }
+
+    await Promise.all(downloads);
 
     const audioDuration = await getMediaDuration(audioPath);
 
@@ -675,23 +943,17 @@ app.post("/video-cinematic", async (req, res) => {
     console.log("[/video-cinematic] audio duration:", audioDuration);
     console.log("[/video-cinematic] clip duration:", duration);
 
+    const textForScreen = screenText || textOriginal;
+
     const segments = normalizeTextSegments(
       req.body.text_segments,
-      textOriginal,
+      textForScreen,
       duration
     );
 
     textFiles = createTextSegmentFiles(ts, segments);
 
-    const filter = getCinematicVideoFilter(
-      duration,
-      textFiles,
-      effect,
-      zoomSpeed,
-      resolution
-    );
-
-    await runFfmpeg([
+    const args = [
       "-y",
       "-hide_banner",
 
@@ -700,7 +962,35 @@ app.post("/video-cinematic", async (req, res) => {
       "-i", imagePath,
 
       "-i", audioPath,
+    ];
 
+    if (audioPlan.ambientIndex !== null) {
+      args.push("-i", ambientPath);
+    }
+
+    if (audioPlan.sfxIndex !== null) {
+      args.push("-i", sfxPath);
+    }
+
+    if (audioPlan.musicIndex !== null) {
+      args.push("-i", musicPath);
+    }
+
+    const filter = getCinematicVideoFilter(
+      duration,
+      textFiles,
+      effect,
+      zoomSpeed,
+      resolution,
+      visualOverlay,
+      overlayIntensity,
+      transitionIn,
+      transitionOut,
+      transitionDuration,
+      audioPlan
+    );
+
+    args.push(
       "-filter_complex", filter,
 
       "-map", "[v]",
@@ -720,8 +1010,10 @@ app.post("/video-cinematic", async (req, res) => {
       "-pix_fmt", "yuv420p",
       "-movflags", "+faststart",
 
-      outputPath,
-    ]);
+      outputPath
+    );
+
+    await runFfmpeg(args);
 
     const upload = await uploadToCloudinary(outputPath, "youtube/videos");
 
@@ -731,21 +1023,50 @@ app.post("/video-cinematic", async (req, res) => {
       public_id: upload.public_id,
       bytes: upload.bytes,
       duration: upload.duration,
+
       effect_used: effect,
       resolution_used: resolution,
+
+      text_used_for_voice: textOriginal,
+      texto_en_pantalla_used: screenText || null,
+
       text_segments_used: textFiles.map((s) => ({
         text: s.text,
         start: s.start,
         end: s.end,
       })),
+
       audio_duration_detected: audioDuration,
-      mode: "video_cinematic_v3_4_safe",
+
+      ambient_audio_used: ambientUrl || null,
+      ambient_volume_used: ambientUrl ? ambientVolume : 0,
+
+      sfx_audio_used: sfxUrl || null,
+      sfx_volume_used: sfxUrl ? sfxVolume : 0,
+
+      music_audio_used: musicUrl || null,
+      music_volume_used: musicUrl ? musicVolume : 0,
+
+      visual_overlay_used: visualOverlay,
+      overlay_intensity_used: overlayIntensity,
+
+      transition_in_used: transitionIn,
+      transition_out_used: transitionOut,
+      transition_duration_used: transitionDuration,
+
+      mode: "video_cinematic_v3_5_jimenez_audiovisual",
       visual_layers: [
         "ken_burns_motion",
-        "soft_haze",
+        "dynamic_visual_overlay",
         "fine_grain",
         "soft_vignette",
-        "segmented_text",
+        "screen_text",
+      ],
+      audio_layers: [
+        "voice_priority",
+        ambientUrl ? "ambient_low" : "ambient_none",
+        sfxUrl ? "sfx_low" : "sfx_none",
+        musicUrl ? "music_low" : "music_none",
       ],
     });
 
@@ -761,7 +1082,11 @@ app.post("/video-cinematic", async (req, res) => {
     safeDelete([
       imagePath,
       audioPath,
+      ambientPath,
+      sfxPath,
+      musicPath,
       outputPath,
+      ...downloadedOptionalFiles,
       ...textFiles.map((t) => t.path),
     ]);
   }
@@ -1004,7 +1329,7 @@ app.post("/merge-cinematic", async (req, res) => {
       clips_merged: videos.length,
       bytes: upload.bytes,
       duration: upload.duration,
-      mode: "cinematic_xfade_v3_4_safe",
+      mode: "cinematic_xfade_v3_5_safe",
       transition: req.body.transition || "fade",
     });
 
@@ -1024,5 +1349,5 @@ app.post("/merge-cinematic", async (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`ffmpeg-api v3.4-cinematic-safe — puerto ${PORT}`);
+  console.log(`ffmpeg-api v3.5-jimenez-audiovisual — puerto ${PORT}`);
 });
