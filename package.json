@@ -1,7 +1,7 @@
 {
   "name": "ffmpeg-api",
-  "version": "3.0.0",
-  "description": "FFmpeg API — Ken Burns + merge para pipeline YouTube Horror IA",
+  "version": "3.6.0",
+  "description": "FFmpeg API — Caballeros sin Blanca + Jiménez pipeline",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
