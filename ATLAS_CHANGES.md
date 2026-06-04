@@ -23,3 +23,12 @@ Notion "n8n Vive Andalucía". Hasta hacerlo, el endpoint da 404 y el mapa usa so
 
 ## Validación
 Parser (vm.Script) + ejecución en DOM simulado (incl. lang=ar): 0 errores; 50 popups OK.
+
+## 5 idiomas completos (4 jun 2026)
+- I18N ampliado a 5 idiomas: ES · EN · FR · PT · AR (363 claves cada uno, paridad exacta).
+- Portugués (pt-PT) AÑADIDO de cero; EN/FR/AR auditados y corregidos a calidad nativa.
+- Selector reordenado ES·EN·FR·PT·AR + botón PT. RTL solo en árabe.
+- Textos de código (validación, chatbot) y panel del Atlas migrados al sistema t()/data-t en los 5 idiomas.
+- Objetos de datos inline (8 ciudades, 6 épocas, 9 eventos del timeline) completados con pt.
+- Validado: parser vm.Script (0 errores) + ejecución en DOM simulado con applyLang en los 5 idiomas.
+- i18n_{en,fr,pt,ar}.json: traducciones por idioma (artefactos de respaldo).
