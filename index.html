@@ -857,18 +857,46 @@ a:hover { color: var(--terra-d); }
 }
 .mapa-controls-overlay .mc-zoom .mc-btn:hover { background: rgba(189,69,35,0.12); color: var(--terra); }
 
-.mapa-controls-overlay .mc-layers {
-  width: 132px;
+/* Dropdown selector de capa */
+.mapa-controls-overlay .mc-layers-dd {
+  position: relative;
+  align-self: stretch;
+}
+.mapa-controls-overlay .mc-layer-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  width: 100%;
+  min-width: 90px;
+}
+.mapa-controls-overlay .mc-layer-trigger .mc-label { flex: 1; text-align: left; }
+.mapa-controls-overlay .mc-dd-arrow { font-size: 9px; opacity: 0.55; transition: transform 0.2s; }
+.mapa-controls-overlay .mc-layers-dd.open .mc-dd-arrow { transform: rotate(180deg); }
+.mapa-controls-overlay .mc-layers-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: rgba(255,255,255,0.97);
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 120px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  border: 1px solid rgba(0,0,0,0.08);
+  z-index: 1000;
 }
 .mapa-controls-overlay .mc-layer {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 9px 13px;
   font-size: 12.5px;
   text-align: left;
   width: 100%;
   letter-spacing: 0.1px;
+  background: none;
+  border: none;
 }
 .mapa-controls-overlay .mc-layer + .mc-layer {
   border-top: 1px solid rgba(0,0,0,0.06);
@@ -876,15 +904,14 @@ a:hover { color: var(--terra-d); }
 .mapa-controls-overlay .mc-layer .mc-icon { font-size: 15px; line-height: 1; }
 .mapa-controls-overlay .mc-layer:hover { background: rgba(189,69,35,0.10); }
 .mapa-controls-overlay .mc-layer.active {
-  background: rgba(189,69,35,0.18);
+  background: rgba(189,69,35,0.15);
   color: var(--terra-d);
   font-weight: 700;
 }
 
 @media (max-width: 600px) {
   .mapa-controls-overlay { top: 10px; right: 10px; gap: 6px; }
-  .mapa-controls-overlay .mc-layers { width: 118px; }
-  .mapa-controls-overlay .mc-layer { padding: 7px 10px; font-size: 11.5px; }
+  .mapa-controls-overlay .mc-layer-trigger { padding: 7px 9px; font-size: 11.5px; min-width: 78px; }
   .mapa-controls-overlay .mc-zoom .mc-btn { width: 32px; height: 32px; font-size: 18px; }
 }
 
@@ -4116,17 +4143,25 @@ img, video, iframe { max-width: 100%; height: auto; }
               <button class="mc-btn" id="mcZoomIn" aria-label="Acercar" title="Acercar">+</button>
               <button class="mc-btn" id="mcZoomOut" aria-label="Alejar" title="Alejar">−</button>
             </div>
-            <div class="mc-group mc-layers">
-              <button class="mc-btn mc-layer active" data-layer="politico" title="Mapa político"><span class="mc-icon">🗺️</span><span class="mc-label" data-t="map.layer.politico">Mapa</span></button>
-              <button class="mc-btn mc-layer" data-layer="relieve" title="Mapa de relieve"><span class="mc-icon">⛰️</span><span class="mc-label" data-t="map.layer.relieve">Relieve</span></button>
-              <button class="mc-btn mc-layer" data-layer="satelite" title="Imagen satélite"><span class="mc-icon">🛰️</span><span class="mc-label" data-t="map.layer.satelite">Satélite</span></button>
+            <!-- Selector de capa: desplegable compacto -->
+            <div class="mc-group mc-layers-dd" id="mcLayersDd">
+              <button class="mc-btn mc-layer-trigger" id="mcLayerTrigger" title="Cambiar capa del mapa" aria-haspopup="true" aria-expanded="false">
+                <span class="mc-icon" id="mcLayerIcon">🗺️</span>
+                <span class="mc-label" id="mcLayerLabel" data-t="map.layer.politico">Mapa</span>
+                <span class="mc-dd-arrow">▾</span>
+              </button>
+              <div class="mc-layers-menu" id="mcLayersMenu" hidden>
+                <button class="mc-btn mc-layer active" data-layer="politico"><span class="mc-icon">🗺️</span><span data-t="map.layer.politico">Mapa</span></button>
+                <button class="mc-btn mc-layer" data-layer="relieve"><span class="mc-icon">⛰️</span><span data-t="map.layer.relieve">Relieve</span></button>
+                <button class="mc-btn mc-layer" data-layer="satelite"><span class="mc-icon">🛰️</span><span data-t="map.layer.satelite">Satélite</span></button>
+              </div>
             </div>
           </div>
           <!-- Atlas Andalusí: control de la capa de exploración (enclaves + monumentos reales) -->
           <div class="atlas-overlay" id="atlasOverlay">
             <div class="atlas-overlay-head">
               <span class="atlas-dot"></span>
-              <span data-t="atlas.title">Atlas Andalusí</span>
+              <span data-t="atlas.title">Al-Ándalus</span>
               <button class="atlas-toggle" id="atlasToggle" aria-pressed="true" title="Mostrar / ocultar la huella andalusí">●</button>
             </div>
             <div class="atlas-overlay-body" id="atlasBody">
@@ -4296,7 +4331,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 
   <div class="container">
     <div class="section-head">
-      <span class="tag">Diseña tu viaje · Atlas de Al-Ándalus</span>
+      <span class="tag">Diseña tu viaje · Ruta de Al-Ándalus</span>
       <h2 class="section-title">Explora, elige y crea tu ruta</h2>
       <p class="section-sub">Recorre las provincias, descubre sus ciudades y monumentos andalusíes y añádelos a “Mi Viaje”. Cuando lo tengas, lo convertimos en un circuito organizado a tu medida.</p>
     </div>
@@ -4304,7 +4339,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="vaexp-main">
         <nav class="vaexp-breadcrumb" id="vaexpCrumb"></nav>
         <div class="vaexp-panel" id="vaexpPanel">
-          <div class="vaexp-loading">Cargando el atlas en vivo…</div>
+          <div class="vaexp-loading">Cargando la huella andalusí…</div>
         </div>
       </div>
       <aside class="vaexp-trip">
@@ -4464,7 +4499,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       var nProv=regs.length;
       var nMon=regs.reduce(function(a,r){ return a+(r.total_elementos||0); },0);
       var card=document.createElement('button'); card.className='vaexp-card vaexp-card-pais-btn';
-      var meta = nProv? (plural(nProv,'provincia','provincias')+' · '+plural(nMon,'monumento','monumentos')) : 'En preparación';
+      var meta = pc.placeholder ? 'Próximamente' : (nProv? (plural(nProv,'provincia','provincias')+' · '+plural(nMon,'monumento','monumentos')) : 'Próximamente');
       card.innerHTML='<span class="vaexp-card-name">'+esc(pc.label)+'</span><span class="vaexp-card-meta">'+meta+'</span>';
       card.onclick=function(){ S.pais=pc.key; renderProvincias(pc.key); };
       box.appendChild(card);
@@ -4555,7 +4590,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     var ids=rel[pobId]||[];
     var els=ids.map(function(id){ return S.elById[id]; }).filter(Boolean);
     var wrap=document.createElement('div');
-    if(!els.length){ wrap.appendChild(emptyMsg('Esta población aún no tiene monumentos catalogados en el Atlas.')); }
+    if(!els.length){ wrap.appendChild(emptyMsg('Esta población aún no tiene monumentos catalogados.')); }
     else{
       var box=document.createElement('div'); box.className='vaexp-cards';
       els.forEach(function(e){
@@ -5299,6 +5334,7 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'nav.experiencia':'Tu experiencia',
       'pos.c3t':'3 maneras de vivir la experiencia',
       'pos.c3p':'Adaptamos el ritmo, el alojamiento y los servicios al grupo y al viaje que quieren vivir.',
+      'atlas.title':'Al-Ándalus',
       'chat.name':'Ibn Firnas · Vive al Ándalus',
       'chat.online':'Asistente de rutas y viajes andalusíes',
       'chat.greet':'Salam, bienvenido a Vive al Ándalus. Soy Ibn Firnas, tu asistente para diseñar rutas históricas, culturales y viajes organizados por el legado andalusí. ¿Cómo te llamas y qué tipo de experiencia te gustaría preparar?',
@@ -6431,20 +6467,61 @@ function initMap() {
     satelite: layerSatelite
   };
 
+  // Dropdown de capas
+  const mcLayersDd = document.getElementById('mcLayersDd');
+  const mcLayerTrigger = document.getElementById('mcLayerTrigger');
+  const mcLayersMenu = document.getElementById('mcLayersMenu');
+  const mcLayerIcon = document.getElementById('mcLayerIcon');
+  const mcLayerLabel = document.getElementById('mcLayerLabel');
+
+  const LAYER_META = {
+    politico: { icon: '🗺️', label: 'Mapa', tkey: 'map.layer.politico' },
+    relieve:  { icon: '⛰️', label: 'Relieve', tkey: 'map.layer.relieve' },
+    satelite: { icon: '🛰️', label: 'Satélite', tkey: 'map.layer.satelite' }
+  };
+
+  function closeLayerMenu() {
+    mcLayersMenu.hidden = true;
+    mcLayersDd.classList.remove('open');
+    mcLayerTrigger.setAttribute('aria-expanded', 'false');
+  }
+
+  mcLayerTrigger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (mcLayersMenu.hidden) {
+      mcLayersMenu.hidden = false;
+      mcLayersDd.classList.add('open');
+      mcLayerTrigger.setAttribute('aria-expanded', 'true');
+    } else {
+      closeLayerMenu();
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!mcLayersDd.contains(e.target)) closeLayerMenu();
+  });
+
   // Conectar botones del overlay HTML
   document.querySelectorAll('#mapaControlsOverlay .mc-layer').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.getAttribute('data-layer');
       const target = BASE_LAYERS_MAP[key];
-      if (!target || target === currentBaseLayer) return;
+      if (!target || target === currentBaseLayer) { closeLayerMenu(); return; }
       mapInstance.removeLayer(currentBaseLayer);
       target.addTo(mapInstance);
       // Mantener etiquetas siempre encima (excepto satélite, donde sólo nombres en zoom alto)
       if (mapInstance.hasLayer(layerEtiquetas)) layerEtiquetas.bringToFront();
       currentBaseLayer = target;
-      // Marcar activo
       document.querySelectorAll('#mapaControlsOverlay .mc-layer').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      // Actualizar trigger con la capa activa
+      const meta = LAYER_META[key];
+      if (meta) {
+        mcLayerIcon.textContent = meta.icon;
+        mcLayerLabel.textContent = (I18N[currentLang] && I18N[currentLang][meta.tkey]) || meta.label;
+        mcLayerLabel.setAttribute('data-t', meta.tkey);
+      }
+      closeLayerMenu();
     });
   });
   // Zoom HTML
