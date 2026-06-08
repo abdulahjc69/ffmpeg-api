@@ -4242,6 +4242,28 @@ img, video, iframe { max-width: 100%; height: auto; }
 .vaexp-serv-chip.on{background:#1f6f54;border-color:#1f6f54;color:#fff;}
 .vaexp-serv-ic{font-size:13px;}
 .vaexp-serv-tick{font-weight:800;}
+/* Accordion de servicios */
+.vaexp-chips-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.vaexp-chips-grid .vaexp-serv-chip{width:100%;justify-content:flex-start;border-radius:12px;}
+.vaexp-serv-chip--solo{grid-column:1/-1;max-width:calc(50% - 3.5px);margin:0 auto;}
+.vaexp-serv-dd-arrow{margin-left:auto;font-size:9px;opacity:.45;transition:transform .18s;}
+.vaexp-serv-chip.expanded{border-color:#bd4523;color:#bd4523;background:#fff8f6;}
+.vaexp-serv-chip.expanded.on{background:#bd4523;border-color:#bd4523;color:#fff;}
+.vaexp-serv-chip.expanded .vaexp-serv-dd-arrow{transform:rotate(180deg);opacity:.85;}
+.vaexp-serv-panel{margin-top:5px;background:#faf8f3;border:1px solid #e7e0d2;border-radius:12px;padding:12px 13px;grid-column:1/-1;animation:fadeInPanel .15s ease;}
+@keyframes fadeInPanel{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.vaexp-panel-hint{font-size:11.5px;color:#7a6a54;line-height:1.45;margin:0 0 9px;}
+.vaexp-panel-sec-title{font-size:10.5px;font-weight:700;color:#3a2f1c;text-transform:uppercase;letter-spacing:.06em;margin:10px 0 5px;}
+.vaexp-panel-sec-title:first-child{margin-top:0;}
+.vaexp-panel-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.vaexp-sub-chip{display:inline-flex;align-items:center;font-family:inherit;font-size:11.5px;color:#5b4a2e;background:#fff;border:1px solid #d9cdb4;border-radius:14px;padding:4px 10px;cursor:pointer;transition:all .12s;line-height:1.3;}
+.vaexp-sub-chip:hover{border-color:#bd4523;}
+.vaexp-sub-chip.on{background:#1f6f54;border-color:#1f6f54;color:#fff;}
+.vaexp-panel-profiles{display:flex;flex-direction:column;gap:4px;}
+.vaexp-sub-chip.vaexp-profile{flex-direction:column;align-items:flex-start;border-radius:9px;padding:7px 11px;width:100%;box-sizing:border-box;}
+.vaexp-sub-name{font-weight:700;font-size:12px;}
+.vaexp-sub-langs{font-size:10.5px;opacity:.7;margin-top:1px;}
+@media(max-width:480px){.vaexp-serv-chip--solo{max-width:100%;}}
 @media(max-width:720px){.vaexp-grid{grid-template-columns:1fr;}}
 .vaexp-grid{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start;margin-top:26px;}
 .vaexp-main{min-width:0;}
@@ -4438,7 +4460,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   var VAEXP_CFG = { SUBMIT_MODE:'preview', WEBHOOK:'https://n8n-production-3cc5.up.railway.app/webhook/vivealandalus-lead' };
 
   var S = { data:null, pobById:{}, elById:{}, regions:[], nivel:'paises', pais:null, services:[],
-            region:null, poblacion:null, elemento:null, trip:[],
+            serviceDetails:{}, region:null, poblacion:null, elemento:null, trip:[],
             intent:'disenar', prefs:{guia:'si',transporte:'si',hotel:'si',halal:'no'} };
   var TRIP_KEY='vaexp_trip_v1';
 
@@ -4740,6 +4762,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       seleccion:{ total_lugares:st.lugares, provincias:st.provincias, poblaciones:st.poblaciones, monumentos:monumentos.length, items:S.trip },
       accion:(S.intent==='presupuesto'?'solicitar_presupuesto':'disenar_ruta'),
       servicios:(S.services?S.services.slice():[]),
+      servicios_detalle:(S.serviceDetails||{}),
       origen:'explorador_atlas',
       ts:new Date().toISOString()
     };
@@ -4780,26 +4803,99 @@ img, video, iframe { max-width: 100%; height: auto; }
     var bS=$('vaexpFormSend'); if(bS) bS.onclick=function(){ sendForm(); };
     bindPrefs();
     try{ var __sv=localStorage.getItem('vaexp_serv_v1'); S.services=__sv?JSON.parse(__sv):[]; }catch(e){ S.services=[]; }
+    try{ var __sd=localStorage.getItem('vaexp_sdet_v1'); S.serviceDetails=__sd?JSON.parse(__sd):{}; }catch(e){ S.serviceDetails={}; }
     renderServ();
     loadTrip(); renderTrip();
     if(window.__atlasV2){ load(window.__atlasV2); }
     else { tryLoadFallback(); setTimeout(tryLoadFallback,1500); setTimeout(tryLoadFallback,4500); }
   }
-  // ===== Servicios reales (Bloque 1) =====
+  // ===== Servicios (Bloque 1) — con accordion de sub-opciones =====
   var SERVICIOS=[
-    {k:'transporte',    label:'Transporte',          ic:'🚌'},
-    {k:'guia_acomp',   label:'Guía acompañante',     ic:'🧭'},
-    {k:'guia_local',   label:'Guía local',            ic:'🗣️'},
-    {k:'hotel',        label:'Hotel',                 ic:'🏨'},
-    {k:'restauracion', label:'Restauración',          ic:'🍽️'},
-    {k:'halal',        label:'Experiencia Halal',     ic:'🕌'},
-    {k:'estandar',     label:'Experiencia estándar',  ic:'⭐'},
-    {k:'museos',       label:'Museos',                ic:'🏛️'},
-    {k:'monumentos',   label:'Monumentos',            ic:'🏯'},
-    {k:'traslados',    label:'Traslados aeropuerto',  ic:'✈️'},
-    {k:'seguro',       label:'Seguro opcional',       ic:'🛡️'}
+    {k:'hotel',        label:'Hotel',              ic:'🏨'},
+    {k:'transporte',   label:'Transporte',          ic:'🚌'},
+    {k:'guia_acomp',   label:'Guía acompañante',   ic:'🧭'},
+    {k:'guia_local',   label:'Guía local',          ic:'🗣️'},
+    {k:'restauracion', label:'Restauración',        ic:'🍽️'},
+    {k:'halal',        label:'Experiencia Halal',   ic:'🕌'},
+    {k:'monumentos',   label:'Monumentos',          ic:'🏯'},
+    {k:'museos',       label:'Museos',              ic:'🏛️'},
+    {k:'seguro',       label:'Seguro opcional',     ic:'🛡️', solo:true}
   ];
-  // ===== Tipos de viajero / cliente (Bloque 2) =====
+
+  // Sub-opciones por servicio
+  var SERV_OPTS={
+    hotel:{
+      hint:'Selecciona categoría y régimen orientativo. La propuesta final dependerá de fechas, disponibilidad y ciudad.',
+      sections:[
+        {title:'Tipo de alojamiento', opts:['Hostal','Hotel 1 estrella','Hotel 2 estrellas','Hotel 3 estrellas','Hotel 4 estrellas','Hotel 5 estrellas','Hotel boutique','Hotel histórico / con encanto','Apartamentos turísticos','Alojamiento a definir por el equipo']},
+        {title:'Régimen', opts:['Sin maletas','Servicio de maletas','Desayuno','Media pensión','Pensión completa','Solo alojamiento']}
+      ]
+    },
+    transporte:{
+      hint:'Elige el tipo de transporte orientativo. Si no lo sabes, lo ajustamos según número de viajeros y ruta.',
+      sections:[
+        {title:null, opts:['Coche VTC','Furgo VTC','Microbús','Minibús','Autocar mediano','Autocar grande','Autocar premium','Transporte adaptado / accesible','Transporte a definir por el equipo']}
+      ]
+    },
+    guia_acomp:{
+      hint:'El guía acompañante coordina el grupo durante el circuito. La asignación final depende de idioma, disponibilidad y ruta.',
+      sections:[
+        {title:'Tour leaders disponibles', profiles:[
+          {name:'Muhammad Achon',          langs:'Español · Inglés'},
+          {name:'Kurt Abdulkader Schaller', langs:'Español · Inglés'},
+          {name:'Mohammed',                langs:'Español'},
+          {name:'Yunaid Diaz',             langs:'Español · Inglés'},
+          {name:'Nabil',                   langs:'Español · Inglés'},
+          {name:'Hamdi',                   langs:'Español · Inglés · Árabe'},
+          {name:'Maryam Keller',           langs:'Español · Inglés'}
+        ]}
+      ]
+    },
+    guia_local:{
+      hint:'Los guías locales se asignan según ciudad, monumento, idioma y disponibilidad.',
+      sections:[
+        {title:null, opts:['Guía local oficial en monumentos','Guía local por ciudad','Guía local por idioma','Guía especializado en historia andalusí','Guía local a definir por el equipo']}
+      ]
+    },
+    restauracion:{
+      hint:'Podemos proponer restaurantes o adaptar la ruta a preferencias del grupo.',
+      sections:[
+        {title:null, opts:['Restaurantes seleccionados por Vive al Ándalus','El cliente propone restaurantes','Menú de grupo','Menú individual','Comida tradicional local','Opción vegetariana','Opción sin cerdo','Opción sin alcohol','Opción a definir por el equipo']}
+      ]
+    },
+    halal:{
+      hint:'Adaptamos la experiencia halal de forma práctica y respetuosa según ciudad, grupo y disponibilidad.',
+      sections:[
+        {title:null, opts:['Restauración halal','Restauración sin cerdo','Restauración sin alcohol','Horarios compatibles con oración','Espacios de oración si están disponibles','Hoteles adecuados para grupo musulmán','Experiencia halal a definir por el equipo']}
+      ]
+    },
+    seguro:{
+      hint:'El seguro depende del origen del grupo, duración del viaje, edad de los viajeros y coberturas necesarias.',
+      sections:[
+        {title:null, opts:['Seguro básico de viaje','Seguro de cancelación','Seguro médico de viaje','Seguro para grupos','Seguro a definir por el equipo']}
+      ]
+    }
+  };
+
+  // Patrimonio por ciudad
+  var MONS_BY_CIUDAD={
+    'Granada':  ['Alhambra','Generalife','Albaicín','Bañuelo','Muralla zirí','Aljibes'],
+    'Córdoba':  ['Mezquita-Catedral','Medina Azahara','Judería / entorno histórico','Puente Romano','Alcázar'],
+    'Sevilla':  ['Real Alcázar','Giralda / antigua aljama','Torre del Oro','Barrio de Santa Cruz'],
+    'Málaga':   ['Alcazaba','Gibralfaro','Centro histórico andalusí (pendiente)'],
+    'Toledo':   ['Mezquita del Cristo de la Luz','Puerta de Bisagra / murallas','Baños y restos islámicos','Barrios históricos'],
+    'Madrid':   ['Mayrit / muralla árabe','Entorno de la Almudena','Restos islámicos de Madrid']
+  };
+  var MUSEOS_BY_CIUDAD={
+    'Granada':  ['Museo de la Alhambra','Museo Arqueológico de Granada','Centro de interpretación (pendiente)'],
+    'Córdoba':  ['Museo de Medina Azahara','Museo Arqueológico de Córdoba'],
+    'Sevilla':  ['Espacios de patrimonio islámico (pendiente)'],
+    'Málaga':   ['Museo de Málaga (si procede)','Espacios patrimoniales (pendiente)'],
+    'Toledo':   ['Museo de Santa Cruz (contexto)','Patrimonio islámico (pendiente)'],
+    'Madrid':   ['Museo Arqueológico Nacional (contexto)','Restos de Mayrit (pendiente)']
+  };
+
+  // Tipos de viajero (Bloque 2) — sin cambios
   var TIPOS_VIAJERO=[
     {k:'particular',   label:'Particular o familia',  ic:'👨‍👩‍👧‍👦'},
     {k:'grupo_priv',   label:'Grupo privado',         ic:'🤝'},
@@ -4810,26 +4906,144 @@ img, video, iframe { max-width: 100%; height: auto; }
     {k:'agencia',      label:'Agencia de viajes',     ic:'✈️'},
     {k:'prof_tur',     label:'Profesional turístico', ic:'🗺️'}
   ];
+
+  var openServKey=null;
+
   function servActive(k){ return S.services.indexOf(k)>=0; }
-  function saveServ(){ try{ localStorage.setItem('vaexp_serv_v1',JSON.stringify(S.services)); }catch(e){} }
-  function toggleServ(k){ var i=S.services.indexOf(k); if(i>=0) S.services.splice(i,1); else S.services.push(k); saveServ(); renderServ(); renderTrip(); }
+  function saveServ(){
+    try{ localStorage.setItem('vaexp_serv_v1',JSON.stringify(S.services)); }catch(e){}
+    try{ localStorage.setItem('vaexp_sdet_v1',JSON.stringify(S.serviceDetails||{})); }catch(e){}
+  }
+  function subOptActive(k,opt){ return !!(S.serviceDetails&&S.serviceDetails[k]&&S.serviceDetails[k].indexOf(opt)>=0); }
+  function toggleSubOpt(k,opt){
+    if(!S.serviceDetails) S.serviceDetails={};
+    if(!S.serviceDetails[k]) S.serviceDetails[k]=[];
+    var arr=S.serviceDetails[k], i=arr.indexOf(opt);
+    if(i>=0) arr.splice(i,1); else arr.push(opt);
+    if(arr.length>0&&!servActive(k)){ S.services.push(k); }
+    saveServ(); renderServ(); renderTrip();
+  }
+  function toggleServOpen(k){
+    if(openServKey===k){ openServKey=null; }
+    else {
+      openServKey=k;
+      if(!servActive(k)){ S.services.push(k); saveServ(); }
+    }
+    renderServ(); renderTrip();
+  }
+
+  function renderServPanel(k,panel){
+    panel.innerHTML='';
+    if(k==='monumentos'||k==='museos'){ renderGeoPanel(k,panel); return; }
+    var cfg=SERV_OPTS[k]; if(!cfg) return;
+    if(cfg.hint){
+      var hint=document.createElement('p'); hint.className='vaexp-panel-hint'; hint.textContent=cfg.hint; panel.appendChild(hint);
+    }
+    cfg.sections.forEach(function(sec){
+      if(sec.title){ var h=document.createElement('div'); h.className='vaexp-panel-sec-title'; h.textContent=sec.title; panel.appendChild(h); }
+      if(sec.profiles){
+        var pDiv=document.createElement('div'); pDiv.className='vaexp-panel-profiles';
+        sec.profiles.forEach(function(p){
+          var b=document.createElement('button'); b.type='button';
+          b.className='vaexp-sub-chip vaexp-profile'+(subOptActive(k,p.name)?' on':'');
+          b.innerHTML='<span class="vaexp-sub-name">'+esc(p.name)+'</span><span class="vaexp-sub-langs">'+esc(p.langs)+'</span>';
+          b.onclick=function(){ toggleSubOpt(k,p.name); };
+          pDiv.appendChild(b);
+        });
+        panel.appendChild(pDiv);
+      } else if(sec.opts){
+        var cDiv=document.createElement('div'); cDiv.className='vaexp-panel-chips';
+        sec.opts.forEach(function(opt){
+          var b=document.createElement('button'); b.type='button';
+          b.className='vaexp-sub-chip'+(subOptActive(k,opt)?' on':'');
+          b.textContent=opt;
+          b.onclick=function(){ toggleSubOpt(k,opt); };
+          cDiv.appendChild(b);
+        });
+        panel.appendChild(cDiv);
+      }
+    });
+  }
+
+  function renderGeoPanel(k,panel){
+    var DATA=k==='monumentos'?MONS_BY_CIUDAD:MUSEOS_BY_CIUDAD;
+    var noSelMsg=k==='monumentos'
+      ?'Primero selecciona una ciudad o población en el mapa para ver sus monumentos.'
+      :'Primero selecciona una ciudad o población en el mapa para ver museos relacionados.';
+    var pendMsg=k==='monumentos'
+      ?'Monumentos pendientes de completar para esta ciudad.'
+      :'Base de museos pendiente de completar para esta ciudad.';
+
+    // Obtener nombre de ciudad actual
+    var ciudad='';
+    if(S.poblacion&&S.pobById[S.poblacion]) ciudad=S.pobById[S.poblacion].nombre||'';
+    if(!ciudad&&S.region){
+      var reg=null; (S.regions||[]).forEach(function(r){ if(r.id_notion===S.region) reg=r; });
+      if(reg) ciudad=reg.nombre||'';
+    }
+
+    var hint=document.createElement('p'); hint.className='vaexp-panel-hint';
+    if(!ciudad){ hint.textContent=noSelMsg; panel.appendChild(hint); return; }
+
+    // Buscar coincidencia
+    var matchKey=null;
+    Object.keys(DATA).forEach(function(key){
+      if(ciudad.toLowerCase().indexOf(key.toLowerCase())>=0||key.toLowerCase().indexOf(ciudad.toLowerCase())>=0) matchKey=key;
+    });
+    if(!matchKey){ hint.textContent=pendMsg; panel.appendChild(hint); return; }
+
+    hint.textContent=(k==='monumentos'?'Monumentos disponibles en ':'Museos disponibles en ')+matchKey+':';
+    panel.appendChild(hint);
+    var cDiv=document.createElement('div'); cDiv.className='vaexp-panel-chips';
+    DATA[matchKey].forEach(function(opt){
+      var b=document.createElement('button'); b.type='button';
+      b.className='vaexp-sub-chip'+(subOptActive(k,opt)?' on':'');
+      b.textContent=opt;
+      b.onclick=function(){ toggleSubOpt(k,opt); };
+      cDiv.appendChild(b);
+    });
+    panel.appendChild(cDiv);
+  }
+
+  function makeChips(list,container){
+    list.forEach(function(sv){
+      var b=document.createElement('button'); b.type='button';
+      b.className='vaexp-serv-chip'+(servActive(sv.k)?' on':'');
+      b.setAttribute('data-serv',sv.k);
+      b.innerHTML='<span class="vaexp-serv-ic">'+sv.ic+'</span>'+esc(sv.label);
+      b.onclick=function(){ var i=S.services.indexOf(sv.k); if(i>=0) S.services.splice(i,1); else S.services.push(sv.k); saveServ(); renderServ(); renderTrip(); };
+      container.appendChild(b);
+    });
+  }
+
   function renderServ(){
     var box=$('vaexpServChips'); if(!box) return;
     box.innerHTML='';
-    function makeChips(list, container){
-      list.forEach(function(sv){
-        var b=document.createElement('button'); b.type='button';
-        b.className='vaexp-serv-chip'+(servActive(sv.k)?' on':'');
-        b.setAttribute('data-serv',sv.k);
-        b.innerHTML='<span class="vaexp-serv-ic">'+sv.ic+'</span>'+esc(sv.label)+(servActive(sv.k)?' <span class="vaexp-serv-tick">✓</span>':'');
-        b.onclick=function(){ toggleServ(sv.k); };
-        container.appendChild(b);
-      });
-    }
-    makeChips(SERVICIOS, box);
+    var grid=document.createElement('div'); grid.className='vaexp-chips-grid';
+    SERVICIOS.forEach(function(sv){
+      var isOn=servActive(sv.k), isOpen=openServKey===sv.k;
+      var b=document.createElement('button'); b.type='button';
+      var cls='vaexp-serv-chip'+(isOn?' on':'')+(isOpen?' expanded':'')+(sv.solo?' vaexp-serv-chip--solo':'');
+      b.className=cls;
+      b.setAttribute('data-serv',sv.k);
+      b.innerHTML='<span class="vaexp-serv-ic">'+sv.ic+'</span>'+esc(sv.label)+'<span class="vaexp-serv-dd-arrow">▾</span>';
+      b.onclick=function(){ toggleServOpen(sv.k); };
+      grid.appendChild(b);
+
+      // Panel accordion (solo si abierto)
+      if(isOpen){
+        var panel=document.createElement('div'); panel.className='vaexp-serv-panel';
+        panel.id='vaexpPanel_'+sv.k;
+        renderServPanel(sv.k,panel);
+        grid.appendChild(panel);
+      }
+    });
+    box.appendChild(grid);
+
     // Bloque 2: Tipo de viajero
-    var box2=$('vaexpTipoChips'); if(box2){ box2.innerHTML=''; makeChips(TIPOS_VIAJERO, box2); }
-    var cnt=$('vaexpServCount'); if(cnt){ var total=S.services.length; if(total){ cnt.hidden=false; cnt.textContent=total+' sel.'; } else { cnt.hidden=true; cnt.textContent=''; } }
+    var box2=$('vaexpTipoChips'); if(box2){ box2.innerHTML=''; makeChips(TIPOS_VIAJERO,box2); }
+    var cnt=$('vaexpServCount');
+    if(cnt){ var total=S.services.length; cnt.hidden=!total; cnt.textContent=total?total+' sel.':''; }
   }
 
   // ===== Fallback v2 derivado del Atlas real (sin inventar datos) =====
