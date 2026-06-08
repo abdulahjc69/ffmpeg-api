@@ -4244,30 +4244,52 @@ img, video, iframe { max-width: 100%; height: auto; }
 .vaexp-serv-chip.on{background:#1f6f54;border-color:#1f6f54;color:#fff;}
 .vaexp-serv-ic{font-size:13px;}
 .vaexp-serv-tick{font-weight:800;}
+.vaexp-serv-chip-add{margin-left:auto;font-size:11px;opacity:.45;font-weight:600;}
+.vaexp-chips-grid .vaexp-serv-chip{cursor:pointer;}
 /* Accordion de servicios */
 .vaexp-chips-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
 .vaexp-chips-grid .vaexp-serv-chip{width:100%;justify-content:flex-start;border-radius:12px;}
 .vaexp-serv-chip--solo{grid-column:1/-1;width:fit-content;min-width:130px;margin:4px auto 0;padding:7px 20px;}
-.vaexp-serv-dd-arrow{margin-left:auto;font-size:9px;opacity:.45;transition:transform .18s;}
-.vaexp-serv-chip.expanded{border-color:#bd4523;color:#bd4523;background:#fff8f6;}
-.vaexp-serv-chip.expanded.on{background:#bd4523;border-color:#bd4523;color:#fff;}
-.vaexp-serv-chip.expanded .vaexp-serv-dd-arrow{transform:rotate(180deg);opacity:.85;}
-.vaexp-serv-panel{margin-top:5px;background:#faf8f3;border:1px solid #e7e0d2;border-radius:12px;padding:12px 13px;grid-column:1/-1;animation:fadeInPanel .15s ease;}
-@keyframes fadeInPanel{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
-.vaexp-panel-hint{font-size:11.5px;color:#7a6a54;line-height:1.45;margin:0 0 9px;}
-.vaexp-panel-sec-title{font-size:10.5px;font-weight:700;color:#3a2f1c;text-transform:uppercase;letter-spacing:.06em;margin:10px 0 5px;}
-.vaexp-panel-sec-title:first-child{margin-top:0;}
-.vaexp-panel-chips{display:flex;flex-wrap:wrap;gap:5px;}
-.vaexp-sub-chip{display:inline-flex;align-items:center;font-family:inherit;font-size:11.5px;color:#5b4a2e;background:#fff;border:1px solid #d9cdb4;border-radius:14px;padding:4px 10px;cursor:pointer;transition:all .12s;line-height:1.3;}
-.vaexp-sub-chip:hover{border-color:#bd4523;}
-.vaexp-sub-chip.on{background:#1f6f54;border-color:#1f6f54;color:#fff;}
-.vaexp-panel-profiles{display:flex;flex-direction:column;gap:4px;}
-.vaexp-sub-chip.vaexp-profile{flex-direction:column;align-items:flex-start;border-radius:9px;padding:7px 11px;width:100%;box-sizing:border-box;}
-.vaexp-sub-name{font-weight:700;font-size:12px;}
-.vaexp-sub-langs{font-size:10.5px;opacity:.7;margin-top:1px;}
-/* Tipo de viajero: grid 2 columnas igual que servicios */
+/* Modal de servicios */
+.serv-modal-overlay{position:fixed;inset:0;background:rgba(20,15,8,.55);z-index:3000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px);}
+.serv-modal-overlay[hidden]{display:none;}
+.serv-modal-box{background:#fff;border-radius:18px;width:100%;max-width:420px;max-height:82vh;display:flex;flex-direction:column;box-shadow:0 20px 56px rgba(0,0,0,.25);overflow:hidden;animation:smSlideIn .22s ease-out;}
+@keyframes smSlideIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.serv-modal-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #efe9dd;background:#faf8f3;flex-shrink:0;}
+.serv-modal-ic{font-size:22px;line-height:1;}
+.serv-modal-title{flex:1;font-family:'Amiri','Playfair Display',serif;font-size:17px;font-weight:700;color:#3a2f1c;}
+.serv-modal-close{background:none;border:0;font-size:22px;color:#8C7A5E;cursor:pointer;padding:0 4px;line-height:1;}
+.serv-modal-close:hover{color:#bd4523;}
+.serv-modal-body{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:11px;}
+.serv-modal-hint{font-size:12px;color:#7a6a54;line-height:1.5;margin:0;}
+.serv-modal-sec-title{font-size:10.5px;font-weight:700;color:#3a2f1c;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;}
+.serv-modal-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.serv-sub-chip{display:inline-flex;align-items:center;font-family:inherit;font-size:12px;color:#5b4a2e;background:#f7f5f0;border:1.5px solid #d9cdb4;border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .13s;line-height:1.3;user-select:none;}
+.serv-sub-chip:hover{border-color:#bd4523;background:#fff;}
+.serv-sub-chip.on{background:#1f6f54;border-color:#1f6f54;color:#fff;font-weight:600;}
+.serv-modal-profiles{display:flex;flex-direction:column;gap:5px;}
+.serv-profile-chip{display:flex;flex-direction:column;align-items:flex-start;font-family:inherit;font-size:12px;color:#5b4a2e;background:#f7f5f0;border:1.5px solid #d9cdb4;border-radius:11px;padding:8px 12px;cursor:pointer;transition:all .13s;width:100%;text-align:left;}
+.serv-profile-chip.on{background:#1f6f54;border-color:#1f6f54;color:#fff;}
+.serv-profile-name{font-weight:700;font-size:12.5px;}
+.serv-profile-langs{font-size:10.5px;opacity:.72;margin-top:2px;}
+.serv-modal-foot{padding:12px 18px 16px;border-top:1px solid #efe9dd;background:#faf8f3;flex-shrink:0;}
+.serv-modal-save{width:100%;background:var(--terra);color:#fff;border:0;border-radius:12px;padding:12px 16px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;letter-spacing:.01em;}
+.serv-modal-save:hover{background:var(--terra-d);}
+/* Resumen de servicios */
+.vaexp-serv-summary{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.vaexp-sum-row{display:flex;align-items:flex-start;gap:8px;background:#f7f5f0;border-radius:10px;padding:8px 10px;}
+.vaexp-sum-ic{font-size:14px;flex-shrink:0;margin-top:1px;}
+.vaexp-sum-text{flex:1;min-width:0;}
+.vaexp-sum-lbl{font-size:10.5px;font-weight:700;color:#8C7A5E;text-transform:uppercase;letter-spacing:.04em;}
+.vaexp-sum-val{font-size:12px;color:#3a2f1c;line-height:1.4;margin-top:1px;word-break:break-word;}
+.vaexp-sum-del{background:none;border:0;color:#c0392b;cursor:pointer;font-size:15px;padding:0 2px;line-height:1;flex-shrink:0;margin-top:1px;}
+/* Tipo de viajero: grid 2 columnas */
 .vaexp-tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
 .vaexp-tipo-grid .vaexp-serv-chip{width:100%;justify-content:flex-start;border-radius:12px;}
+@media(max-width:500px){
+  .serv-modal-box{max-height:90vh;border-radius:18px 18px 0 0;}
+  .serv-modal-overlay{align-items:flex-end;padding:0;}
+}
 @media(max-width:480px){.vaexp-serv-chip--solo{min-width:0;width:auto;}}
 @media(max-width:720px){.vaexp-grid{grid-template-columns:1fr;}}
 .vaexp-grid{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start;margin-top:26px;}
@@ -4376,6 +4398,7 @@ img, video, iframe { max-width: 100%; height: auto; }
           <div class="vaexp-serv-head">Servicios para tu viaje <span id="vaexpServCount" class="vaexp-serv-count" hidden></span></div>
           <p class="vaexp-serv-hint">Selecciona los servicios que quieres incluir en tu circuito.</p>
           <div class="vaexp-serv-chips" id="vaexpServChips"></div>
+          <div id="vaexpServSummary" class="vaexp-serv-summary" hidden></div>
         </div>
 
         <div class="vaexp-serv vaexp-serv--tipo" id="vaexpTipo">
@@ -4807,6 +4830,14 @@ img, video, iframe { max-width: 100%; height: auto; }
     var bC=$('vaexpFormCancel'); if(bC) bC.onclick=function(){ closeForm(); };
     var bS=$('vaexpFormSend'); if(bS) bS.onclick=function(){ sendForm(); };
     bindPrefs();
+    // Modal de servicios — listeners
+    (function(){
+      var modal=$('servModal'), saveBtn=$('servModalSave'), closeBtn=$('servModalClose');
+      if(saveBtn) saveBtn.onclick=saveServModal;
+      if(closeBtn) closeBtn.onclick=closeServModal;
+      if(modal) modal.addEventListener('click',function(e){ if(e.target===modal) closeServModal(); });
+      document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeServModal(); });
+    })();
     try{ var __sv=localStorage.getItem('vaexp_serv_v1'); S.services=__sv?JSON.parse(__sv):[]; }catch(e){ S.services=[]; }
     try{ var __sd=localStorage.getItem('vaexp_sdet_v1'); S.serviceDetails=__sd?JSON.parse(__sd):{}; }catch(e){ S.serviceDetails={}; }
     renderServ();
@@ -4912,110 +4943,153 @@ img, video, iframe { max-width: 100%; height: auto; }
     {k:'prof_tur',     label:'Profesional turístico', ic:'🗺️'}
   ];
 
-  var openServKey=null;
-
   function servActive(k){ return S.services.indexOf(k)>=0; }
   function saveServ(){
     try{ localStorage.setItem('vaexp_serv_v1',JSON.stringify(S.services)); }catch(e){}
     try{ localStorage.setItem('vaexp_sdet_v1',JSON.stringify(S.serviceDetails||{})); }catch(e){}
   }
   function subOptActive(k,opt){ return !!(S.serviceDetails&&S.serviceDetails[k]&&S.serviceDetails[k].indexOf(opt)>=0); }
-  function toggleSubOpt(k,opt){
-    if(!S.serviceDetails) S.serviceDetails={};
-    if(!S.serviceDetails[k]) S.serviceDetails[k]=[];
-    var arr=S.serviceDetails[k], i=arr.indexOf(opt);
-    if(i>=0) arr.splice(i,1); else arr.push(opt);
-    if(arr.length>0&&!servActive(k)){ S.services.push(k); }
-    saveServ(); renderServ(); renderTrip();
-  }
-  function toggleServOpen(k){
-    if(openServKey===k&&servActive(k)){
-      // Chip activo + panel abierto → desactivar y cerrar
-      var i=S.services.indexOf(k); if(i>=0) S.services.splice(i,1);
-      if(S.serviceDetails) S.serviceDetails[k]=[];
-      openServKey=null;
-    } else if(openServKey===k){
-      // Panel abierto sin activo → solo cerrar
-      openServKey=null;
-    } else {
-      // Abrir panel; activar si no estaba activo
-      openServKey=k;
-      if(!servActive(k)){ S.services.push(k); }
-    }
-    saveServ(); renderServ(); renderTrip();
+
+  // ── Modal de servicios ──────────────────────────────────────────────────────
+  var _servModalKey=null;
+
+  function openServModal(k){
+    _servModalKey=k;
+    var sv=null; SERVICIOS.forEach(function(s){ if(s.k===k) sv=s; });
+    if(!sv) return;
+    var modal=$('servModal'); if(!modal) return;
+    $('servModalIc').textContent=sv.ic;
+    $('servModalTitle').textContent=sv.label;
+    buildModalBody(k);
+    modal.hidden=false;
+    document.body.style.overflow='hidden';
   }
 
-  function renderServPanel(k,panel){
-    panel.innerHTML='';
-    if(k==='monumentos'||k==='museos'){ renderGeoPanel(k,panel); return; }
+  function closeServModal(){
+    var modal=$('servModal'); if(!modal) return;
+    modal.hidden=true;
+    document.body.style.overflow='';
+    _servModalKey=null;
+  }
+
+  function buildModalBody(k){
+    var body=$('servModalBody'); if(!body) return;
+    body.innerHTML='';
+    if(k==='monumentos'||k==='museos'){ buildModalGeo(k,body); return; }
     var cfg=SERV_OPTS[k]; if(!cfg) return;
     if(cfg.hint){
-      var hint=document.createElement('p'); hint.className='vaexp-panel-hint'; hint.textContent=cfg.hint; panel.appendChild(hint);
+      var hint=document.createElement('p'); hint.className='serv-modal-hint'; hint.textContent=cfg.hint; body.appendChild(hint);
     }
     cfg.sections.forEach(function(sec){
-      if(sec.title){ var h=document.createElement('div'); h.className='vaexp-panel-sec-title'; h.textContent=sec.title; panel.appendChild(h); }
+      if(sec.title){ var h=document.createElement('div'); h.className='serv-modal-sec-title'; h.textContent=sec.title; body.appendChild(h); }
       if(sec.profiles){
-        var pDiv=document.createElement('div'); pDiv.className='vaexp-panel-profiles';
+        var pDiv=document.createElement('div'); pDiv.className='serv-modal-profiles';
         sec.profiles.forEach(function(p){
           var b=document.createElement('button'); b.type='button';
-          b.className='vaexp-sub-chip vaexp-profile'+(subOptActive(k,p.name)?' on':'');
-          b.innerHTML='<span class="vaexp-sub-name">'+esc(p.name)+'</span><span class="vaexp-sub-langs">'+esc(p.langs)+'</span>';
-          b.onclick=function(){ toggleSubOpt(k,p.name); };
+          b.className='serv-profile-chip'+(subOptActive(k,p.name)?' on':'');
+          b.innerHTML='<span class="serv-profile-name">'+esc(p.name)+'</span><span class="serv-profile-langs">'+esc(p.langs)+'</span>';
+          b.onclick=function(){ modalToggleSub(k,p.name,b); };
           pDiv.appendChild(b);
         });
-        panel.appendChild(pDiv);
+        body.appendChild(pDiv);
       } else if(sec.opts){
-        var cDiv=document.createElement('div'); cDiv.className='vaexp-panel-chips';
+        var cDiv=document.createElement('div'); cDiv.className='serv-modal-chips';
         sec.opts.forEach(function(opt){
           var b=document.createElement('button'); b.type='button';
-          b.className='vaexp-sub-chip'+(subOptActive(k,opt)?' on':'');
+          b.className='serv-sub-chip'+(subOptActive(k,opt)?' on':'');
           b.textContent=opt;
-          b.onclick=function(){ toggleSubOpt(k,opt); };
+          b.onclick=function(){ modalToggleSub(k,opt,b); };
           cDiv.appendChild(b);
         });
-        panel.appendChild(cDiv);
+        body.appendChild(cDiv);
       }
     });
   }
 
-  function renderGeoPanel(k,panel){
+  function buildModalGeo(k,body){
     var DATA=k==='monumentos'?MONS_BY_CIUDAD:MUSEOS_BY_CIUDAD;
-    var noSelMsg=k==='monumentos'
-      ?'Primero selecciona una ciudad o población en el mapa para ver sus monumentos.'
-      :'Primero selecciona una ciudad o población en el mapa para ver museos relacionados.';
-    var pendMsg=k==='monumentos'
-      ?'Monumentos pendientes de completar para esta ciudad.'
-      :'Base de museos pendiente de completar para esta ciudad.';
-
-    // Obtener nombre de ciudad actual
     var ciudad='';
     if(S.poblacion&&S.pobById[S.poblacion]) ciudad=S.pobById[S.poblacion].nombre||'';
     if(!ciudad&&S.region){
-      var reg=null; (S.regions||[]).forEach(function(r){ if(r.id_notion===S.region) reg=r; });
-      if(reg) ciudad=reg.nombre||'';
+      (S.regions||[]).forEach(function(r){ if(r.id_notion===S.region) ciudad=r.nombre||''; });
     }
-
-    var hint=document.createElement('p'); hint.className='vaexp-panel-hint';
-    if(!ciudad){ hint.textContent=noSelMsg; panel.appendChild(hint); return; }
-
-    // Buscar coincidencia
+    var hint=document.createElement('p'); hint.className='serv-modal-hint';
+    if(!ciudad){
+      hint.textContent=k==='monumentos'
+        ?'Primero selecciona una ciudad o población en el mapa para ver sus monumentos.'
+        :'Primero selecciona una ciudad o población en el mapa para ver museos relacionados.';
+      body.appendChild(hint); return;
+    }
     var matchKey=null;
     Object.keys(DATA).forEach(function(key){
       if(ciudad.toLowerCase().indexOf(key.toLowerCase())>=0||key.toLowerCase().indexOf(ciudad.toLowerCase())>=0) matchKey=key;
     });
-    if(!matchKey){ hint.textContent=pendMsg; panel.appendChild(hint); return; }
-
-    hint.textContent=(k==='monumentos'?'Monumentos disponibles en ':'Museos disponibles en ')+matchKey+':';
-    panel.appendChild(hint);
-    var cDiv=document.createElement('div'); cDiv.className='vaexp-panel-chips';
+    if(!matchKey){
+      hint.textContent=k==='monumentos'?'Monumentos pendientes de completar para esta ciudad.':'Base de museos pendiente de completar para esta ciudad.';
+      body.appendChild(hint); return;
+    }
+    hint.textContent=(k==='monumentos'?'Monumentos disponibles en ':'Museos en ')+matchKey+':';
+    body.appendChild(hint);
+    var cDiv=document.createElement('div'); cDiv.className='serv-modal-chips';
     DATA[matchKey].forEach(function(opt){
       var b=document.createElement('button'); b.type='button';
-      b.className='vaexp-sub-chip'+(subOptActive(k,opt)?' on':'');
+      b.className='serv-sub-chip'+(subOptActive(k,opt)?' on':'');
       b.textContent=opt;
-      b.onclick=function(){ toggleSubOpt(k,opt); };
+      b.onclick=function(){ modalToggleSub(k,opt,b); };
       cDiv.appendChild(b);
     });
-    panel.appendChild(cDiv);
+    body.appendChild(cDiv);
+  }
+
+  function modalToggleSub(k,opt,btn){
+    if(!S.serviceDetails) S.serviceDetails={};
+    if(!S.serviceDetails[k]) S.serviceDetails[k]=[];
+    var arr=S.serviceDetails[k], i=arr.indexOf(opt);
+    if(i>=0){ arr.splice(i,1); btn.classList.remove('on'); }
+    else { arr.push(opt); btn.classList.add('on'); }
+    saveServ();
+  }
+
+  function saveServModal(){
+    var k=_servModalKey; if(!k) return;
+    var arr=(S.serviceDetails&&S.serviceDetails[k])?S.serviceDetails[k]:[];
+    if(arr.length>0){
+      if(!servActive(k)) S.services.push(k);
+    } else {
+      var i=S.services.indexOf(k); if(i>=0) S.services.splice(i,1);
+    }
+    saveServ();
+    closeServModal();
+    renderServ(); renderTrip();
+  }
+
+  function renderServSummary(){
+    var box=$('vaexpServSummary'); if(!box) return;
+    var entries=[];
+    SERVICIOS.forEach(function(sv){
+      if(!servActive(sv.k)) return;
+      var details=(S.serviceDetails&&S.serviceDetails[sv.k])?S.serviceDetails[sv.k]:[];
+      entries.push({sv:sv, details:details});
+    });
+    if(!entries.length){ box.innerHTML=''; box.hidden=true; return; }
+    box.hidden=false; box.innerHTML='';
+    entries.forEach(function(e){
+      var row=document.createElement('div'); row.className='vaexp-sum-row';
+      var ic=document.createElement('span'); ic.className='vaexp-sum-ic'; ic.textContent=e.sv.ic;
+      var txt=document.createElement('div'); txt.className='vaexp-sum-text';
+      var lbl=document.createElement('div'); lbl.className='vaexp-sum-lbl'; lbl.textContent=e.sv.label;
+      var val=document.createElement('div'); val.className='vaexp-sum-val';
+      val.textContent=e.details.length?e.details.join(' · '):'Seleccionado';
+      txt.appendChild(lbl); txt.appendChild(val);
+      var x=document.createElement('button'); x.className='vaexp-sum-del'; x.textContent='×'; x.title='Quitar';
+      x.onclick=(function(k){ return function(){
+        var i=S.services.indexOf(k); if(i>=0) S.services.splice(i,1);
+        if(S.serviceDetails) S.serviceDetails[k]=[];
+        saveServ(); renderServ(); renderTrip();
+      }; })(e.sv.k);
+      row.appendChild(ic); row.appendChild(txt); row.appendChild(x);
+      box.appendChild(row);
+    });
   }
 
   function makeChips(list,container){
@@ -5034,25 +5108,17 @@ img, video, iframe { max-width: 100%; height: auto; }
     box.innerHTML='';
     var grid=document.createElement('div'); grid.className='vaexp-chips-grid';
     SERVICIOS.forEach(function(sv){
-      var isOn=servActive(sv.k), isOpen=openServKey===sv.k;
+      var isOn=servActive(sv.k);
       var b=document.createElement('button'); b.type='button';
-      var cls='vaexp-serv-chip'+(isOn?' on':'')+(isOpen?' expanded':'')+(sv.solo?' vaexp-serv-chip--solo':'');
-      b.className=cls;
+      b.className='vaexp-serv-chip'+(isOn?' on':'')+(sv.solo?' vaexp-serv-chip--solo':'');
       b.setAttribute('data-serv',sv.k);
-      b.innerHTML='<span class="vaexp-serv-ic">'+sv.ic+'</span>'+esc(sv.label)+'<span class="vaexp-serv-dd-arrow">▾</span>';
-      b.onclick=function(){ toggleServOpen(sv.k); };
+      var tick=isOn?'<span class="vaexp-serv-tick"> ✓</span>':'<span class="vaexp-serv-chip-add">+</span>';
+      b.innerHTML='<span class="vaexp-serv-ic">'+sv.ic+'</span>'+esc(sv.label)+tick;
+      b.onclick=function(){ openServModal(sv.k); };
       grid.appendChild(b);
-
-      // Panel accordion (solo si abierto)
-      if(isOpen){
-        var panel=document.createElement('div'); panel.className='vaexp-serv-panel';
-        panel.id='vaexpPanel_'+sv.k;
-        renderServPanel(sv.k,panel);
-        grid.appendChild(panel);
-      }
     });
     box.appendChild(grid);
-
+    renderServSummary();
     // Bloque 2: Tipo de viajero en grid 2 columnas
     var box2=$('vaexpTipoChips');
     if(box2){
@@ -5499,6 +5565,22 @@ img, video, iframe { max-width: 100%; height: auto; }
         </button>
       </div>
       <button class="poi-modal-add" id="poiModalAdd">+ Añadir a mi viaje</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============ MODAL DE SERVICIOS ============ -->
+<div id="servModal" class="serv-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="servModalTitle">
+  <div class="serv-modal-box">
+    <div class="serv-modal-head">
+      <span class="serv-modal-ic" id="servModalIc"></span>
+      <span class="serv-modal-title" id="servModalTitle"></span>
+      <button class="serv-modal-close" id="servModalClose" aria-label="Cerrar">×</button>
+    </div>
+    <div class="serv-modal-body" id="servModalBody"></div>
+    <div class="serv-modal-foot">
+      <button class="serv-modal-save" id="servModalSave">Guardar selección ✓</button>
     </div>
   </div>
 </div>
