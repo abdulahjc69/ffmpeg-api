@@ -17,9 +17,12 @@
 <link rel="alternate" hreflang="en" href="https://vivealandalus.com/?lang=en">
 <link rel="alternate" hreflang="ar" href="https://vivealandalus.com/?lang=ar">
 <link rel="alternate" hreflang="fr" href="https://vivealandalus.com/?lang=fr">
+<link rel="alternate" hreflang="pt" href="https://vivealandalus.com/?lang=pt">
 <link rel="alternate" hreflang="x-default" href="https://vivealandalus.com/">
 
 <!-- Open Graph -->
+<meta property="og:image" content="https://res.cloudinary.com/didxuy5wm/image/upload/f_auto,q_auto/vaa-logo.png">
+<meta name="twitter:image" content="https://res.cloudinary.com/didxuy5wm/image/upload/f_auto,q_auto/vaa-logo.png">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:locale:alternate" content="en_US">
@@ -44,7 +47,7 @@
   "legalName": "Bin Firnas Travel SL",
   "description": "Especialistas en grupos culturales por la España de Al-Ándalus",
   "url": "https://vivealandalus.com",
-  "logo": "https://vivealandalus.com/logo.png",
+  "logo": "https://res.cloudinary.com/didxuy5wm/image/upload/f_auto,q_auto/vaa-logo.png",
   "telephone": "+34633305906",
   "email": "reservas@vivealandalus.com",
   "address": {
@@ -5450,6 +5453,13 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="footer-legal">
       <div>© 2026 Bin Firnas Travel SL · CIF B56080765 · <span data-t="ft.cian">Licencia</span> CIAN-147996-3</div>
       <div data-t="ft.dir">C/ Teatro 19, bajo · 14200 Peñarroya-Pueblonuevo · Córdoba · España</div>
+      <div style="margin-top:6px;">
+        <a href="/politica-de-privacidad" target="_blank" rel="noopener">Política de privacidad</a>
+        &nbsp;·&nbsp;
+        <a href="/aviso-legal" target="_blank" rel="noopener">Aviso legal</a>
+        &nbsp;·&nbsp;
+        <a href="/cookies" target="_blank" rel="noopener">Política de cookies</a>
+      </div>
     </div>
     <div class="footer-brand">
       <a href="https://binfirnastravel.com/" target="_blank" rel="noopener" class="footer-brand-link">
@@ -7513,7 +7523,7 @@ const IBN_FIRNAS_OFFSCOPE = [
 ];
 
 function ibnFirnasGuardrail(text) {
-  return ZIRYAB_OFFSCOPE.some(function(re){ return re.test(text); });
+  return IBN_FIRNAS_OFFSCOPE.some(function(re){ return re.test(text); });
 }
 
 const IBN_FIRNAS_SYSTEM = `Eres Ibn Firnas, asistente de Vive al Ándalus. Tu único propósito es ayudar a diseñar rutas culturales, históricos y viajes organizados por el legado de Al-Ándalus (Córdoba, Sevilla, Granada, Toledo, Málaga, Madrid, Ronda y ciudades andalusíes de España).
