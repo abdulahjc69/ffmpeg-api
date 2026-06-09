@@ -4010,6 +4010,40 @@ img, video, iframe { max-width: 100%; height: auto; }
 .panel-grp-n{background:rgba(194,149,74,.18);color:#e7b765;border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;}
 @media (min-width:1025px){.panel-grp{grid-column:1/-1;}}
 </style>
+<style>
+/* ── PALETA COMERCIAL REFINADA ─────────────────────────── */
+:root {
+  --crema: #F6EEDF;
+  --crema-2: #EDE6D6;
+  --terra: #BD4523;
+  --oro: #C2954A;
+  --oliva: #6B7755;
+  --negro: #1A1A1A;
+  --texto-sec: #4A4A4A;
+}
+/* Reducir terracota en fondos de sección */
+.section-tag { background: var(--crema-2); color: var(--oliva); }
+.sol-modal-tag { background: var(--crema-2); color: var(--oliva); }
+/* Secciones con fondo claro */
+.niveles-section, #niveles { background: var(--crema); }
+/* Fondos terracota a versión más suave */
+.wiz-header { background: var(--negro); }
+.wiz-dot.active { background: var(--terra); }
+.wiz-dot.done { background: var(--oro); }
+/* Mejorar legibilidad del wizard */
+.wiz-modal { background: #fff; }
+.wiz-body { background: #fff; }
+.wiz-footer { background: var(--crema); border-top: 1px solid var(--crema-2); }
+.wiz-summary-block { background: var(--crema); }
+.wiz-tranquiliza { background: #eef5ee; border-color: var(--oliva); color: #3a4a2e; }
+/* Tarjetas de ciudad más elegantes */
+.wiz-city-card.selected { border-color: var(--terra); background: #fff9f7; }
+/* Servicios */
+.wiz-srv-btn.active { border-color: var(--oliva); background: #f3f5ef; }
+.wiz-srv-btn.active .wiz-srv-name { color: var(--oliva); }
+/* Texto secundario */
+.wiz-panel-sub, .wiz-srv-desc { color: var(--texto-sec); }
+</style>
 </head>
 <body>
 
@@ -4228,7 +4262,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 </section>
 
 <!-- ============ EXPLORADOR JERÁRQUICO DEL ATLAS · prototipo F4 ============ -->
-<section class="section vaexp-section" id="explorador">
+<section class="section vaexp-section" id="explorador" style="display:none">
 <style>
 #explorador [hidden]{display:none !important;}
 .vaexp-section{background:#f7f5f0;}
@@ -6049,13 +6083,12 @@ img, video, iframe { max-width: 100%; height: auto; }
       </div>
       <div class="wiz-progress-track"><div class="wiz-progress-fill" id="wizProgressBar"></div></div>
       <div class="wiz-dots">
-        <button class="wiz-dot" data-step="1" onclick="wizGoToStep(1)" aria-label="Paso 1"></button>
-        <button class="wiz-dot" data-step="2" onclick="wizGoToStep(2)" aria-label="Paso 2"></button>
-        <button class="wiz-dot" data-step="3" onclick="wizGoToStep(3)" aria-label="Paso 3"></button>
-        <button class="wiz-dot" data-step="4" onclick="wizGoToStep(4)" aria-label="Paso 4"></button>
-        <button class="wiz-dot" data-step="5" onclick="wizGoToStep(5)" aria-label="Paso 5"></button>
-        <button class="wiz-dot" data-step="6" onclick="wizGoToStep(6)" aria-label="Paso 6"></button>
-        <button class="wiz-dot" data-step="7" onclick="wizGoToStep(7)" aria-label="Paso 7"></button>
+        <button class="wiz-dot" data-step="1" onclick="wizGoToStep(1)" aria-label="Paso 1: Fechas"></button>
+        <button class="wiz-dot" data-step="2" onclick="wizGoToStep(2)" aria-label="Paso 2: Viajeros"></button>
+        <button class="wiz-dot" data-step="3" onclick="wizGoToStep(3)" aria-label="Paso 3: Ruta"></button>
+        <button class="wiz-dot" data-step="4" onclick="wizGoToStep(4)" aria-label="Paso 4: Servicios"></button>
+        <button class="wiz-dot" data-step="5" onclick="wizGoToStep(5)" aria-label="Paso 5: Resumen"></button>
+        <button class="wiz-dot" data-step="6" onclick="wizGoToStep(6)" aria-label="Paso 6: Contacto"></button>
       </div>
     </div>
     <div class="wiz-body">
@@ -6167,15 +6200,9 @@ img, video, iframe { max-width: 100%; height: auto; }
         <ol class="wiz-order-list" id="wizCityOrder"></ol>
       </div>
 
-      <!-- PASO 4: Lugares por ciudad -->
+      <!-- PASO 4: Servicios -->
       <div id="wizPanel4" class="wiz-panel">
-        <h3 class="wiz-step-title">📍 Paso 4 · Lugares por ciudad</h3>
-        <div id="wizStep4Tabs"></div>
-      </div>
-
-      <!-- PASO 5: Necesidades del grupo -->
-      <div id="wizPanel5" class="wiz-panel">
-        <h3 class="wiz-step-title">🛎️ Paso 5 · ¿Qué necesitáis que organicemos?</h3>
+        <h3 class="wiz-step-title">🛎️ Paso 4 · ¿Qué necesitáis que organicemos?</h3>
         <p class="wiz-tranquiliza">No hace falta que lo tengáis todo decidido. Marcad lo que sepáis y nuestro equipo os ayudará a preparar el viaje.</p>
         <div class="wiz-servicios-grid">
           <button type="button" class="wiz-srv-btn active" data-srv="hotel" onclick="wizToggleServicio('hotel')">
@@ -6216,15 +6243,15 @@ img, video, iframe { max-width: 100%; height: auto; }
         </div>
       </div>
 
-      <!-- PASO 6: Resumen -->
-      <div id="wizPanel6" class="wiz-panel">
-        <h3 class="wiz-step-title">📋 Paso 6 · Resumen de tu viaje</h3>
+      <!-- PASO 5: Resumen -->
+      <div id="wizPanel5" class="wiz-panel">
+        <h3 class="wiz-step-title">📋 Paso 5 · Resumen de tu viaje</h3>
         <div id="wizSummaryContent"></div>
       </div>
 
-      <!-- PASO 7: Contacto -->
-      <div id="wizPanel7" class="wiz-panel">
-        <h3 class="wiz-step-title">📬 Paso 7 · Tus datos de contacto</h3>
+      <!-- PASO 6: Contacto -->
+      <div id="wizPanel6" class="wiz-panel">
+        <h3 class="wiz-step-title">📬 Paso 6 · Tus datos de contacto</h3>
         <div class="wiz-contact-grid">
           <div class="wiz-field full-width">
             <label for="wizNombre">Nombre completo *</label>
@@ -6977,7 +7004,7 @@ let atlasClusterEnclaves = null;
 let atlasMonLayer = null;
 let atlasEnclaveMarkers = [];
 let atlasMonMarkers = [];
-let atlasState = { on: true, epoca: 'all', mon: true };
+let atlasState = { on: false, epoca: 'all', mon: true };
 function atlasNivelLabel(n) { return n === 1 ? t('atlas.nivel.medina', 'Medina · capital') : (n === 2 ? t('atlas.nivel.fortaleza', 'Plaza / fortaleza') : t('atlas.nivel.enclave', 'Enclave / barrio')); }
 
 function atlasEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -9025,13 +9052,15 @@ function wizGoToStep(n) {
   const panel = document.getElementById('wizPanel' + n);
   if (panel) panel.classList.add('active');
   wizUpdateProgress();
-  if (n === 4) wizRenderStep4();
-  if (n === 6) wizRenderStep6();
+  if (n === 5) wizRenderStep5();
+  // Cambiar texto del botón según paso
+  const nextBtn = document.getElementById('wizSubmitBtn');
+  if (nextBtn) nextBtn.textContent = n === 6 ? 'Enviar y recibir mi propuesta →' : 'Siguiente →';
 }
 
 function wizUpdateProgress() {
   const bar = document.getElementById('wizProgressBar');
-  if (bar) bar.style.width = (((VWIZ.step - 1) / 6) * 100) + '%';
+  if (bar) bar.style.width = (((VWIZ.step - 1) / 5) * 100) + '%';
   document.querySelectorAll('.wiz-dot').forEach(d => {
     const s = parseInt(d.dataset.step);
     d.classList.toggle('done', s < VWIZ.step);
@@ -9054,7 +9083,7 @@ function wizValidateStep(n) {
     if (VWIZ.ciudades_orden.length === 0) return 'Selecciona al menos una ciudad';
     return null;
   }
-  if (n === 7) {
+  if (n === 6) {
     const nombre = document.getElementById('wizNombre')?.value.trim();
     const email = document.getElementById('wizEmail')?.value.trim();
     const whatsapp = document.getElementById('wizWhatsapp')?.value.trim();
@@ -9069,11 +9098,11 @@ function wizValidateStep(n) {
 }
 
 function wizNext() {
+  wizSyncStep(VWIZ.step);
   const err = wizValidateStep(VWIZ.step);
   if (err) { wizShowError(err); return; }
   wizClearError();
-  wizSyncStep(VWIZ.step);
-  if (VWIZ.step < 7) wizGoToStep(VWIZ.step + 1);
+  if (VWIZ.step < 6) wizGoToStep(VWIZ.step + 1);
   else wizSubmit();
 }
 
@@ -9190,55 +9219,6 @@ function wizCityMove(idx, dir) {
   wizRenderCityOrder();
 }
 
-function wizRenderStep4() {
-  const container = document.getElementById('wizStep4Tabs');
-  if (!container) return;
-  container.innerHTML = '';
-  if (VWIZ.ciudades_orden.length === 0) {
-    container.innerHTML = '<p style="color:var(--terra)">No hay ciudades seleccionadas. Vuelve al paso 3.</p>';
-    return;
-  }
-  const tabBar = document.createElement('div'); tabBar.className = 'wiz-tab-bar';
-  const tabContent = document.createElement('div'); tabContent.className = 'wiz-tab-content';
-  VWIZ.ciudades_orden.forEach((city, ci) => {
-    if (!window._wizCityState) window._wizCityState = {};
-    if (!window._wizCityState[city]) window._wizCityState[city] = { noches: 1, pois: [] };
-    const tab = document.createElement('button');
-    tab.className = 'wiz-tab' + (ci === 0 ? ' active' : '');
-    tab.textContent = WIZ_CITY_EMOJIS[city] + ' ' + city;
-    tab.onclick = () => {
-      container.querySelectorAll('.wiz-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      container.querySelectorAll('.wiz-tab-panel').forEach(p => p.classList.remove('active'));
-      document.getElementById('wizTabPanel_' + city).classList.add('active');
-    };
-    tabBar.appendChild(tab);
-    const panel = document.createElement('div');
-    panel.className = 'wiz-tab-panel' + (ci === 0 ? ' active' : '');
-    panel.id = 'wizTabPanel_' + city;
-    const pois = POIS[city];
-    let poiHtml = '';
-    if (pois) {
-      poiHtml = '<div class="wiz-poi-grid">' + pois.map(poi => {
-        const poiName = (poi && typeof poi === 'object') ? (poi.name || poi.n || '') : String(poi);
-        const checked = (window._wizCityState[city].pois || []).includes(poiName) ? 'checked' : '';
-        const safeCity = city.replace(/'/g, "\\'");
-        const safeName = poiName.replace(/'/g, "\\'");
-        return '<label class="wiz-poi-label"><input type="checkbox" ' + checked + ' onchange="wizTogglePoi(\'' + safeCity + '\',\'' + safeName + '\',this.checked)"> ' + poiName + '</label>';
-      }).join('') + '</div>';
-    } else {
-      poiHtml = '<p style="color:#888">Configuración disponible al guardar</p>';
-    }
-    panel.innerHTML = '<div class="wiz-noches-row"><span>Noches en ' + city + '</span>' +
-      '<div class="wiz-counter-inline"><button onclick="wizCityNochesDelta(\'' + city + '\',-1)">−</button>' +
-      '<span id="wizNoches_' + city + '">' + window._wizCityState[city].noches + '</span>' +
-      '<button onclick="wizCityNochesDelta(\'' + city + '\',1)">+</button></div></div>' + poiHtml;
-    tabContent.appendChild(panel);
-  });
-  container.appendChild(tabBar);
-  container.appendChild(tabContent);
-}
-
 function wizTogglePoi(city, poi, checked) {
   if (!window._wizCityState) window._wizCityState = {};
   if (!window._wizCityState[city]) window._wizCityState[city] = { noches: 1, pois: [] };
@@ -9262,7 +9242,7 @@ function wizToggleServicio(key) {
   if (btn) btn.classList.toggle('active', VWIZ.servicios[key]);
 }
 
-function wizRenderStep6() {
+function wizRenderStep5() {
   const cont = document.getElementById('wizSummaryContent');
   if (!cont) return;
   const noches = VWIZ.duracion_noches;
@@ -9276,15 +9256,15 @@ function wizRenderStep6() {
     '<p>' + VWIZ.adultos + ' adulto(s)' + menoresTxt + (VWIZ.tipo_cliente ? ' · ' + VWIZ.tipo_cliente : '') + '</p></div>' +
     '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🗺️ Ciudades</strong><a href="#" onclick="wizGoToStep(3);return false;">Editar</a></div>' +
     '<p>' + (VWIZ.ciudades_orden.length > 0 ? VWIZ.ciudades_orden.map((c,i) => (i+1)+'. '+c).join(' → ') : '—') + '</p></div>' +
-    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🛎️ Servicios</strong><a href="#" onclick="wizGoToStep(5);return false;">Editar</a></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🛎️ Servicios</strong><a href="#" onclick="wizGoToStep(4);return false;">Editar</a></div>' +
     '<p>' + (srvActivos || 'Ninguno') + '</p></div>';
 }
 
 async function wizSubmit() {
-  const err = wizValidateStep(7);
+  const err = wizValidateStep(6);
   if (err) { wizShowError(err); return; }
   wizClearError();
-  wizSyncStep(7);
+  wizSyncStep(6);
   // Sync VWIZ → CFG
   CFG.adultos = VWIZ.adultos;
   CFG.ninos = VWIZ.menores.slice();
