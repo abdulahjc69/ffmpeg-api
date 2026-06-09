@@ -5952,6 +5952,37 @@ img, video, iframe { max-width: 100%; height: auto; }
   font-size: 13px; color: #1a5c45; margin-bottom: 16px; line-height: 1.5;
 }
 .wiz-servicios-grid { display: flex; flex-direction: column; gap: 8px; }
+/* Servicio: ítem contenedor (botón + detalle) */
+.wiz-srv-item { display: flex; flex-direction: column; }
+.wiz-srv-item .wiz-srv-btn { border-radius: 10px; }
+.wiz-srv-item .wiz-srv-btn.active { border-radius: 10px 10px 0 0; }
+/* Panel de detalle desplegable */
+.wiz-srv-detail {
+  display: none;
+  background: #faf8f4;
+  border: 2px solid var(--terra, #BB4422);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 14px 16px 16px;
+}
+.wiz-srv-det-row { margin-bottom: 12px; }
+.wiz-srv-det-row:last-child { margin-bottom: 0; }
+.wiz-srv-det-label { display: block; font-size: 0.75rem; font-weight: 700; color: #5b4a2e; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+.wiz-srv-det-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.wiz-srv-chip { font-family: inherit; font-size: 0.82rem; padding: 5px 13px; border: 1.5px solid #d0c4b0; border-radius: 20px; background: #fff; cursor: pointer; color: #5b4a2e; transition: all .15s; line-height: 1.4; }
+.wiz-srv-chip:hover { border-color: var(--terra); }
+.wiz-srv-chip.sel { background: var(--oliva, #6B7755); border-color: var(--oliva, #6B7755); color: #fff; }
+.wiz-srv-det-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.wiz-srv-det-input { width: 100%; box-sizing: border-box; border: 1.5px solid #d0c4b0; border-radius: 8px; padding: 7px 10px; font-family: inherit; font-size: 0.85rem; color: #3a2f1c; background: #fff; }
+.wiz-srv-det-input:focus { outline: none; border-color: var(--terra); }
+.wiz-srv-ctr-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.wiz-srv-ctr-row label { flex: 1; font-size: 0.85rem; color: #5b4a2e; }
+.wiz-srv-ctr-ctrl { display: flex; align-items: center; gap: 6px; }
+.wiz-srv-ctr-ctrl button { width: 26px; height: 26px; border: 1.5px solid #d0c4b0; border-radius: 50%; background: #fff; cursor: pointer; font-size: 1rem; line-height: 1; color: #3a2f1c; }
+.wiz-srv-ctr-ctrl button:hover { border-color: var(--terra); }
+.wiz-srv-ctr-val { min-width: 22px; text-align: center; font-size: 0.9rem; font-weight: 700; color: #3a2f1c; }
+.wiz-srv-det-section { font-size: 0.8rem; font-weight: 600; color: #8c7a5e; margin: 10px 0 6px; text-transform: uppercase; letter-spacing: .03em; }
+@media (max-width: 520px) { .wiz-srv-det-grid2 { grid-template-columns: 1fr; } }
 .wiz-srv-btn {
   display: flex;
   align-items: center;
@@ -6198,44 +6229,268 @@ img, video, iframe { max-width: 100%; height: auto; }
       <!-- PASO 4: Servicios -->
       <div id="wizPanel4" class="wiz-panel">
         <h3 class="wiz-step-title">🛎️ Paso 4 · ¿Qué necesitáis que organicemos?</h3>
-        <p class="wiz-tranquiliza">No hace falta que lo tengáis todo decidido. Marcad lo que sepáis y nuestro equipo os ayudará a preparar el viaje.</p>
+        <p class="wiz-tranquiliza">Activad cada servicio para añadir detalles. No hace falta tenerlo todo decidido.</p>
         <div class="wiz-servicios-grid">
-          <button type="button" class="wiz-srv-btn active" data-srv="hotel" onclick="wizToggleServicio('hotel')">
-            <span class="wiz-srv-icon">🏨</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Alojamiento</span><span class="wiz-srv-desc">Hoteles para todo el grupo durante el viaje</span></span>
-            <span class="wiz-srv-check"></span>
-          </button>
-          <button type="button" class="wiz-srv-btn" data-srv="transporte" onclick="wizToggleServicio('transporte')">
-            <span class="wiz-srv-icon">🚐</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Transporte</span><span class="wiz-srv-desc">Vehículo privado con conductor para todo el recorrido</span></span>
-            <span class="wiz-srv-check"></span>
-          </button>
-          <button type="button" class="wiz-srv-btn active" data-srv="tour_leader" onclick="wizToggleServicio('tour_leader')">
-            <span class="wiz-srv-icon">👑</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Acompañamiento durante el viaje</span><span class="wiz-srv-desc">Un coordinador acompaña al grupo en todo momento: horarios, traslados, organización e incidencias. No es lo mismo que una visita guiada puntual.</span></span>
-            <span class="wiz-srv-check"></span>
-          </button>
-          <button type="button" class="wiz-srv-btn active" data-srv="guia_local" onclick="wizToggleServicio('guia_local')">
-            <span class="wiz-srv-icon">👤</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Visitas guiadas</span><span class="wiz-srv-desc">Un guía local os acompaña en una visita concreta: monumento, barrio, museo o ciudad.</span></span>
-            <span class="wiz-srv-check"></span>
-          </button>
-          <button type="button" class="wiz-srv-btn" data-srv="experiencia_culinaria" onclick="wizToggleServicio('experiencia_culinaria')">
-            <span class="wiz-srv-icon">🍽️</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Experiencia gastronómica</span><span class="wiz-srv-desc">Talleres, cenas especiales, mercados y sabores de Al-Ándalus</span></span>
-            <span class="wiz-srv-check"></span>
-          </button>
-          <button type="button" class="wiz-srv-btn" data-srv="experiencia_halal" onclick="wizToggleServicio('experiencia_halal')">
-            <span class="wiz-srv-icon">🕌</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Necesidades culturales y halal</span><span class="wiz-srv-desc">Gastronomía halal certificada, espacios de oración, tiempos de rezo y vivencias culturales</span></span>
-            <span class="wiz-srv-check"></span>
-          </button>
-          <button type="button" class="wiz-srv-btn" data-srv="llegada_internacional" onclick="wizToggleServicio('llegada_internacional')">
-            <span class="wiz-srv-icon">✈️</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Llegada internacional</span><span class="wiz-srv-desc">Traslados desde/hacia aeropuerto o estación al inicio y final del viaje</span></span>
-            <span class="wiz-srv-check"></span>
-          </button>
-        </div>
+
+          <!-- ALOJAMIENTO -->
+          <div class="wiz-srv-item">
+            <button type="button" class="wiz-srv-btn active" data-srv="hotel" onclick="wizToggleServicio('hotel')">
+              <span class="wiz-srv-icon">🏨</span>
+              <span class="wiz-srv-texts"><span class="wiz-srv-name">Alojamiento</span><span class="wiz-srv-desc">Hoteles para todo el grupo durante el viaje</span></span>
+              <span class="wiz-srv-check"></span>
+            </button>
+            <div class="wiz-srv-detail" id="wizSrvDetail_hotel" style="display:block">
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Categoría</span>
+                <div class="wiz-srv-det-chips" id="wizHotelCat">
+                  <button type="button" class="wiz-srv-chip" data-val="hostal" onclick="wizChipSel(this,'wizHotelCat')">Hostal</button>
+                  <button type="button" class="wiz-srv-chip" data-val="1" onclick="wizChipSel(this,'wizHotelCat')">1★</button>
+                  <button type="button" class="wiz-srv-chip" data-val="2" onclick="wizChipSel(this,'wizHotelCat')">2★</button>
+                  <button type="button" class="wiz-srv-chip sel" data-val="3" onclick="wizChipSel(this,'wizHotelCat')">3★</button>
+                  <button type="button" class="wiz-srv-chip" data-val="4" onclick="wizChipSel(this,'wizHotelCat')">4★</button>
+                  <button type="button" class="wiz-srv-chip" data-val="5" onclick="wizChipSel(this,'wizHotelCat')">5★</button>
+                  <button type="button" class="wiz-srv-chip" data-val="aconsejadme" onclick="wizChipSel(this,'wizHotelCat')">Aconsejadme</button>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Régimen</span>
+                <div class="wiz-srv-det-chips" id="wizHotelRegimen">
+                  <button type="button" class="wiz-srv-chip" data-val="solo_alojamiento" onclick="wizChipSel(this,'wizHotelRegimen')">Solo alojamiento</button>
+                  <button type="button" class="wiz-srv-chip sel" data-val="con_desayuno" onclick="wizChipSel(this,'wizHotelRegimen')">Con desayuno</button>
+                  <button type="button" class="wiz-srv-chip" data-val="media_pension" onclick="wizChipSel(this,'wizHotelRegimen')">Media pensión</button>
+                  <button type="button" class="wiz-srv-chip" data-val="pension_completa" onclick="wizChipSel(this,'wizHotelRegimen')">Pensión completa</button>
+                  <button type="button" class="wiz-srv-chip" data-val="aconsejadme" onclick="wizChipSel(this,'wizHotelRegimen')">Aconsejadme</button>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Habitaciones aproximadas</span>
+                <div class="wiz-srv-ctr-row"><label>Individuales</label><div class="wiz-srv-ctr-ctrl"><button type="button" onclick="wizSrvCtr('wizHabInd',-1)">−</button><span class="wiz-srv-ctr-val" id="wizHabInd">0</span><button type="button" onclick="wizSrvCtr('wizHabInd',1)">+</button></div></div>
+                <div class="wiz-srv-ctr-row"><label>Dobles</label><div class="wiz-srv-ctr-ctrl"><button type="button" onclick="wizSrvCtr('wizHabDob',-1)">−</button><span class="wiz-srv-ctr-val" id="wizHabDob">2</span><button type="button" onclick="wizSrvCtr('wizHabDob',1)">+</button></div></div>
+                <div class="wiz-srv-ctr-row"><label>Triples</label><div class="wiz-srv-ctr-ctrl"><button type="button" onclick="wizSrvCtr('wizHabTri',-1)">−</button><span class="wiz-srv-ctr-val" id="wizHabTri">0</span><button type="button" onclick="wizSrvCtr('wizHabTri',1)">+</button></div></div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Servicios adicionales</span>
+                <div class="wiz-srv-det-chips">
+                  <button type="button" class="wiz-srv-chip" data-grp="hotelExtra" data-val="maletas" onclick="wizChipMulti(this)">🧳 Servicio de maletas</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="hotelExtra" data-val="accesibilidad" onclick="wizChipMulti(this)">♿ Accesibilidad</button>
+                </div>
+                <input type="text" class="wiz-srv-det-input" id="wizHotelOtros" placeholder="Otros requisitos..." style="margin-top:8px;">
+              </div>
+            </div>
+          </div>
+
+          <!-- TRANSPORTE -->
+          <div class="wiz-srv-item">
+            <button type="button" class="wiz-srv-btn" data-srv="transporte" onclick="wizToggleServicio('transporte')">
+              <span class="wiz-srv-icon">🚐</span>
+              <span class="wiz-srv-texts"><span class="wiz-srv-name">Transporte</span><span class="wiz-srv-desc">Vehículo privado con conductor durante el recorrido</span></span>
+              <span class="wiz-srv-check"></span>
+            </button>
+            <div class="wiz-srv-detail" id="wizSrvDetail_transporte" style="display:none">
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Cobertura</span>
+                <div class="wiz-srv-det-chips" id="wizTransCobertura">
+                  <button type="button" class="wiz-srv-chip sel" data-val="toda_ruta" onclick="wizChipSel(this,'wizTransCobertura')">Toda la ruta</button>
+                  <button type="button" class="wiz-srv-chip" data-val="traslados" onclick="wizChipSel(this,'wizTransCobertura')">Solo traslados</button>
+                  <button type="button" class="wiz-srv-chip" data-val="algunos_tramos" onclick="wizChipSel(this,'wizTransCobertura')">Algunos tramos</button>
+                  <button type="button" class="wiz-srv-chip" data-val="aconsejadme" onclick="wizChipSel(this,'wizTransCobertura')">Aconsejadme</button>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-section">📍 Llegada — ¿Cómo llegáis?</span>
+                <div class="wiz-srv-det-chips" id="wizTransLlegModo">
+                  <button type="button" class="wiz-srv-chip" data-val="avion" onclick="wizChipSel(this,'wizTransLlegModo')">✈️ Avión</button>
+                  <button type="button" class="wiz-srv-chip" data-val="barco" onclick="wizChipSel(this,'wizTransLlegModo')">🚢 Barco</button>
+                  <button type="button" class="wiz-srv-chip" data-val="tren" onclick="wizChipSel(this,'wizTransLlegModo')">🚄 Tren</button>
+                  <button type="button" class="wiz-srv-chip" data-val="autobus" onclick="wizChipSel(this,'wizTransLlegModo')">🚌 Autobús</button>
+                  <button type="button" class="wiz-srv-chip" data-val="otro" onclick="wizChipSel(this,'wizTransLlegModo')">📍 Otro</button>
+                </div>
+                <div class="wiz-srv-det-grid2">
+                  <div><label class="wiz-srv-det-label" style="margin-top:8px;">Punto de llegada</label><input type="text" class="wiz-srv-det-input" id="wizTransLlegPunto" placeholder="Aeropuerto, estación..."></div>
+                  <div><label class="wiz-srv-det-label" style="margin-top:8px;">Fecha llegada</label><input type="date" class="wiz-srv-det-input" id="wizTransLlegFecha"></div>
+                  <div><label class="wiz-srv-det-label">Hora llegada</label><input type="time" class="wiz-srv-det-input" id="wizTransLlegHora"></div>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-section">🏁 Salida</span>
+                <div class="wiz-srv-det-grid2">
+                  <div><label class="wiz-srv-det-label">Punto de salida</label><input type="text" class="wiz-srv-det-input" id="wizTransSalPunto" placeholder="Aeropuerto, estación..."></div>
+                  <div><label class="wiz-srv-det-label">Fecha salida</label><input type="date" class="wiz-srv-det-input" id="wizTransSalFecha"></div>
+                  <div><label class="wiz-srv-det-label">Hora salida</label><input type="time" class="wiz-srv-det-input" id="wizTransSalHora"></div>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Equipaje</span>
+                <div class="wiz-srv-det-chips">
+                  <button type="button" class="wiz-srv-chip" data-grp="equipaje" data-val="mano" onclick="wizChipMulti(this)">🎒 Mano</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="equipaje" data-val="medianas" onclick="wizChipMulti(this)">🧳 Medianas</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="equipaje" data-val="grandes" onclick="wizChipMulti(this)">🧳 Grandes</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="equipaje" data-val="especial" onclick="wizChipMulti(this)">📦 Especial</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOUR LEADER -->
+          <div class="wiz-srv-item">
+            <button type="button" class="wiz-srv-btn active" data-srv="tour_leader" onclick="wizToggleServicio('tour_leader')">
+              <span class="wiz-srv-icon">👑</span>
+              <span class="wiz-srv-texts"><span class="wiz-srv-name">Acompañamiento durante el viaje</span><span class="wiz-srv-desc">Un coordinador acompaña al grupo en todo momento: horarios, traslados, organización e incidencias.</span></span>
+              <span class="wiz-srv-check"></span>
+            </button>
+            <div class="wiz-srv-detail" id="wizSrvDetail_tour_leader" style="display:block">
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Cobertura</span>
+                <div class="wiz-srv-det-chips" id="wizTLCobertura">
+                  <button type="button" class="wiz-srv-chip sel" data-val="toda_ruta" onclick="wizChipSel(this,'wizTLCobertura')">Toda la ruta</button>
+                  <button type="button" class="wiz-srv-chip" data-val="algunos_dias" onclick="wizChipSel(this,'wizTLCobertura')">Algunos días</button>
+                  <button type="button" class="wiz-srv-chip" data-val="determinadas_ciudades" onclick="wizChipSel(this,'wizTLCobertura')">Ciudades concretas</button>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Idioma</span>
+                <div class="wiz-srv-det-chips" id="wizTLIdioma">
+                  <button type="button" class="wiz-srv-chip" data-val="es" onclick="wizChipSel(this,'wizTLIdioma')">🇪🇸 Español</button>
+                  <button type="button" class="wiz-srv-chip sel" data-val="ar" onclick="wizChipSel(this,'wizTLIdioma')">🇸🇦 Árabe</button>
+                  <button type="button" class="wiz-srv-chip" data-val="fr" onclick="wizChipSel(this,'wizTLIdioma')">🇫🇷 Francés</button>
+                  <button type="button" class="wiz-srv-chip" data-val="en" onclick="wizChipSel(this,'wizTLIdioma')">🇬🇧 Inglés</button>
+                  <button type="button" class="wiz-srv-chip" data-val="pt" onclick="wizChipSel(this,'wizTLIdioma')">🇵🇹 Portugués</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GUÍA LOCAL -->
+          <div class="wiz-srv-item">
+            <button type="button" class="wiz-srv-btn active" data-srv="guia_local" onclick="wizToggleServicio('guia_local')">
+              <span class="wiz-srv-icon">👤</span>
+              <span class="wiz-srv-texts"><span class="wiz-srv-name">Visitas guiadas</span><span class="wiz-srv-desc">Un guía local en una visita concreta: monumento, barrio o ciudad.</span></span>
+              <span class="wiz-srv-check"></span>
+            </button>
+            <div class="wiz-srv-detail" id="wizSrvDetail_guia_local" style="display:block">
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">¿En qué ciudades?</span>
+                <div class="wiz-srv-det-chips">
+                  <button type="button" class="wiz-srv-chip" data-grp="guiaCiudades" data-val="Madrid" onclick="wizChipMulti(this)">🏛️ Madrid</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="guiaCiudades" data-val="Toledo" onclick="wizChipMulti(this)">⚔️ Toledo</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="guiaCiudades" data-val="Córdoba" onclick="wizChipMulti(this)">🕌 Córdoba</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="guiaCiudades" data-val="Sevilla" onclick="wizChipMulti(this)">💃 Sevilla</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="guiaCiudades" data-val="Málaga" onclick="wizChipMulti(this)">☀️ Málaga</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="guiaCiudades" data-val="Granada" onclick="wizChipMulti(this)">🌹 Granada</button>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <label class="wiz-srv-det-label">Monumentos o lugares concretos (opcional)</label>
+                <input type="text" class="wiz-srv-det-input" id="wizGuiaPreferencia" placeholder="Alhambra, Mezquita-Catedral, Judería...">
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Idioma del guía</span>
+                <div class="wiz-srv-det-chips" id="wizGuiaIdioma">
+                  <button type="button" class="wiz-srv-chip" data-val="es" onclick="wizChipSel(this,'wizGuiaIdioma')">🇪🇸 Español</button>
+                  <button type="button" class="wiz-srv-chip sel" data-val="ar" onclick="wizChipSel(this,'wizGuiaIdioma')">🇸🇦 Árabe</button>
+                  <button type="button" class="wiz-srv-chip" data-val="fr" onclick="wizChipSel(this,'wizGuiaIdioma')">🇫🇷 Francés</button>
+                  <button type="button" class="wiz-srv-chip" data-val="en" onclick="wizChipSel(this,'wizGuiaIdioma')">🇬🇧 Inglés</button>
+                  <button type="button" class="wiz-srv-chip" data-val="pt" onclick="wizChipSel(this,'wizGuiaIdioma')">🇵🇹 Portugués</button>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Duración aproximada</span>
+                <div class="wiz-srv-det-chips" id="wizGuiaDuracion">
+                  <button type="button" class="wiz-srv-chip" data-val="2h" onclick="wizChipSel(this,'wizGuiaDuracion')">2 horas</button>
+                  <button type="button" class="wiz-srv-chip sel" data-val="medio_dia" onclick="wizChipSel(this,'wizGuiaDuracion')">Medio día</button>
+                  <button type="button" class="wiz-srv-chip" data-val="dia_completo" onclick="wizChipSel(this,'wizGuiaDuracion')">Día completo</button>
+                  <button type="button" class="wiz-srv-chip" data-val="varios_dias" onclick="wizChipSel(this,'wizGuiaDuracion')">Varios días</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RESTAURACIÓN -->
+          <div class="wiz-srv-item">
+            <button type="button" class="wiz-srv-btn" data-srv="experiencia_culinaria" onclick="wizToggleServicio('experiencia_culinaria')">
+              <span class="wiz-srv-icon">🍽️</span>
+              <span class="wiz-srv-texts"><span class="wiz-srv-name">Restauración</span><span class="wiz-srv-desc">Organizamos vuestras comidas: restaurantes, talleres y gastronomía de Al-Ándalus</span></span>
+              <span class="wiz-srv-check"></span>
+            </button>
+            <div class="wiz-srv-detail" id="wizSrvDetail_experiencia_culinaria" style="display:none">
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">¿Qué comidas organizar?</span>
+                <div class="wiz-srv-det-chips">
+                  <button type="button" class="wiz-srv-chip" data-grp="comidasOrg" data-val="desayunos" onclick="wizChipMulti(this)">☕ Desayunos</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="comidasOrg" data-val="comidas" onclick="wizChipMulti(this)">🍱 Comidas</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="comidasOrg" data-val="cenas" onclick="wizChipMulti(this)">🌙 Cenas</button>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">Preferencia alimentaria</span>
+                <div class="wiz-srv-det-chips" id="wizRestTipo">
+                  <button type="button" class="wiz-srv-chip" data-val="tradicional" onclick="wizChipSel(this,'wizRestTipo')">🍷 Tradicional</button>
+                  <button type="button" class="wiz-srv-chip" data-val="halal" onclick="wizChipSel(this,'wizRestTipo')">☪️ Halal</button>
+                  <button type="button" class="wiz-srv-chip" data-val="sin_requisitos" onclick="wizChipSel(this,'wizRestTipo')">✅ Sin requisitos</button>
+                  <button type="button" class="wiz-srv-chip" data-val="vegetariano" onclick="wizChipSel(this,'wizRestTipo')">🥗 Vegetariano</button>
+                  <button type="button" class="wiz-srv-chip" data-val="otros" onclick="wizChipSel(this,'wizRestTipo')">💬 Otros</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HALAL -->
+          <div class="wiz-srv-item">
+            <button type="button" class="wiz-srv-btn" data-srv="experiencia_halal" onclick="wizToggleServicio('experiencia_halal')">
+              <span class="wiz-srv-icon">🕌</span>
+              <span class="wiz-srv-texts"><span class="wiz-srv-name">Necesidades culturales y halal</span><span class="wiz-srv-desc">Gastronomía halal certificada, espacios de oración y vivencias culturales</span></span>
+              <span class="wiz-srv-check"></span>
+            </button>
+            <div class="wiz-srv-detail" id="wizSrvDetail_experiencia_halal" style="display:none">
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-label">¿Qué necesitáis?</span>
+                <div class="wiz-srv-det-chips">
+                  <button type="button" class="wiz-srv-chip sel" data-grp="halalOpc" data-val="comida_halal" onclick="wizChipMulti(this)">☪️ Comida halal</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="halalOpc" data-val="hoteles_sensibles" onclick="wizChipMulti(this)">🏨 Hoteles sensibles</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="halalOpc" data-val="horarios_oracion" onclick="wizChipMulti(this)">🕐 Horarios de oración</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="halalOpc" data-val="mezquitas" onclick="wizChipMulti(this)">🕌 Mezquitas cercanas</button>
+                  <button type="button" class="wiz-srv-chip" data-grp="halalOpc" data-val="otros" onclick="wizChipMulti(this)">💬 Otros</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LLEGADA / SALIDA INTERNACIONAL -->
+          <div class="wiz-srv-item">
+            <button type="button" class="wiz-srv-btn" data-srv="llegada_internacional" onclick="wizToggleServicio('llegada_internacional')">
+              <span class="wiz-srv-icon">✈️</span>
+              <span class="wiz-srv-texts"><span class="wiz-srv-name">Traslado llegada / salida</span><span class="wiz-srv-desc">Recogida desde aeropuerto, puerto o estación al inicio y fin del viaje</span></span>
+              <span class="wiz-srv-check"></span>
+            </button>
+            <div class="wiz-srv-detail" id="wizSrvDetail_llegada_internacional" style="display:none">
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-section">📍 Llegada</span>
+                <span class="wiz-srv-det-label">Modo de llegada</span>
+                <div class="wiz-srv-det-chips" id="wizLlegModo">
+                  <button type="button" class="wiz-srv-chip" data-val="avion" onclick="wizChipSel(this,'wizLlegModo')">✈️ Avión</button>
+                  <button type="button" class="wiz-srv-chip" data-val="barco" onclick="wizChipSel(this,'wizLlegModo')">🚢 Barco</button>
+                  <button type="button" class="wiz-srv-chip" data-val="tren" onclick="wizChipSel(this,'wizLlegModo')">🚄 Tren</button>
+                  <button type="button" class="wiz-srv-chip" data-val="autobus" onclick="wizChipSel(this,'wizLlegModo')">🚌 Autobús</button>
+                  <button type="button" class="wiz-srv-chip" data-val="otro" onclick="wizChipSel(this,'wizLlegModo')">📍 Otro</button>
+                </div>
+                <div class="wiz-srv-det-grid2">
+                  <div><label class="wiz-srv-det-label" style="margin-top:8px;">Punto de llegada</label><input type="text" class="wiz-srv-det-input" id="wizLlegPunto" placeholder="Aeropuerto Barajas T4..."></div>
+                  <div><label class="wiz-srv-det-label" style="margin-top:8px;">Fecha llegada</label><input type="date" class="wiz-srv-det-input" id="wizLlegFecha"></div>
+                  <div><label class="wiz-srv-det-label">Hora llegada</label><input type="time" class="wiz-srv-det-input" id="wizLlegHora"></div>
+                </div>
+              </div>
+              <div class="wiz-srv-det-row">
+                <span class="wiz-srv-det-section">🏁 Salida</span>
+                <div class="wiz-srv-det-grid2">
+                  <div><label class="wiz-srv-det-label">Punto de salida</label><input type="text" class="wiz-srv-det-input" id="wizSalPunto" placeholder="Aeropuerto, estación..."></div>
+                  <div><label class="wiz-srv-det-label">Fecha salida</label><input type="date" class="wiz-srv-det-input" id="wizSalFecha"></div>
+                  <div><label class="wiz-srv-det-label">Hora salida</label><input type="time" class="wiz-srv-det-input" id="wizSalHora"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /wiz-servicios-grid -->
       </div>
 
       <!-- PASO 5: Resumen -->
@@ -8910,6 +9165,7 @@ function buildSolicitudPayload() {
     duracion_noches: VWIZ.duracion_noches,
     tipo_cliente: VWIZ.tipo_cliente,
     servicios: VWIZ.servicios,
+    detalles_servicios: VWIZ.detalles,
     fecha_aproximada: (VWIZ.fecha_inicio && VWIZ.fecha_fin) ? (VWIZ.fecha_inicio + ' → ' + VWIZ.fecha_fin) : ((document.getElementById('solFechaInicio')?.value || '') + ' → ' + (document.getElementById('solFechaFin')?.value || '')),
     idioma_cliente: currentLang,
     nivel: CFG.nivel,
@@ -9017,6 +9273,15 @@ const VWIZ = {
     experiencia_culinaria: false,
     experiencia_halal: false,
     llegada_internacional: false
+  },
+  detalles: {
+    alojamiento: { categoria: '3', regimen: 'con_desayuno', hab_individuales: 0, hab_dobles: 2, hab_triples: 0, maletas: false, accesibilidad: false, otros: '' },
+    transporte: { cobertura: 'toda_ruta', llegada_modo: '', llegada_punto: '', llegada_fecha: '', llegada_hora: '', salida_punto: '', salida_fecha: '', salida_hora: '', equipaje: [] },
+    tour_leader: { cobertura: 'toda_ruta', idioma: 'ar' },
+    guia_local: { ciudades: [], preferencia: '', idioma: 'ar', duracion: 'medio_dia' },
+    restauracion: { comidas: [], tipo: '' },
+    halal: { opciones: ['comida_halal'] },
+    llegada_internacional: { modo: '', punto: '', fecha: '', hora: '', salida_punto: '', salida_fecha: '', salida_hora: '' }
   }
 };
 
@@ -9134,6 +9399,7 @@ function wizSyncStep(n) {
       VWIZ.menores = Array.from(agGrid.querySelectorAll('input')).map(i => parseInt(i.value) || 0);
     }
   }
+  if (n === 4) wizSyncServiciosDetail();
 }
 
 function wizUpdateNights() {
@@ -9235,6 +9501,74 @@ function wizToggleServicio(key) {
   VWIZ.servicios[key] = !VWIZ.servicios[key];
   const btn = document.querySelector('[data-srv="' + key + '"]');
   if (btn) btn.classList.toggle('active', VWIZ.servicios[key]);
+  const detail = document.getElementById('wizSrvDetail_' + key);
+  if (detail) detail.style.display = VWIZ.servicios[key] ? 'block' : 'none';
+}
+
+function wizChipSel(el, groupId) {
+  document.getElementById(groupId)?.querySelectorAll('.wiz-srv-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function wizChipMulti(el) {
+  el.classList.toggle('sel');
+}
+
+function wizSrvCtr(id, delta) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = Math.max(0, parseInt(el.textContent || '0') + delta);
+}
+
+function wizSyncServiciosDetail() {
+  const d = VWIZ.detalles;
+  if (VWIZ.servicios.hotel) {
+    d.alojamiento.categoria = document.querySelector('#wizHotelCat .wiz-srv-chip.sel')?.dataset.val || '';
+    d.alojamiento.regimen = document.querySelector('#wizHotelRegimen .wiz-srv-chip.sel')?.dataset.val || '';
+    d.alojamiento.hab_individuales = parseInt(document.getElementById('wizHabInd')?.textContent || '0');
+    d.alojamiento.hab_dobles = parseInt(document.getElementById('wizHabDob')?.textContent || '2');
+    d.alojamiento.hab_triples = parseInt(document.getElementById('wizHabTri')?.textContent || '0');
+    d.alojamiento.maletas = !!document.querySelector('[data-grp="hotelExtra"][data-val="maletas"].sel');
+    d.alojamiento.accesibilidad = !!document.querySelector('[data-grp="hotelExtra"][data-val="accesibilidad"].sel');
+    d.alojamiento.otros = document.getElementById('wizHotelOtros')?.value.trim() || '';
+  }
+  if (VWIZ.servicios.transporte) {
+    d.transporte.cobertura = document.querySelector('#wizTransCobertura .wiz-srv-chip.sel')?.dataset.val || '';
+    d.transporte.llegada_modo = document.querySelector('#wizTransLlegModo .wiz-srv-chip.sel')?.dataset.val || '';
+    d.transporte.llegada_punto = document.getElementById('wizTransLlegPunto')?.value.trim() || '';
+    d.transporte.llegada_fecha = document.getElementById('wizTransLlegFecha')?.value || '';
+    d.transporte.llegada_hora = document.getElementById('wizTransLlegHora')?.value || '';
+    d.transporte.salida_punto = document.getElementById('wizTransSalPunto')?.value.trim() || '';
+    d.transporte.salida_fecha = document.getElementById('wizTransSalFecha')?.value || '';
+    d.transporte.salida_hora = document.getElementById('wizTransSalHora')?.value || '';
+    d.transporte.equipaje = Array.from(document.querySelectorAll('[data-grp="equipaje"].sel')).map(e => e.dataset.val);
+  }
+  if (VWIZ.servicios.tour_leader) {
+    d.tour_leader.cobertura = document.querySelector('#wizTLCobertura .wiz-srv-chip.sel')?.dataset.val || '';
+    d.tour_leader.idioma = document.querySelector('#wizTLIdioma .wiz-srv-chip.sel')?.dataset.val || '';
+  }
+  if (VWIZ.servicios.guia_local) {
+    d.guia_local.ciudades = Array.from(document.querySelectorAll('[data-grp="guiaCiudades"].sel')).map(e => e.dataset.val);
+    d.guia_local.preferencia = document.getElementById('wizGuiaPreferencia')?.value.trim() || '';
+    d.guia_local.idioma = document.querySelector('#wizGuiaIdioma .wiz-srv-chip.sel')?.dataset.val || '';
+    d.guia_local.duracion = document.querySelector('#wizGuiaDuracion .wiz-srv-chip.sel')?.dataset.val || '';
+  }
+  if (VWIZ.servicios.experiencia_culinaria) {
+    d.restauracion.comidas = Array.from(document.querySelectorAll('[data-grp="comidasOrg"].sel')).map(e => e.dataset.val);
+    d.restauracion.tipo = document.querySelector('#wizRestTipo .wiz-srv-chip.sel')?.dataset.val || '';
+  }
+  if (VWIZ.servicios.experiencia_halal) {
+    d.halal.opciones = Array.from(document.querySelectorAll('[data-grp="halalOpc"].sel')).map(e => e.dataset.val);
+  }
+  if (VWIZ.servicios.llegada_internacional) {
+    d.llegada_internacional.modo = document.querySelector('#wizLlegModo .wiz-srv-chip.sel')?.dataset.val || '';
+    d.llegada_internacional.punto = document.getElementById('wizLlegPunto')?.value.trim() || '';
+    d.llegada_internacional.fecha = document.getElementById('wizLlegFecha')?.value || '';
+    d.llegada_internacional.hora = document.getElementById('wizLlegHora')?.value || '';
+    d.llegada_internacional.salida_punto = document.getElementById('wizSalPunto')?.value.trim() || '';
+    d.llegada_internacional.salida_fecha = document.getElementById('wizSalFecha')?.value || '';
+    d.llegada_internacional.salida_hora = document.getElementById('wizSalHora')?.value || '';
+  }
 }
 
 function wizRenderStep5() {
@@ -9243,16 +9577,50 @@ function wizRenderStep5() {
   const noches = VWIZ.duracion_noches;
   const flexTxt = VWIZ.fechas_flexibles ? ' (±' + VWIZ.margen_flexibilidad + ' días)' : '';
   const menoresTxt = VWIZ.menores.length > 0 ? ', ' + VWIZ.menores.length + ' menor(es)' : '';
-  const srvNames = { hotel: 'Alojamiento', transporte: 'Transporte', tour_leader: 'Acompañamiento durante el viaje', guia_local: 'Visitas guiadas', experiencia_culinaria: 'Experiencia gastronómica', experiencia_halal: 'Necesidades culturales y halal', llegada_internacional: 'Llegada internacional' };
-  const srvActivos = Object.entries(VWIZ.servicios).filter(([,v]) => v).map(([k]) => srvNames[k] || k).join(' · ');
+  wizSyncServiciosDetail();
+  const catLbl = { hostal:'Hostal', '1':'Hotel 1★','2':'Hotel 2★','3':'Hotel 3★','4':'Hotel 4★','5':'Hotel 5★', aconsejadme:'Aconsejadme' };
+  const regLbl = { solo_alojamiento:'Solo alojamiento', con_desayuno:'Con desayuno', media_pension:'Media pensión', pension_completa:'Pensión completa', aconsejadme:'Aconsejadme' };
+  const idiomaLbl = { es:'Español', ar:'Árabe', fr:'Francés', en:'Inglés', pt:'Portugués' };
+  const d = VWIZ.detalles;
+  function srvLine(icon, parts) { return '<span style="display:block;font-size:0.82rem;color:#5b4a2e;margin-top:4px;">' + icon + ' ' + parts.filter(Boolean).join(' · ') + '</span>'; }
+  let srvHTML = '';
+  if (VWIZ.servicios.hotel) {
+    const a = d.alojamiento;
+    const habs = [a.hab_individuales ? a.hab_individuales+' ind' : '', a.hab_dobles ? a.hab_dobles+' dob' : '', a.hab_triples ? a.hab_triples+' tri' : ''].filter(Boolean).join(', ');
+    srvHTML += srvLine('🏨', [catLbl[a.categoria]||a.categoria, regLbl[a.regimen]||a.regimen, habs]);
+  }
+  if (VWIZ.servicios.transporte) {
+    const t = d.transporte;
+    srvHTML += srvLine('🚐', [t.cobertura, t.llegada_modo ? 'Llegada: '+t.llegada_modo+(t.llegada_punto ? ' · '+t.llegada_punto : '') : '']);
+  }
+  if (VWIZ.servicios.tour_leader) {
+    const tl = d.tour_leader;
+    srvHTML += srvLine('👑', ['Tour Leader', tl.cobertura, idiomaLbl[tl.idioma]||tl.idioma]);
+  }
+  if (VWIZ.servicios.guia_local) {
+    const g = d.guia_local;
+    srvHTML += srvLine('👤', ['Guía local', g.ciudades.length ? g.ciudades.join(', ') : '', idiomaLbl[g.idioma]||g.idioma, g.duracion]);
+  }
+  if (VWIZ.servicios.experiencia_culinaria) {
+    const r = d.restauracion;
+    srvHTML += srvLine('🍽️', [r.comidas.length ? r.comidas.join(', ') : 'Restauración', r.tipo]);
+  }
+  if (VWIZ.servicios.experiencia_halal) {
+    srvHTML += srvLine('🕌', ['Halal', d.halal.opciones.join(', ')]);
+  }
+  if (VWIZ.servicios.llegada_internacional) {
+    const l = d.llegada_internacional;
+    srvHTML += srvLine('✈️', ['Llegada', l.modo, l.punto, l.fecha ? l.fecha+(l.hora ? ' '+l.hora : '') : '']);
+  }
+  if (!srvHTML) srvHTML = '<span style="font-size:0.82rem;color:#888;">Ningún servicio seleccionado</span>';
   cont.innerHTML = '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>📅 Fechas</strong><a href="#" onclick="wizGoToStep(1);return false;">Editar</a></div>' +
     '<p>' + (VWIZ.fecha_inicio || '—') + ' → ' + (VWIZ.fecha_fin || '—') + ' · ' + noches + ' noches' + flexTxt + '</p></div>' +
-    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>👥 Viajeros</strong><a href="#" onclick="wizGoToStep(3);return false;">Editar</a></div>' +
-    '<p>' + VWIZ.adultos + ' adulto(s)' + menoresTxt + (VWIZ.tipo_cliente ? ' · ' + VWIZ.tipo_cliente : '') + '</p></div>' +
     '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🗺️ Ciudades</strong><a href="#" onclick="wizGoToStep(2);return false;">Editar</a></div>' +
     '<p>' + (VWIZ.ciudades_orden.length > 0 ? VWIZ.ciudades_orden.map((c,i) => (i+1)+'. '+c).join(' → ') : '—') + '</p></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>👥 Viajeros</strong><a href="#" onclick="wizGoToStep(3);return false;">Editar</a></div>' +
+    '<p>' + VWIZ.adultos + ' adulto(s)' + menoresTxt + (VWIZ.tipo_cliente ? ' · ' + VWIZ.tipo_cliente : '') + '</p></div>' +
     '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🛎️ Servicios</strong><a href="#" onclick="wizGoToStep(4);return false;">Editar</a></div>' +
-    '<p>' + (srvActivos || 'Ninguno') + '</p></div>';
+    srvHTML + '</div>';
 }
 
 async function wizSubmit() {
