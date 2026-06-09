@@ -4535,16 +4535,18 @@ img, video, iframe { max-width: 100%; height: auto; }
   }
   function regionById(id){ for(var i=0;i<S.regions.length;i++){ if(S.regions[i].id===id) return S.regions[i]; } return null; }
 
+  // hidden:true = oculto temporalmente; cambiar a false para reactivar
   var PAISES_CFG=[
     {key:'España',         label:'España 🇪🇸'},
-    {key:'Portugal',       label:'Portugal 🇵🇹',       placeholder:true},
-    {key:'Marruecos norte',label:'Marruecos norte 🇲🇦', placeholder:true}
+    {key:'Portugal',       label:'Portugal 🇵🇹',       placeholder:true, hidden:true},
+    {key:'Marruecos norte',label:'Marruecos norte 🇲🇦', placeholder:true, hidden:true}
   ];
   function paisLabel(k){ for(var i=0;i<PAISES_CFG.length;i++){ if(PAISES_CFG[i].key===k) return PAISES_CFG[i].label; } return k; }
   function renderPaises(){
     S.nivel='paises'; S.pais=null; S.region=null; S.poblacion=null; S.elemento=null; crumb();
     var box=document.createElement('div'); box.className='vaexp-cards vaexp-cards-pais';
     PAISES_CFG.forEach(function(pc){
+      if(pc.hidden) return; // oculto temporalmente — cambiar hidden:false para reactivar
       var regs=S.regions.filter(function(r){ return r.pais===pc.key; });
       var nProv=regs.length;
       var nMon=regs.reduce(function(a,r){ return a+(r.total_elementos||0); },0);
@@ -4588,26 +4590,13 @@ img, video, iframe { max-width: 100%; height: auto; }
     var box=document.createElement('div'); box.className='vaexp-cards';
     regs.forEach(function(r){
       var enRuta = S.pais!=='España' || RUTA_ESTRELLA_PROVINCIAS.indexOf(r.nombre)>-1;
-      var card=document.createElement('button'); card.className='vaexp-card'+(enRuta?'':' vaexp-card-prox');
-      if(enRuta){
-        card.innerHTML='<span class="vaexp-card-name">'+esc(r.nombre)+'</span>'+
-          '<span class="vaexp-card-meta">'+plural(r.total_poblaciones||0,'población','poblaciones')+' · '+plural(r.total_elementos||0,'monumento','monumentos')+'</span>';
-        card.onclick=function(){ S.region=r.id; renderPoblaciones(r.id); };
-      } else {
-        card.innerHTML='<span class="vaexp-card-name">'+esc(r.nombre)+'</span>'+
-          '<span class="vaexp-card-meta vaexp-prox-badge">Próximamente</span>';
-        card.onclick=function(){
-          var wrap=document.createElement('div');
-          var ph=document.createElement('div'); ph.className='vaexp-prep';
-          ph.innerHTML='<div class="vaexp-prep-ic">🗺️</div><h3>'+esc(r.nombre)+'</h3>'+
-            '<p>Próximamente. Esta provincia no forma parte de la ruta estrella actual. Puedes incluirla en tu propuesta y nuestro equipo evaluará la ruta contigo.</p>';
-          wrap.appendChild(ph);
-          var back=document.createElement('button'); back.className='vaexp-add-sm'; back.textContent='← Volver a provincias';
-          back.onclick=function(){ renderProvincias(S.pais); };
-          wrap.appendChild(back);
-          setPanel(wrap);
-        };
-      }
+      // Provincias fuera de la ruta estrella: ocultas temporalmente
+      // Para reactivar: eliminar este return y el flag enRuta
+      if(!enRuta) return;
+      var card=document.createElement('button'); card.className='vaexp-card';
+      card.innerHTML='<span class="vaexp-card-name">'+esc(r.nombre)+'</span>'+
+        '<span class="vaexp-card-meta">'+plural(r.total_poblaciones||0,'población','poblaciones')+' · '+plural(r.total_elementos||0,'monumento','monumentos')+'</span>';
+      card.onclick=function(){ S.region=r.id; renderPoblaciones(r.id); };
       box.appendChild(card);
     });
     setPanel(box);
@@ -4619,7 +4608,9 @@ img, video, iframe { max-width: 100%; height: auto; }
     var ids=rel[regionId]||[];
     var pobs=ids.map(function(id){ return S.pobById[id]; }).filter(Boolean);
     pobs.sort(function(a,b){ var na=a.nivel||9,nb=b.nivel||9; if(na!==nb) return na-nb; return String(a.nombre).localeCompare(String(b.nombre),'es'); });
-    if(!pobs.length){ setPanel(emptyMsg('No hay poblaciones catalogadas en esta provincia.')); return; }
+    // Ocultar ciudades sin contenido real (sin monumentos ni elementos)
+    pobs=pobs.filter(function(p){ return (p.total_elementos||0)>0; });
+    if(!pobs.length){ setPanel(emptyMsg('No hay poblaciones con contenido en esta provincia todavía.')); return; }
     var box=document.createElement('div'); box.className='vaexp-cards';
     pobs.forEach(function(p){
       var card=document.createElement('button'); card.className='vaexp-card';
@@ -6009,9 +6000,13 @@ function ciuEmoji(e) {
   return e.nivel === 1 ? '\uD83D\uDD4C' : (e.nivel === 2 ? '\uD83C\uDFF0' : '\uD83C\uDFD8\uFE0F');
 }
 function getCiudades() {
+  // Solo pines de las provincias activas (ruta estrella) — preparado para ampliar
+  const RUTA_PROV = new Set(['Madrid','Toledo','Córdoba','Sevilla','Málaga','Granada']);
   const out = [], vistos = new Set();
   (atlasData.enclaves || []).forEach(e => {
     if (typeof e.lat !== 'number' || typeof e.lng !== 'number') return;
+    // Filtro: si la provincia está definida y no pertenece a la ruta → ocultar temporalmente
+    if (e.provincia && !RUTA_PROV.has(e.provincia)) return;
     const o = CIUDADES_CURADAS[e.nombre] || {};
     out.push({
       n: e.nombre, c: [e.lat, e.lng], nivel: e.nivel || 3, emoji: ciuEmoji(e),
