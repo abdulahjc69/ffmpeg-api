@@ -8897,11 +8897,11 @@ function buildSolicitudPayload() {
       adultos: CFG.adultos,
       menores: CFG.ninos.length,
       edades_menores: CFG.ninos,
-      halal: CFG.halal
+      halal: VWIZ.servicios.experiencia_halal || CFG.halal
     },
     ciudades: ciudades,
-    transporte: CFG.transporte,
-    tour_lider: CFG.tourLider === 'si',
+    transporte: VWIZ.servicios.transporte || CFG.transporte,
+    tour_lider: VWIZ.servicios.tour_leader || CFG.tourLider === 'si',
     ruta: { modo: CFG.ruta, orden: CFG.rutaOrden, km_total: cfgKmTotal() },
     fecha_inicio: VWIZ.fecha_inicio || document.getElementById('solFechaInicio')?.value || '',
     fecha_fin: VWIZ.fecha_fin || document.getElementById('solFechaFin')?.value || '',
