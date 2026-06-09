@@ -5544,8 +5544,15 @@ img, video, iframe { max-width: 100%; height: auto; }
         <div class="cfg-warn" id="warnContacto" style="display:none;"></div>
       </div>
 
+      <div class="sol-privacy-check">
+        <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#444;cursor:pointer;line-height:1.45;">
+          <input type="checkbox" id="solPrivacyCheck" style="margin-top:2px;flex-shrink:0;accent-color:#BD4523;">
+          <span>He leído y acepto la <a href="/politica-de-privacidad" target="_blank" rel="noopener" style="color:#BD4523;text-decoration:underline;">Política de privacidad</a>.</span>
+        </label>
+        <div id="warnPrivacy" style="display:none;color:#c0392b;font-size:12px;font-weight:700;margin-top:5px;padding:6px 10px;background:rgba(192,57,43,0.07);border-radius:6px;">Debes aceptar la política de privacidad antes de enviar la solicitud.</div>
+      </div>
+
       <button class="sol-submit" id="solSubmit" data-t="sol.enviar">Enviar solicitud →</button>
-      <p class="sol-privacy"><small data-t="sol.privacy">Tus datos son tratados según nuestra política de privacidad. Sin spam, sin terceros.</small></p>
     </div>
   </div>
 </div>
@@ -8248,15 +8255,23 @@ function buildSolicitudPayload() {
     idioma_cliente: currentLang,
     nivel: CFG.nivel,
     origen: 'vivealandalus.com',
+    privacidad_aceptada: true,
+    privacidad_fecha: new Date().toISOString(),
     ts: new Date().toISOString()
   };
 }
 
 document.getElementById('solSubmit').addEventListener('click', async () => {
-  ['warnFechas','warnContacto'].forEach(id => {
+  ['warnFechas','warnContacto','warnPrivacy'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.style.display = 'none'; el.textContent = ''; }
+    if (el) { el.style.display = 'none'; el.textContent = el.id === 'warnPrivacy' ? el.textContent : ''; }
   });
+  const privacyCheck = document.getElementById('solPrivacyCheck');
+  if (!privacyCheck || !privacyCheck.checked) {
+    const w = document.getElementById('warnPrivacy');
+    if (w) w.style.display = 'block';
+    return;
+  }
   const errors = solValidate();
   if (errors.length > 0) {
     const seen = new Set();
