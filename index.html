@@ -4067,7 +4067,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     <nav class="nav" id="nav">
       <a href="#inicio" data-t="nav.inicio">Inicio</a>
       <a href="#mapa-section" data-t="nav.explora">Explora Al-Ándalus</a>
-      <a href="#explorador" data-t="nav.ciudades">Crea tu ruta</a>
+      <a href="#mapa-section" data-t="nav.ciudades">Crea tu ruta</a>
       <a href="#proceso" data-t="nav.proceso">Cómo funciona</a>
       <a href="#niveles" data-t="nav.experiencia">Tu experiencia</a>
       <a href="#b2b" data-t="nav.b2b">Profesionales</a>
@@ -4142,7 +4142,7 @@ img, video, iframe { max-width: 100%; height: auto; }
           <div class="camino-cuerpo">
             <h3 class="camino-titulo" data-t="pro.s3t">Diseñamos</h3>
             <p class="camino-texto" data-t="pro.s3p">Transformamos tus ideas en una propuesta real adaptada a tu tiempo, intereses y forma de viajar.</p>
-            <a class="camino-btn" href="#explorador" data-t="pro.s3btn">Solicitar propuesta</a>
+            <a class="camino-btn" href="#mapa-section" data-t="pro.s3btn">Solicitar propuesta</a>
           </div>
         </li>
         <li class="camino-paso">
@@ -4171,11 +4171,6 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="section-head">
       <span class="section-tag" data-t="map.tag">Explora · Construye · Viaja</span>
       <h2 data-t="map.title">Diseña tu ruta sobre 8 siglos de Al-Ándalus</h2>
-    </div>
-    <div style="text-align:center;margin-bottom:28px;padding:20px;background:var(--crema);border-radius:12px;">
-      <p style="font-family:'El Messiri',serif;font-size:1.1rem;color:var(--negro);margin:0 0 14px;">¿Sabéis lo que queréis visitar? Usad el configurador paso a paso.</p>
-      <button class="btn-wizard-trigger" id="btnAbrirWizard" onclick="abrirWizard()" style="font-family:inherit;font-size:17px;padding:16px 36px;">🗺️ Planifica tu viaje →</button>
-      <p style="margin:10px 0 0;font-size:12px;color:#888;">7 pasos · Fechas · Ciudades · Lugares · Servicios · Contacto</p>
     </div>
     <div class="mapa-stage">
       <div class="mapa-layout">
@@ -6084,8 +6079,8 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="wiz-progress-track"><div class="wiz-progress-fill" id="wizProgressBar"></div></div>
       <div class="wiz-dots">
         <button class="wiz-dot" data-step="1" onclick="wizGoToStep(1)" aria-label="Paso 1: Fechas"></button>
-        <button class="wiz-dot" data-step="2" onclick="wizGoToStep(2)" aria-label="Paso 2: Viajeros"></button>
-        <button class="wiz-dot" data-step="3" onclick="wizGoToStep(3)" aria-label="Paso 3: Ruta"></button>
+        <button class="wiz-dot" data-step="2" onclick="wizGoToStep(2)" aria-label="Paso 2: Ruta"></button>
+        <button class="wiz-dot" data-step="3" onclick="wizGoToStep(3)" aria-label="Paso 3: Viajeros"></button>
         <button class="wiz-dot" data-step="4" onclick="wizGoToStep(4)" aria-label="Paso 4: Servicios"></button>
         <button class="wiz-dot" data-step="5" onclick="wizGoToStep(5)" aria-label="Paso 5: Resumen"></button>
         <button class="wiz-dot" data-step="6" onclick="wizGoToStep(6)" aria-label="Paso 6: Contacto"></button>
@@ -6122,48 +6117,9 @@ img, video, iframe { max-width: 100%; height: auto; }
         </div>
       </div>
 
-      <!-- PASO 2: Viajeros -->
+      <!-- PASO 2: Ruta -->
       <div id="wizPanel2" class="wiz-panel">
-        <h3 class="wiz-step-title">👥 Paso 2 · Viajeros</h3>
-        <div class="wiz-counter-row">
-          <span class="wiz-counter-label">Adultos</span>
-          <div class="wiz-counter-ctrl">
-            <button id="wizAdultosM">−</button>
-            <span class="wiz-counter-val" id="wizAdultos">2</span>
-            <button id="wizAdultosP">+</button>
-          </div>
-        </div>
-        <div class="wiz-counter-row">
-          <span class="wiz-counter-label">Menores de 18</span>
-          <div class="wiz-counter-ctrl">
-            <button id="wizMenoresM">−</button>
-            <span class="wiz-counter-val" id="wizMenores">0</span>
-            <button id="wizMenoresP">+</button>
-          </div>
-        </div>
-        <div id="wizAgesWrap" class="wiz-ages-wrap" style="display:none;">
-          <p style="font-size:0.82rem;color:#666;margin:0 0 4px;">Edades de los menores</p>
-          <div id="wizAgesGrid" class="wiz-ages-grid"></div>
-        </div>
-        <div class="wiz-field" style="margin-top:16px;">
-          <label for="wizTipoCliente">Tipo de grupo</label>
-          <select id="wizTipoCliente">
-            <option value="">— Seleccionar —</option>
-            <option value="familia">👨‍👩‍👧 Grupo familiar</option>
-            <option value="pareja">💑 Pareja</option>
-            <option value="amigos">👫 Grupo de amigos</option>
-            <option value="solitario">🧳 Viajero en solitario</option>
-            <option value="escolar">🎓 Grupo escolar</option>
-            <option value="religioso">🕌 Peregrinación / grupo religioso</option>
-            <option value="honeymoon">💍 Luna de miel / aniversario</option>
-            <option value="corporativo">💼 Grupo corporativo</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- PASO 3: Ruta -->
-      <div id="wizPanel3" class="wiz-panel">
-        <h3 class="wiz-step-title">🗺️ Paso 3 · Tu ruta</h3>
+        <h3 class="wiz-step-title">🗺️ Paso 2 · Tu ruta</h3>
         <p style="font-size:0.85rem;color:#888;margin:0 0 14px;font-family:'Inter',sans-serif;">Selecciona las ciudades y ordénalas a tu gusto</p>
         <div class="wiz-city-grid" id="wizCityGrid">
           <div class="wiz-city-card" data-city="Madrid" onclick="wizCityToggle('Madrid')">
@@ -6198,6 +6154,45 @@ img, video, iframe { max-width: 100%; height: auto; }
           </div>
         </div>
         <ol class="wiz-order-list" id="wizCityOrder"></ol>
+      </div>
+
+      <!-- PASO 3: Viajeros -->
+      <div id="wizPanel3" class="wiz-panel">
+        <h3 class="wiz-step-title">👥 Paso 3 · Viajeros</h3>
+        <div class="wiz-counter-row">
+          <span class="wiz-counter-label">Adultos</span>
+          <div class="wiz-counter-ctrl">
+            <button id="wizAdultosM">−</button>
+            <span class="wiz-counter-val" id="wizAdultos">2</span>
+            <button id="wizAdultosP">+</button>
+          </div>
+        </div>
+        <div class="wiz-counter-row">
+          <span class="wiz-counter-label">Menores de 18</span>
+          <div class="wiz-counter-ctrl">
+            <button id="wizMenoresM">−</button>
+            <span class="wiz-counter-val" id="wizMenores">0</span>
+            <button id="wizMenoresP">+</button>
+          </div>
+        </div>
+        <div id="wizAgesWrap" class="wiz-ages-wrap" style="display:none;">
+          <p style="font-size:0.82rem;color:#666;margin:0 0 4px;">Edades de los menores</p>
+          <div id="wizAgesGrid" class="wiz-ages-grid"></div>
+        </div>
+        <div class="wiz-field" style="margin-top:16px;">
+          <label for="wizTipoCliente">Tipo de grupo</label>
+          <select id="wizTipoCliente">
+            <option value="">— Seleccionar —</option>
+            <option value="familia">👨‍👩‍👧 Grupo familiar</option>
+            <option value="pareja">💑 Pareja</option>
+            <option value="amigos">👫 Grupo de amigos</option>
+            <option value="solitario">🧳 Viajero en solitario</option>
+            <option value="escolar">🎓 Grupo escolar</option>
+            <option value="religioso">🕌 Peregrinación / grupo religioso</option>
+            <option value="honeymoon">💍 Luna de miel / aniversario</option>
+            <option value="corporativo">💼 Grupo corporativo</option>
+          </select>
+        </div>
       </div>
 
       <!-- PASO 4: Servicios -->
@@ -7359,7 +7354,7 @@ function buildCityMarkers() {
       '</div>';
     const marker = L.marker(c.c, { icon }).addTo(mapInstance).bindPopup(popupHtml, { minWidth: 220 });
     marker.on('popupopen', () => {
-      document.querySelectorAll('.popup-btn-add').forEach(b => { b.onclick = () => { if(window.VAExp&&window.VAExp.addCityByName){ window.VAExp.addCityByName(b.getAttribute('data-city')); } else { toggleCiudad(b.getAttribute('data-city')); } if(mapInstance) mapInstance.closePopup(); }; });
+      document.querySelectorAll('.popup-btn-add').forEach(b => { b.onclick = () => { const city = b.getAttribute('data-city'); if(mapInstance) mapInstance.closePopup(); abrirWizard(); if(!VWIZ.ciudades_orden.includes(city)){ VWIZ.ciudades_orden.push(city); } wizGoToStep(2); wizRenderCityCards(); wizRenderCityOrder(); }; });
       document.querySelectorAll('.popup-btn-zoom').forEach(b => { b.onclick = () => { zoomToCity(b.getAttribute('data-city')); }; });
     });
     cityMarkers[c.n] = marker;
@@ -9076,11 +9071,11 @@ function wizValidateStep(n) {
     return null;
   }
   if (n === 2) {
-    if (VWIZ.adultos < 1) return 'Debe haber al menos 1 adulto';
+    if (VWIZ.ciudades_orden.length === 0) return 'Selecciona al menos una ciudad';
     return null;
   }
   if (n === 3) {
-    if (VWIZ.ciudades_orden.length === 0) return 'Selecciona al menos una ciudad';
+    if (VWIZ.adultos < 1) return 'Debe haber al menos 1 adulto';
     return null;
   }
   if (n === 6) {
@@ -9132,7 +9127,7 @@ function wizSyncStep(n) {
       VWIZ.duracion_noches = Math.max(0, Math.round((d2 - d1) / 86400000));
     }
   }
-  if (n === 2) {
+  if (n === 3) {
     VWIZ.tipo_cliente = document.getElementById('wizTipoCliente')?.value || '';
     const agGrid = document.getElementById('wizAgesGrid');
     if (agGrid) {
