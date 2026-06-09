@@ -4138,6 +4138,9 @@ img, video, iframe { max-width: 100%; height: auto; }
       <span class="section-tag" data-t="map.tag">Explora · Construye · Viaja</span>
       <h2 data-t="map.title">Diseña tu ruta sobre 8 siglos de Al-Ándalus</h2>
     </div>
+    <div style="text-align:center;margin-bottom:24px;">
+      <button class="btn-wizard-trigger" id="btnAbrirWizard" onclick="abrirWizard()">🗺️ Planifica tu viaje →</button>
+    </div>
     <div class="mapa-stage">
       <div class="mapa-layout">
         <div class="mapa-wrapper">
@@ -5651,6 +5654,633 @@ img, video, iframe { max-width: 100%; height: auto; }
     <button class="chat-send" id="chatSend" aria-label="Enviar">→</button>
   </div>
 </div>
+
+<style>
+/* ============================================
+   WIZARD DE PLANIFICACIÓN — ESTILOS
+   ============================================ */
+.wiz-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(26,26,26,0.72);
+  align-items: center;
+  justify-content: center;
+}
+.wiz-overlay.open { display: flex; }
+.wiz-modal {
+  background: var(--crema, #F6EEDF);
+  border-radius: 16px;
+  width: min(680px, 96vw);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(26,26,26,0.28);
+}
+.wiz-header {
+  background: var(--terra, #BB4422);
+  color: #fff;
+  padding: 20px 24px 14px;
+  flex-shrink: 0;
+}
+.wiz-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.wiz-title { font-family: 'El Messiri', serif; font-size: 1.25rem; margin: 0; }
+.wiz-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+.wiz-progress-track {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+  height: 4px;
+  margin-bottom: 10px;
+}
+.wiz-progress-fill {
+  background: var(--oro, #C2954A);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+.wiz-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.wiz-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  transition: background 0.2s;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.wiz-dot.active { background: #fff; }
+.wiz-dot.done { background: var(--oro, #C2954A); }
+.wiz-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+.wiz-panel { display: none; }
+.wiz-panel.active { display: block; }
+.wiz-step-title {
+  font-family: 'El Messiri', serif;
+  font-size: 1.1rem;
+  color: var(--terra, #BB4422);
+  margin: 0 0 18px;
+}
+.wiz-field { margin-bottom: 16px; }
+.wiz-field label { display: block; font-size: 0.85rem; color: #666; margin-bottom: 4px; font-family: 'Inter', sans-serif; }
+.wiz-field input[type="date"],
+.wiz-field input[type="text"],
+.wiz-field input[type="email"],
+.wiz-field input[type="tel"],
+.wiz-field select,
+.wiz-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.wiz-field input:focus,
+.wiz-field select:focus,
+.wiz-field textarea:focus {
+  outline: none;
+  border-color: var(--terra, #BB4422);
+}
+.wiz-nights-display {
+  font-size: 0.9rem;
+  color: var(--terra, #BB4422);
+  font-weight: 600;
+  margin-top: 4px;
+}
+.wiz-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.wiz-counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+.wiz-counter-label { font-family: 'Inter', sans-serif; font-size: 0.95rem; }
+.wiz-counter-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.wiz-counter-ctrl button {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--terra, #BB4422);
+  background: #fff;
+  color: var(--terra, #BB4422);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.wiz-counter-ctrl button:hover { background: var(--terra, #BB4422); color: #fff; }
+.wiz-counter-val { font-weight: 700; min-width: 24px; text-align: center; font-size: 1.05rem; }
+.wiz-ages-wrap { margin-top: 12px; }
+.wiz-ages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-top: 8px; }
+.wiz-age-input { width: 100%; padding: 8px; border: 1.5px solid #ddd; border-radius: 8px; text-align: center; font-size: 0.9rem; box-sizing: border-box; }
+.wiz-city-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.wiz-city-card {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+}
+.wiz-city-card:hover { border-color: var(--oro, #C2954A); }
+.wiz-city-card.selected { border-color: var(--terra, #BB4422); background: #fef6f3; }
+.wiz-city-card .city-emoji { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+.wiz-city-card .city-name { font-size: 0.85rem; font-weight: 600; }
+.wiz-city-card .city-badge {
+  display: none;
+  position: absolute;
+  top: 5px; right: 5px;
+  background: var(--terra, #BB4422);
+  color: #fff;
+  border-radius: 50%;
+  width: 18px; height: 18px;
+  font-size: 0.7rem;
+  align-items: center;
+  justify-content: center;
+}
+.wiz-city-card.selected .city-badge { display: flex; }
+.wiz-order-list { list-style: none; padding: 0; margin: 0; }
+.wiz-order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+}
+.wiz-order-btns { display: flex; gap: 4px; }
+.wiz-order-btns button {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  transition: background 0.15s;
+}
+.wiz-order-btns button:hover { background: var(--terra, #BB4422); color: #fff; border-color: var(--terra); }
+.wiz-tab-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; }
+.wiz-tab {
+  padding: 7px 14px;
+  background: #fff;
+  border: 1.5px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s, border-color 0.15s;
+}
+.wiz-tab.active { background: var(--terra, #BB4422); color: #fff; border-color: var(--terra); }
+.wiz-tab-panel { display: none; }
+.wiz-tab-panel.active { display: block; }
+.wiz-noches-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+}
+.wiz-counter-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wiz-counter-inline button {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid var(--terra);
+  background: #fff;
+  color: var(--terra);
+  cursor: pointer;
+  font-size: 1rem;
+}
+.wiz-counter-inline button:hover { background: var(--terra); color: #fff; }
+.wiz-poi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.wiz-poi-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #eee;
+}
+.wiz-poi-label:hover { border-color: var(--oro); }
+.wiz-servicios-grid { display: flex; flex-direction: column; gap: 8px; }
+.wiz-srv-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.wiz-srv-btn.active { border-color: var(--terra, #BB4422); background: #fef6f3; }
+.wiz-srv-icon { font-size: 1.3rem; }
+.wiz-srv-texts { flex: 1; }
+.wiz-srv-name { font-weight: 600; font-size: 0.9rem; display: block; }
+.wiz-srv-desc { font-size: 0.78rem; color: #888; }
+.wiz-srv-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ddd; flex-shrink: 0; transition: background 0.2s, border-color 0.2s; }
+.wiz-srv-btn.active .wiz-srv-check { background: var(--terra); border-color: var(--terra); }
+.wiz-summary-block {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.wiz-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.wiz-summary-header a { font-size: 0.8rem; color: var(--terra); }
+.wiz-summary-block p { margin: 0; font-size: 0.9rem; color: #555; font-family: 'Inter', sans-serif; }
+.wiz-contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.wiz-contact-grid .full-width { grid-column: 1 / -1; }
+.wiz-wa-prefix-row { display: flex; gap: 6px; }
+.wiz-wa-prefix-row select { width: 90px; flex-shrink: 0; }
+.wiz-wa-prefix-row input { flex: 1; }
+.wiz-privacy-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 14px 0;
+  font-size: 0.82rem;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.4;
+}
+.wiz-privacy-row a { color: var(--terra); }
+.wiz-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  background: var(--crema, #F6EEDF);
+}
+.wiz-btn-prev {
+  background: none;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  transition: border-color 0.2s;
+}
+.wiz-btn-prev:hover { border-color: #999; }
+.wiz-btn-next {
+  background: var(--terra, #BB4422);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 28px;
+  cursor: pointer;
+  font-family: 'El Messiri', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.wiz-btn-next:hover { background: #a33c1e; }
+.wiz-btn-next:disabled { background: #ccc; cursor: not-allowed; }
+.wiz-error {
+  display: none;
+  color: var(--terra, #BB4422);
+  background: #fef0ec;
+  border: 1px solid #f5c8bc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+}
+.btn-wizard-trigger {
+  background: var(--terra, #BB4422);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 30px;
+  font-family: 'El Messiri', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-wizard-trigger:hover { background: #a33c1e; transform: translateY(-1px); }
+@media (max-width: 600px) {
+  .wiz-city-grid { grid-template-columns: repeat(2, 1fr); }
+  .wiz-contact-grid { grid-template-columns: 1fr; }
+  .wiz-contact-grid .full-width { grid-column: 1; }
+  .wiz-row-2 { grid-template-columns: 1fr; }
+}
+</style>
+
+<!-- WIZARD DE PLANIFICACIÓN DE VIAJE (7 pasos) -->
+<div id="wizardOverlay" class="wiz-overlay" role="dialog" aria-modal="true" aria-labelledby="wizTitleEl">
+  <div class="wiz-modal">
+    <div class="wiz-header">
+      <div class="wiz-header-top">
+        <h2 class="wiz-title" id="wizTitleEl">Planifica tu viaje a Al-Ándalus</h2>
+        <button class="wiz-close" onclick="cerrarWizard()" aria-label="Cerrar">×</button>
+      </div>
+      <div class="wiz-progress-track"><div class="wiz-progress-fill" id="wizProgressBar"></div></div>
+      <div class="wiz-dots">
+        <button class="wiz-dot" data-step="1" onclick="wizGoToStep(1)" aria-label="Paso 1"></button>
+        <button class="wiz-dot" data-step="2" onclick="wizGoToStep(2)" aria-label="Paso 2"></button>
+        <button class="wiz-dot" data-step="3" onclick="wizGoToStep(3)" aria-label="Paso 3"></button>
+        <button class="wiz-dot" data-step="4" onclick="wizGoToStep(4)" aria-label="Paso 4"></button>
+        <button class="wiz-dot" data-step="5" onclick="wizGoToStep(5)" aria-label="Paso 5"></button>
+        <button class="wiz-dot" data-step="6" onclick="wizGoToStep(6)" aria-label="Paso 6"></button>
+        <button class="wiz-dot" data-step="7" onclick="wizGoToStep(7)" aria-label="Paso 7"></button>
+      </div>
+    </div>
+    <div class="wiz-body">
+      <div id="wizError" class="wiz-error"></div>
+
+      <!-- PASO 1: Fechas -->
+      <div id="wizPanel1" class="wiz-panel">
+        <h3 class="wiz-step-title">📅 Paso 1 · Fechas del viaje</h3>
+        <div class="wiz-row-2">
+          <div class="wiz-field">
+            <label for="wizFechaInicio">Fecha de inicio</label>
+            <input type="date" id="wizFechaInicio" onchange="wizUpdateNights()">
+          </div>
+          <div class="wiz-field">
+            <label for="wizFechaFin">Fecha de fin</label>
+            <input type="date" id="wizFechaFin" onchange="wizUpdateNights()">
+          </div>
+        </div>
+        <div class="wiz-nights-display" id="wizNightsDisplay"></div>
+        <div class="wiz-field" style="margin-top:14px;">
+          <label><input type="checkbox" id="wizFlexible" onchange="wizToggleMargen()"> ¿Fechas flexibles?</label>
+        </div>
+        <div id="wizMargenWrap" style="display:none;" class="wiz-field">
+          <label for="wizMargen">Margen de flexibilidad</label>
+          <select id="wizMargen">
+            <option value="1">±1 día</option>
+            <option value="2">±2 días</option>
+            <option value="3">±3 días</option>
+            <option value="7">±7 días</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PASO 2: Viajeros -->
+      <div id="wizPanel2" class="wiz-panel">
+        <h3 class="wiz-step-title">👥 Paso 2 · Viajeros</h3>
+        <div class="wiz-counter-row">
+          <span class="wiz-counter-label">Adultos</span>
+          <div class="wiz-counter-ctrl">
+            <button id="wizAdultosM">−</button>
+            <span class="wiz-counter-val" id="wizAdultos">2</span>
+            <button id="wizAdultosP">+</button>
+          </div>
+        </div>
+        <div class="wiz-counter-row">
+          <span class="wiz-counter-label">Menores de 18</span>
+          <div class="wiz-counter-ctrl">
+            <button id="wizMenoresM">−</button>
+            <span class="wiz-counter-val" id="wizMenores">0</span>
+            <button id="wizMenoresP">+</button>
+          </div>
+        </div>
+        <div id="wizAgesWrap" class="wiz-ages-wrap" style="display:none;">
+          <p style="font-size:0.82rem;color:#666;margin:0 0 4px;">Edades de los menores</p>
+          <div id="wizAgesGrid" class="wiz-ages-grid"></div>
+        </div>
+        <div class="wiz-field" style="margin-top:16px;">
+          <label for="wizTipoCliente">Tipo de grupo</label>
+          <select id="wizTipoCliente">
+            <option value="">— Seleccionar —</option>
+            <option value="familia">👨‍👩‍👧 Grupo familiar</option>
+            <option value="pareja">💑 Pareja</option>
+            <option value="amigos">👫 Grupo de amigos</option>
+            <option value="solitario">🧳 Viajero en solitario</option>
+            <option value="escolar">🎓 Grupo escolar</option>
+            <option value="religioso">🕌 Peregrinación / grupo religioso</option>
+            <option value="honeymoon">💍 Luna de miel / aniversario</option>
+            <option value="corporativo">💼 Grupo corporativo</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PASO 3: Ruta -->
+      <div id="wizPanel3" class="wiz-panel">
+        <h3 class="wiz-step-title">🗺️ Paso 3 · Tu ruta</h3>
+        <p style="font-size:0.85rem;color:#888;margin:0 0 14px;font-family:'Inter',sans-serif;">Selecciona las ciudades y ordénalas a tu gusto</p>
+        <div class="wiz-city-grid" id="wizCityGrid">
+          <div class="wiz-city-card" data-city="Madrid" onclick="wizCityToggle('Madrid')">
+            <span class="city-emoji">🏛️</span>
+            <span class="city-name">Madrid</span>
+            <span class="city-badge">✓</span>
+          </div>
+          <div class="wiz-city-card" data-city="Toledo" onclick="wizCityToggle('Toledo')">
+            <span class="city-emoji">⚔️</span>
+            <span class="city-name">Toledo</span>
+            <span class="city-badge">✓</span>
+          </div>
+          <div class="wiz-city-card" data-city="Córdoba" onclick="wizCityToggle('Córdoba')">
+            <span class="city-emoji">🕌</span>
+            <span class="city-name">Córdoba</span>
+            <span class="city-badge">✓</span>
+          </div>
+          <div class="wiz-city-card" data-city="Sevilla" onclick="wizCityToggle('Sevilla')">
+            <span class="city-emoji">💃</span>
+            <span class="city-name">Sevilla</span>
+            <span class="city-badge">✓</span>
+          </div>
+          <div class="wiz-city-card" data-city="Málaga" onclick="wizCityToggle('Málaga')">
+            <span class="city-emoji">☀️</span>
+            <span class="city-name">Málaga</span>
+            <span class="city-badge">✓</span>
+          </div>
+          <div class="wiz-city-card" data-city="Granada" onclick="wizCityToggle('Granada')">
+            <span class="city-emoji">🌹</span>
+            <span class="city-name">Granada</span>
+            <span class="city-badge">✓</span>
+          </div>
+        </div>
+        <ol class="wiz-order-list" id="wizCityOrder"></ol>
+      </div>
+
+      <!-- PASO 4: Lugares por ciudad -->
+      <div id="wizPanel4" class="wiz-panel">
+        <h3 class="wiz-step-title">📍 Paso 4 · Lugares por ciudad</h3>
+        <div id="wizStep4Tabs"></div>
+      </div>
+
+      <!-- PASO 5: Servicios -->
+      <div id="wizPanel5" class="wiz-panel">
+        <h3 class="wiz-step-title">🛎️ Paso 5 · Servicios</h3>
+        <div class="wiz-servicios-grid">
+          <button type="button" class="wiz-srv-btn active" data-srv="hotel" onclick="wizToggleServicio('hotel')">
+            <span class="wiz-srv-icon">🏨</span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Hotel</span><span class="wiz-srv-desc">Alojamiento en hoteles seleccionados</span></span>
+            <span class="wiz-srv-check"></span>
+          </button>
+          <button type="button" class="wiz-srv-btn" data-srv="transporte" onclick="wizToggleServicio('transporte')">
+            <span class="wiz-srv-icon">🚐</span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Transporte</span><span class="wiz-srv-desc">Vehículo con conductor para todo el viaje</span></span>
+            <span class="wiz-srv-check"></span>
+          </button>
+          <button type="button" class="wiz-srv-btn active" data-srv="tour_leader" onclick="wizToggleServicio('tour_leader')">
+            <span class="wiz-srv-icon">👑</span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Tour Leader</span><span class="wiz-srv-desc">Acompañante bilingüe durante todo el viaje</span></span>
+            <span class="wiz-srv-check"></span>
+          </button>
+          <button type="button" class="wiz-srv-btn active" data-srv="guia_local" onclick="wizToggleServicio('guia_local')">
+            <span class="wiz-srv-icon">👤</span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Guía Local</span><span class="wiz-srv-desc">Expertos locales en cada ciudad</span></span>
+            <span class="wiz-srv-check"></span>
+          </button>
+          <button type="button" class="wiz-srv-btn" data-srv="experiencia_culinaria" onclick="wizToggleServicio('experiencia_culinaria')">
+            <span class="wiz-srv-icon">🍽️</span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Experiencia culinaria</span><span class="wiz-srv-desc">Talleres de cocina andalusí y catas</span></span>
+            <span class="wiz-srv-check"></span>
+          </button>
+          <button type="button" class="wiz-srv-btn" data-srv="experiencia_halal" onclick="wizToggleServicio('experiencia_halal')">
+            <span class="wiz-srv-icon">🕌</span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Experiencia Halal</span><span class="wiz-srv-desc">Gastronomía y vivencias halal certificadas</span></span>
+            <span class="wiz-srv-check"></span>
+          </button>
+          <button type="button" class="wiz-srv-btn" data-srv="llegada_internacional" onclick="wizToggleServicio('llegada_internacional')">
+            <span class="wiz-srv-icon">✈️</span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Llegada internacional</span><span class="wiz-srv-desc">Traslados desde/hacia aeropuerto o estación</span></span>
+            <span class="wiz-srv-check"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PASO 6: Resumen -->
+      <div id="wizPanel6" class="wiz-panel">
+        <h3 class="wiz-step-title">📋 Paso 6 · Resumen de tu viaje</h3>
+        <div id="wizSummaryContent"></div>
+      </div>
+
+      <!-- PASO 7: Contacto -->
+      <div id="wizPanel7" class="wiz-panel">
+        <h3 class="wiz-step-title">📬 Paso 7 · Tus datos de contacto</h3>
+        <div class="wiz-contact-grid">
+          <div class="wiz-field full-width">
+            <label for="wizNombre">Nombre completo *</label>
+            <input type="text" id="wizNombre" placeholder="Tu nombre completo">
+          </div>
+          <div class="wiz-field">
+            <label for="wizEmail">Email *</label>
+            <input type="email" id="wizEmail" placeholder="tu@email.com">
+          </div>
+          <div class="wiz-field">
+            <label>WhatsApp *</label>
+            <div class="wiz-wa-prefix-row">
+              <select id="wizWAPrefix">
+                <option value="+34">🇪🇸 +34</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+351">🇵🇹 +351</option>
+                <option value="+212">🇲🇦 +212</option>
+                <option value="+213">🇩🇿 +213</option>
+                <option value="+216">🇹🇳 +216</option>
+                <option value="+20">🇪🇬 +20</option>
+                <option value="+966">🇸🇦 +966</option>
+                <option value="+971">🇦🇪 +971</option>
+                <option value="+90">🇹🇷 +90</option>
+                <option value="+62">🇮🇩 +62</option>
+                <option value="+60">🇲🇾 +60</option>
+                <option value="+92">🇵🇰 +92</option>
+              </select>
+              <input type="tel" id="wizWhatsapp" placeholder="600 000 000">
+            </div>
+          </div>
+          <div class="wiz-field">
+            <label for="wizPais">País de residencia</label>
+            <input type="text" id="wizPais" placeholder="España">
+          </div>
+          <div class="wiz-field">
+            <label for="wizIdioma">Idioma preferido</label>
+            <select id="wizIdioma">
+              <option value="es">Español</option>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="pt">Português</option>
+              <option value="ar">العربية</option>
+            </select>
+          </div>
+          <div class="wiz-field full-width">
+            <label for="wizObs">Observaciones</label>
+            <textarea id="wizObs" rows="3" placeholder="Cualquier detalle adicional..."></textarea>
+          </div>
+        </div>
+        <div class="wiz-privacy-row">
+          <input type="checkbox" id="wizPrivacy" style="margin-top:2px;">
+          <label for="wizPrivacy">He leído y acepto la <a href="/politica-de-privacidad.html" target="_blank">política de privacidad</a> de Vive al Ándalus.</label>
+        </div>
+      </div>
+
+    </div><!-- /wiz-body -->
+    <div class="wiz-footer">
+      <button class="wiz-btn-prev" id="wizBtnPrev" onclick="wizPrev()">← Anterior</button>
+      <button class="wiz-btn-next" id="wizSubmitBtn" onclick="wizNext()">Siguiente →</button>
+    </div>
+  </div><!-- /wiz-modal -->
+</div><!-- /wizardOverlay -->
 
 <script>
 // ============================================
@@ -8063,17 +8693,7 @@ function cfgShowErrors(errors) {
 
 // ===== BOTÓN "Solicitar este viaje" → abre modal final =====
 var __bsv2=document.getElementById('btnSolicitarViaje'); if(__bsv2) __bsv2.addEventListener('click', () => {
-  if (ciudadesSeleccionadas.size === 0) return;
-  const errors = cfgValidate();
-  if (errors.length > 0) {
-    cfgShowErrors(errors);
-    const btn = document.getElementById('btnSolicitarViaje');
-    btn.classList.add('error');
-    setTimeout(() => btn.classList.remove('error'), 500);
-    return;
-  }
-  // Sin errores: abrir modal final con resumen pre-rellenado
-  abrirSolicitudModal();
+  abrirWizard();
 });
 
 function abrirSolicitudModal() {
@@ -8253,7 +8873,14 @@ function buildSolicitudPayload() {
     transporte: CFG.transporte,
     tour_lider: CFG.tourLider === 'si',
     ruta: { modo: CFG.ruta, orden: CFG.rutaOrden, km_total: cfgKmTotal() },
-    fecha_aproximada: document.getElementById('solFechaInicio').value + ' → ' + document.getElementById('solFechaFin').value,
+    fecha_inicio: VWIZ.fecha_inicio || document.getElementById('solFechaInicio')?.value || '',
+    fecha_fin: VWIZ.fecha_fin || document.getElementById('solFechaFin')?.value || '',
+    fechas_flexibles: VWIZ.fechas_flexibles,
+    margen_flexibilidad: VWIZ.margen_flexibilidad,
+    duracion_noches: VWIZ.duracion_noches,
+    tipo_cliente: VWIZ.tipo_cliente,
+    servicios: VWIZ.servicios,
+    fecha_aproximada: (VWIZ.fecha_inicio && VWIZ.fecha_fin) ? (VWIZ.fecha_inicio + ' → ' + VWIZ.fecha_fin) : ((document.getElementById('solFechaInicio')?.value || '') + ' → ' + (document.getElementById('solFechaFin')?.value || '')),
     idioma_cliente: currentLang,
     nivel: CFG.nivel,
     origen: 'vivealandalus.com',
@@ -8336,6 +8963,382 @@ document.getElementById('solSuccessOverlay').addEventListener('click', () => {
 
 // Inicializar el configurador en estado base
 cfgUpdate();
+
+// ============================================
+// WIZARD DE PLANIFICACIÓN (7 pasos)
+// ============================================
+
+const VWIZ = {
+  step: 1,
+  fecha_inicio: '',
+  fecha_fin: '',
+  fechas_flexibles: false,
+  margen_flexibilidad: 0,
+  duracion_noches: 0,
+  adultos: 2,
+  menores: [],
+  tipo_cliente: '',
+  ciudades_orden: [],
+  servicios: {
+    hotel: true,
+    transporte: false,
+    tour_leader: true,
+    guia_local: true,
+    experiencia_culinaria: false,
+    experiencia_halal: false,
+    llegada_internacional: false
+  }
+};
+
+const POIS = {
+  'Madrid': ['Palacio Real','Museo del Prado','Templo de Debod','Barrio de las Letras','Plaza Mayor'],
+  'Toledo': ['Catedral de Toledo','Sinagoga del Tránsito','Mezquita del Cristo de la Luz','Alcázar de Toledo','Barrio Judío'],
+  'Córdoba': ['Mezquita-Catedral','Judería','Medina Azahara','Alcázar de los Reyes Cristianos','Puente Romano'],
+  'Sevilla': ['Catedral y Giralda','Real Alcázar','Barrio de Santa Cruz','Torre del Oro','Triana'],
+  'Málaga': ['Alcazaba de Málaga','Museo Picasso','Calle Larios','El Palo','Castillo de Gibralfaro'],
+  'Granada': ['Alhambra y Generalife','Albaicín','Sacromonte','Catedral de Granada','Capilla Real']
+};
+
+const WIZ_CITY_EMOJIS = {
+  'Madrid':'🏛️','Toledo':'⚔️','Córdoba':'🕌','Sevilla':'💃','Málaga':'☀️','Granada':'🌹'
+};
+
+function abrirWizard() {
+  const ov = document.getElementById('wizardOverlay');
+  if (!ov) return;
+  VWIZ.step = 1;
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  wizGoToStep(1);
+}
+
+function cerrarWizard() {
+  const ov = document.getElementById('wizardOverlay');
+  if (ov) ov.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function wizGoToStep(n) {
+  VWIZ.step = n;
+  document.querySelectorAll('.wiz-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('wizPanel' + n);
+  if (panel) panel.classList.add('active');
+  wizUpdateProgress();
+  if (n === 4) wizRenderStep4();
+  if (n === 6) wizRenderStep6();
+}
+
+function wizUpdateProgress() {
+  const bar = document.getElementById('wizProgressBar');
+  if (bar) bar.style.width = (((VWIZ.step - 1) / 6) * 100) + '%';
+  document.querySelectorAll('.wiz-dot').forEach(d => {
+    const s = parseInt(d.dataset.step);
+    d.classList.toggle('done', s < VWIZ.step);
+    d.classList.toggle('active', s === VWIZ.step);
+  });
+}
+
+function wizValidateStep(n) {
+  if (n === 1) {
+    if (!VWIZ.fecha_inicio) return 'Selecciona la fecha de inicio';
+    if (!VWIZ.fecha_fin) return 'Selecciona la fecha de fin';
+    if (VWIZ.fecha_fin <= VWIZ.fecha_inicio) return 'La fecha de fin debe ser posterior a la de inicio';
+    return null;
+  }
+  if (n === 2) {
+    if (VWIZ.adultos < 1) return 'Debe haber al menos 1 adulto';
+    return null;
+  }
+  if (n === 3) {
+    if (VWIZ.ciudades_orden.length === 0) return 'Selecciona al menos una ciudad';
+    return null;
+  }
+  if (n === 7) {
+    const nombre = document.getElementById('wizNombre')?.value.trim();
+    const email = document.getElementById('wizEmail')?.value.trim();
+    const whatsapp = document.getElementById('wizWhatsapp')?.value.trim();
+    const privacy = document.getElementById('wizPrivacy')?.checked;
+    if (!nombre) return 'El nombre es obligatorio';
+    if (!email) return 'El email es obligatorio';
+    if (!whatsapp) return 'El WhatsApp es obligatorio';
+    if (!privacy) return 'Debes aceptar la política de privacidad';
+    return null;
+  }
+  return null;
+}
+
+function wizNext() {
+  const err = wizValidateStep(VWIZ.step);
+  if (err) { wizShowError(err); return; }
+  wizClearError();
+  wizSyncStep(VWIZ.step);
+  if (VWIZ.step < 7) wizGoToStep(VWIZ.step + 1);
+  else wizSubmit();
+}
+
+function wizPrev() {
+  wizClearError();
+  wizSyncStep(VWIZ.step);
+  if (VWIZ.step > 1) wizGoToStep(VWIZ.step - 1);
+}
+
+function wizShowError(msg) {
+  const el = document.getElementById('wizError');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
+}
+function wizClearError() {
+  const el = document.getElementById('wizError');
+  if (el) { el.textContent = ''; el.style.display = 'none'; }
+}
+
+function wizSyncStep(n) {
+  if (n === 1) {
+    VWIZ.fecha_inicio = document.getElementById('wizFechaInicio')?.value || '';
+    VWIZ.fecha_fin = document.getElementById('wizFechaFin')?.value || '';
+    VWIZ.fechas_flexibles = document.getElementById('wizFlexible')?.checked || false;
+    VWIZ.margen_flexibilidad = VWIZ.fechas_flexibles ? parseInt(document.getElementById('wizMargen')?.value || '0') : 0;
+    if (VWIZ.fecha_inicio && VWIZ.fecha_fin) {
+      const d1 = new Date(VWIZ.fecha_inicio), d2 = new Date(VWIZ.fecha_fin);
+      VWIZ.duracion_noches = Math.max(0, Math.round((d2 - d1) / 86400000));
+    }
+  }
+  if (n === 2) {
+    VWIZ.tipo_cliente = document.getElementById('wizTipoCliente')?.value || '';
+    const agGrid = document.getElementById('wizAgesGrid');
+    if (agGrid) {
+      VWIZ.menores = Array.from(agGrid.querySelectorAll('input')).map(i => parseInt(i.value) || 0);
+    }
+  }
+}
+
+function wizUpdateNights() {
+  const fi = document.getElementById('wizFechaInicio')?.value;
+  const ff = document.getElementById('wizFechaFin')?.value;
+  const nd = document.getElementById('wizNightsDisplay');
+  if (nd && fi && ff) {
+    const d1 = new Date(fi), d2 = new Date(ff);
+    const nights = Math.round((d2 - d1) / 86400000);
+    nd.textContent = nights > 0 ? nights + (nights === 1 ? ' noche' : ' noches') : '';
+  } else if (nd) nd.textContent = '';
+}
+
+function wizToggleMargen() {
+  const flex = document.getElementById('wizFlexible')?.checked;
+  const mg = document.getElementById('wizMargenWrap');
+  if (mg) mg.style.display = flex ? 'block' : 'none';
+}
+
+function wizUpdateMenores() {
+  const agGrid = document.getElementById('wizAgesGrid');
+  const agWrap = document.getElementById('wizAgesWrap');
+  if (!agGrid) return;
+  const count = VWIZ.menores.length;
+  if (agWrap) agWrap.style.display = count > 0 ? 'block' : 'none';
+  agGrid.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.min = '0'; inp.max = '17'; inp.placeholder = 'Edad ' + (i+1);
+    inp.value = VWIZ.menores[i] !== undefined ? VWIZ.menores[i] : '';
+    inp.className = 'wiz-age-input';
+    inp.addEventListener('change', () => { VWIZ.menores[i] = parseInt(inp.value) || 0; });
+    agGrid.appendChild(inp);
+  }
+}
+
+function wizCityToggle(city) {
+  const idx = VWIZ.ciudades_orden.indexOf(city);
+  if (idx === -1) {
+    VWIZ.ciudades_orden.push(city);
+  } else {
+    VWIZ.ciudades_orden.splice(idx, 1);
+  }
+  wizRenderCityCards();
+  wizRenderCityOrder();
+}
+
+function wizRenderCityCards() {
+  const grid = document.getElementById('wizCityGrid');
+  if (!grid) return;
+  grid.querySelectorAll('.wiz-city-card').forEach(card => {
+    const city = card.dataset.city;
+    card.classList.toggle('selected', VWIZ.ciudades_orden.includes(city));
+  });
+}
+
+function wizRenderCityOrder() {
+  const ol = document.getElementById('wizCityOrder');
+  if (!ol) return;
+  ol.innerHTML = '';
+  VWIZ.ciudades_orden.forEach((city, idx) => {
+    const li = document.createElement('li');
+    li.className = 'wiz-order-item';
+    li.innerHTML = WIZ_CITY_EMOJIS[city] + ' ' + city +
+      '<span class="wiz-order-btns">' +
+      (idx > 0 ? '<button onclick="wizCityMove(' + idx + ',-1)">▲</button>' : '') +
+      (idx < VWIZ.ciudades_orden.length - 1 ? '<button onclick="wizCityMove(' + idx + ',1)">▼</button>' : '') +
+      '</span>';
+    ol.appendChild(li);
+  });
+}
+
+function wizCityMove(idx, dir) {
+  const arr = VWIZ.ciudades_orden;
+  const ni = idx + dir;
+  if (ni < 0 || ni >= arr.length) return;
+  [arr[idx], arr[ni]] = [arr[ni], arr[idx]];
+  wizRenderCityOrder();
+}
+
+function wizRenderStep4() {
+  const container = document.getElementById('wizStep4Tabs');
+  if (!container) return;
+  container.innerHTML = '';
+  if (VWIZ.ciudades_orden.length === 0) {
+    container.innerHTML = '<p style="color:var(--terra)">No hay ciudades seleccionadas. Vuelve al paso 3.</p>';
+    return;
+  }
+  const tabBar = document.createElement('div'); tabBar.className = 'wiz-tab-bar';
+  const tabContent = document.createElement('div'); tabContent.className = 'wiz-tab-content';
+  VWIZ.ciudades_orden.forEach((city, ci) => {
+    if (!window._wizCityState) window._wizCityState = {};
+    if (!window._wizCityState[city]) window._wizCityState[city] = { noches: 1, pois: [] };
+    const tab = document.createElement('button');
+    tab.className = 'wiz-tab' + (ci === 0 ? ' active' : '');
+    tab.textContent = WIZ_CITY_EMOJIS[city] + ' ' + city;
+    tab.onclick = () => {
+      container.querySelectorAll('.wiz-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      container.querySelectorAll('.wiz-tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('wizTabPanel_' + city).classList.add('active');
+    };
+    tabBar.appendChild(tab);
+    const panel = document.createElement('div');
+    panel.className = 'wiz-tab-panel' + (ci === 0 ? ' active' : '');
+    panel.id = 'wizTabPanel_' + city;
+    const pois = POIS[city];
+    let poiHtml = '';
+    if (pois) {
+      poiHtml = '<div class="wiz-poi-grid">' + pois.map(poi => {
+        const checked = (window._wizCityState[city].pois || []).includes(poi) ? 'checked' : '';
+        return '<label class="wiz-poi-label"><input type="checkbox" ' + checked + ' onchange="wizTogglePoi(\'' + city + '\',\'' + poi + '\',this.checked)"> ' + poi + '</label>';
+      }).join('') + '</div>';
+    } else {
+      poiHtml = '<p style="color:#888">Configuración disponible al guardar</p>';
+    }
+    panel.innerHTML = '<div class="wiz-noches-row"><span>Noches en ' + city + '</span>' +
+      '<div class="wiz-counter-inline"><button onclick="wizCityNochesDelta(\'' + city + '\',-1)">−</button>' +
+      '<span id="wizNoches_' + city + '">' + window._wizCityState[city].noches + '</span>' +
+      '<button onclick="wizCityNochesDelta(\'' + city + '\',1)">+</button></div></div>' + poiHtml;
+    tabContent.appendChild(panel);
+  });
+  container.appendChild(tabBar);
+  container.appendChild(tabContent);
+}
+
+function wizTogglePoi(city, poi, checked) {
+  if (!window._wizCityState) window._wizCityState = {};
+  if (!window._wizCityState[city]) window._wizCityState[city] = { noches: 1, pois: [] };
+  const arr = window._wizCityState[city].pois;
+  const idx = arr.indexOf(poi);
+  if (checked && idx === -1) arr.push(poi);
+  if (!checked && idx !== -1) arr.splice(idx, 1);
+}
+
+function wizCityNochesDelta(city, delta) {
+  if (!window._wizCityState) window._wizCityState = {};
+  if (!window._wizCityState[city]) window._wizCityState[city] = { noches: 1, pois: [] };
+  window._wizCityState[city].noches = Math.max(1, window._wizCityState[city].noches + delta);
+  const el = document.getElementById('wizNoches_' + city);
+  if (el) el.textContent = window._wizCityState[city].noches;
+}
+
+function wizToggleServicio(key) {
+  VWIZ.servicios[key] = !VWIZ.servicios[key];
+  const btn = document.querySelector('[data-srv="' + key + '"]');
+  if (btn) btn.classList.toggle('active', VWIZ.servicios[key]);
+}
+
+function wizRenderStep6() {
+  const cont = document.getElementById('wizSummaryContent');
+  if (!cont) return;
+  const noches = VWIZ.duracion_noches;
+  const flexTxt = VWIZ.fechas_flexibles ? ' (±' + VWIZ.margen_flexibilidad + ' días)' : '';
+  const menoresTxt = VWIZ.menores.length > 0 ? ', ' + VWIZ.menores.length + ' menor(es)' : '';
+  const srvActivos = Object.entries(VWIZ.servicios).filter(([,v]) => v).map(([k]) => k).join(', ');
+  cont.innerHTML = '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>📅 Fechas</strong><a href="#" onclick="wizGoToStep(1);return false;">Editar</a></div>' +
+    '<p>' + (VWIZ.fecha_inicio || '—') + ' → ' + (VWIZ.fecha_fin || '—') + ' · ' + noches + ' noches' + flexTxt + '</p></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>👥 Viajeros</strong><a href="#" onclick="wizGoToStep(2);return false;">Editar</a></div>' +
+    '<p>' + VWIZ.adultos + ' adulto(s)' + menoresTxt + (VWIZ.tipo_cliente ? ' · ' + VWIZ.tipo_cliente : '') + '</p></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🗺️ Ciudades</strong><a href="#" onclick="wizGoToStep(3);return false;">Editar</a></div>' +
+    '<p>' + (VWIZ.ciudades_orden.length > 0 ? VWIZ.ciudades_orden.map((c,i) => (i+1)+'. '+c).join(' → ') : '—') + '</p></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🛎️ Servicios</strong><a href="#" onclick="wizGoToStep(5);return false;">Editar</a></div>' +
+    '<p>' + (srvActivos || 'Ninguno') + '</p></div>';
+}
+
+async function wizSubmit() {
+  const err = wizValidateStep(7);
+  if (err) { wizShowError(err); return; }
+  wizClearError();
+  wizSyncStep(7);
+  // Sync VWIZ → CFG
+  CFG.adultos = VWIZ.adultos;
+  CFG.ninos = VWIZ.menores.slice();
+  if (VWIZ.ciudades_orden.length > 0) {
+    CFG.rutaOrden = VWIZ.ciudades_orden.slice();
+    CFG.ruta = 'cliente';
+    VWIZ.ciudades_orden.forEach(cn => {
+      if (!ciudadesSeleccionadas.has(cn)) ciudadesSeleccionadas.add(cn);
+      if (!CIU[cn]) CIU[cn] = ciuDefault(cn);
+    });
+  }
+  // Sync noches from wizard step 4
+  if (window._wizCityState) {
+    Object.entries(window._wizCityState).forEach(([cn, state]) => {
+      if (CIU[cn]) CIU[cn].noches = state.noches;
+    });
+  }
+  const payload = buildSolicitudPayload();
+  // Override contact with wizard step 7 values
+  payload.contacto = {
+    nombre: document.getElementById('wizNombre')?.value.trim() || '',
+    email: document.getElementById('wizEmail')?.value.trim() || '',
+    telefono: (document.getElementById('wizWAPrefix')?.value || '') + (document.getElementById('wizWhatsapp')?.value.trim() || ''),
+    pais: document.getElementById('wizPais')?.value.trim() || '',
+    idioma_preferido: document.getElementById('wizIdioma')?.value || '',
+    comentarios: document.getElementById('wizObs')?.value.trim() || ''
+  };
+  const submitBtn = document.getElementById('wizSubmitBtn');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando...'; }
+  try {
+    const resp = await fetch(WEBHOOK_LEAD, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    let ref = '';
+    try { const data = await resp.json(); ref = data.ref || data.id || ''; } catch(e) {}
+    cerrarWizard();
+    const successOverlay = document.getElementById('solSuccessOverlay');
+    if (successOverlay) {
+      const refEl = document.getElementById('solSuccessRef');
+      if (refEl && ref) refEl.textContent = 'Ref: ' + ref;
+      successOverlay.setAttribute('aria-hidden', 'false');
+      successOverlay.style.display = 'flex';
+    }
+  } catch(e) {
+    wizShowError('Error al enviar. Por favor inténtalo de nuevo.');
+  } finally {
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar solicitud'; }
+  }
+}
+
+// Bind wizard step 2 counters
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('wizAdultosM')?.addEventListener('click', () => { VWIZ.adultos = Math.max(1, VWIZ.adultos - 1); document.getElementById('wizAdultos').textContent = VWIZ.adultos; });
+  document.getElementById('wizAdultosP')?.addEventListener('click', () => { VWIZ.adultos = Math.min(99, VWIZ.adultos + 1); document.getElementById('wizAdultos').textContent = VWIZ.adultos; });
+  document.getElementById('wizMenoresM')?.addEventListener('click', () => { if (VWIZ.menores.length > 0) { VWIZ.menores.pop(); document.getElementById('wizMenores').textContent = VWIZ.menores.length; wizUpdateMenores(); } });
+  document.getElementById('wizMenoresP')?.addEventListener('click', () => { if (VWIZ.menores.length < 20) { VWIZ.menores.push(0); document.getElementById('wizMenores').textContent = VWIZ.menores.length; wizUpdateMenores(); } });
+});
 
 </script>
 <script>
