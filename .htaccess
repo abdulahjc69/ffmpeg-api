@@ -1,0 +1,11 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Home: / → index.html (sin tocar)
+RewriteRule ^$ index.html [L]
+
+# Páginas legales sin extensión
+RewriteRule ^aviso-legal$              aviso-legal.html              [L]
+RewriteRule ^politica-de-privacidad$   politica-de-privacidad.html   [L]
+RewriteRule ^cookies$                  cookies.html                  [L]
