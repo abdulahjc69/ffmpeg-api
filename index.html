@@ -9247,9 +9247,9 @@ function wizRenderStep5() {
   const srvActivos = Object.entries(VWIZ.servicios).filter(([,v]) => v).map(([k]) => srvNames[k] || k).join(' · ');
   cont.innerHTML = '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>📅 Fechas</strong><a href="#" onclick="wizGoToStep(1);return false;">Editar</a></div>' +
     '<p>' + (VWIZ.fecha_inicio || '—') + ' → ' + (VWIZ.fecha_fin || '—') + ' · ' + noches + ' noches' + flexTxt + '</p></div>' +
-    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>👥 Viajeros</strong><a href="#" onclick="wizGoToStep(2);return false;">Editar</a></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>👥 Viajeros</strong><a href="#" onclick="wizGoToStep(3);return false;">Editar</a></div>' +
     '<p>' + VWIZ.adultos + ' adulto(s)' + menoresTxt + (VWIZ.tipo_cliente ? ' · ' + VWIZ.tipo_cliente : '') + '</p></div>' +
-    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🗺️ Ciudades</strong><a href="#" onclick="wizGoToStep(3);return false;">Editar</a></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🗺️ Ciudades</strong><a href="#" onclick="wizGoToStep(2);return false;">Editar</a></div>' +
     '<p>' + (VWIZ.ciudades_orden.length > 0 ? VWIZ.ciudades_orden.map((c,i) => (i+1)+'. '+c).join(' → ') : '—') + '</p></div>' +
     '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🛎️ Servicios</strong><a href="#" onclick="wizGoToStep(4);return false;">Editar</a></div>' +
     '<p>' + (srvActivos || 'Ninguno') + '</p></div>';
@@ -9259,7 +9259,6 @@ async function wizSubmit() {
   const err = wizValidateStep(6);
   if (err) { wizShowError(err); return; }
   wizClearError();
-  wizSyncStep(6);
   // Sync VWIZ → CFG
   CFG.adultos = VWIZ.adultos;
   CFG.ninos = VWIZ.menores.slice();
@@ -9271,7 +9270,7 @@ async function wizSubmit() {
       if (!CIU[cn]) CIU[cn] = ciuDefault(cn);
     });
   }
-  // Sync noches from wizard step 4
+  // Noches por ciudad — reservado para Fase A. _wizCityState siempre undefined hasta que se implemente el contador de noches en Paso 2.
   if (window._wizCityState) {
     Object.entries(window._wizCityState).forEach(([cn, state]) => {
       if (CIU[cn]) CIU[cn].noches = state.noches;
@@ -9305,11 +9304,11 @@ async function wizSubmit() {
   } catch(e) {
     wizShowError('Error al enviar. Por favor inténtalo de nuevo.');
   } finally {
-    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar solicitud'; }
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar y recibir mi propuesta →'; }
   }
 }
 
-// Bind wizard step 2 counters
+// Bind wizard step 3 counters (Viajeros)
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('wizAdultosM')?.addEventListener('click', () => { VWIZ.adultos = Math.max(1, VWIZ.adultos - 1); document.getElementById('wizAdultos').textContent = VWIZ.adultos; });
   document.getElementById('wizAdultosP')?.addEventListener('click', () => { VWIZ.adultos = Math.min(99, VWIZ.adultos + 1); document.getElementById('wizAdultos').textContent = VWIZ.adultos; });
