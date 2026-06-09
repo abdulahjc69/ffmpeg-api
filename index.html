@@ -5915,6 +5915,11 @@ img, video, iframe { max-width: 100%; height: auto; }
   border: 1px solid #eee;
 }
 .wiz-poi-label:hover { border-color: var(--oro); }
+.wiz-tranquiliza {
+  background: #f0faf5; border-left: 3px solid #1f6f54;
+  padding: 10px 14px; border-radius: 0 8px 8px 0;
+  font-size: 13px; color: #1a5c45; margin-bottom: 16px; line-height: 1.5;
+}
 .wiz-servicios-grid { display: flex; flex-direction: column; gap: 8px; }
 .wiz-srv-btn {
   display: flex;
@@ -6166,43 +6171,44 @@ img, video, iframe { max-width: 100%; height: auto; }
         <div id="wizStep4Tabs"></div>
       </div>
 
-      <!-- PASO 5: Servicios -->
+      <!-- PASO 5: Necesidades del grupo -->
       <div id="wizPanel5" class="wiz-panel">
-        <h3 class="wiz-step-title">🛎️ Paso 5 · Servicios</h3>
+        <h3 class="wiz-step-title">🛎️ Paso 5 · ¿Qué necesitáis que organicemos?</h3>
+        <p class="wiz-tranquiliza">No hace falta que lo tengáis todo decidido. Marcad lo que sepáis y nuestro equipo os ayudará a preparar el viaje.</p>
         <div class="wiz-servicios-grid">
           <button type="button" class="wiz-srv-btn active" data-srv="hotel" onclick="wizToggleServicio('hotel')">
             <span class="wiz-srv-icon">🏨</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Hotel</span><span class="wiz-srv-desc">Alojamiento en hoteles seleccionados</span></span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Alojamiento</span><span class="wiz-srv-desc">Hoteles para todo el grupo durante el viaje</span></span>
             <span class="wiz-srv-check"></span>
           </button>
           <button type="button" class="wiz-srv-btn" data-srv="transporte" onclick="wizToggleServicio('transporte')">
             <span class="wiz-srv-icon">🚐</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Transporte</span><span class="wiz-srv-desc">Vehículo con conductor para todo el viaje</span></span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Transporte</span><span class="wiz-srv-desc">Vehículo privado con conductor para todo el recorrido</span></span>
             <span class="wiz-srv-check"></span>
           </button>
           <button type="button" class="wiz-srv-btn active" data-srv="tour_leader" onclick="wizToggleServicio('tour_leader')">
             <span class="wiz-srv-icon">👑</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Tour Leader</span><span class="wiz-srv-desc">Acompañante bilingüe durante todo el viaje</span></span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Acompañamiento durante el viaje</span><span class="wiz-srv-desc">Un coordinador acompaña al grupo en todo momento: horarios, traslados, organización e incidencias. No es lo mismo que una visita guiada puntual.</span></span>
             <span class="wiz-srv-check"></span>
           </button>
           <button type="button" class="wiz-srv-btn active" data-srv="guia_local" onclick="wizToggleServicio('guia_local')">
             <span class="wiz-srv-icon">👤</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Guía Local</span><span class="wiz-srv-desc">Expertos locales en cada ciudad</span></span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Visitas guiadas</span><span class="wiz-srv-desc">Un guía local os acompaña en una visita concreta: monumento, barrio, museo o ciudad.</span></span>
             <span class="wiz-srv-check"></span>
           </button>
           <button type="button" class="wiz-srv-btn" data-srv="experiencia_culinaria" onclick="wizToggleServicio('experiencia_culinaria')">
             <span class="wiz-srv-icon">🍽️</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Experiencia culinaria</span><span class="wiz-srv-desc">Talleres de cocina andalusí y catas</span></span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Experiencia gastronómica</span><span class="wiz-srv-desc">Talleres, cenas especiales, mercados y sabores de Al-Ándalus</span></span>
             <span class="wiz-srv-check"></span>
           </button>
           <button type="button" class="wiz-srv-btn" data-srv="experiencia_halal" onclick="wizToggleServicio('experiencia_halal')">
             <span class="wiz-srv-icon">🕌</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Experiencia Halal</span><span class="wiz-srv-desc">Gastronomía y vivencias halal certificadas</span></span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Necesidades culturales y halal</span><span class="wiz-srv-desc">Gastronomía halal certificada, espacios de oración, tiempos de rezo y vivencias culturales</span></span>
             <span class="wiz-srv-check"></span>
           </button>
           <button type="button" class="wiz-srv-btn" data-srv="llegada_internacional" onclick="wizToggleServicio('llegada_internacional')">
             <span class="wiz-srv-icon">✈️</span>
-            <span class="wiz-srv-texts"><span class="wiz-srv-name">Llegada internacional</span><span class="wiz-srv-desc">Traslados desde/hacia aeropuerto o estación</span></span>
+            <span class="wiz-srv-texts"><span class="wiz-srv-name">Llegada internacional</span><span class="wiz-srv-desc">Traslados desde/hacia aeropuerto o estación al inicio y final del viaje</span></span>
             <span class="wiz-srv-check"></span>
           </button>
         </div>
@@ -8990,14 +8996,7 @@ const VWIZ = {
   }
 };
 
-const POIS = {
-  'Madrid': ['Palacio Real','Museo del Prado','Templo de Debod','Barrio de las Letras','Plaza Mayor'],
-  'Toledo': ['Catedral de Toledo','Sinagoga del Tránsito','Mezquita del Cristo de la Luz','Alcázar de Toledo','Barrio Judío'],
-  'Córdoba': ['Mezquita-Catedral','Judería','Medina Azahara','Alcázar de los Reyes Cristianos','Puente Romano'],
-  'Sevilla': ['Catedral y Giralda','Real Alcázar','Barrio de Santa Cruz','Torre del Oro','Triana'],
-  'Málaga': ['Alcazaba de Málaga','Museo Picasso','Calle Larios','El Palo','Castillo de Gibralfaro'],
-  'Granada': ['Alhambra y Generalife','Albaicín','Sacromonte','Catedral de Granada','Capilla Real']
-};
+// POIS ya definido arriba — no redeclarar
 
 const WIZ_CITY_EMOJIS = {
   'Madrid':'🏛️','Toledo':'⚔️','Córdoba':'🕌','Sevilla':'💃','Málaga':'☀️','Granada':'🌹'
@@ -9219,8 +9218,11 @@ function wizRenderStep4() {
     let poiHtml = '';
     if (pois) {
       poiHtml = '<div class="wiz-poi-grid">' + pois.map(poi => {
-        const checked = (window._wizCityState[city].pois || []).includes(poi) ? 'checked' : '';
-        return '<label class="wiz-poi-label"><input type="checkbox" ' + checked + ' onchange="wizTogglePoi(\'' + city + '\',\'' + poi + '\',this.checked)"> ' + poi + '</label>';
+        const poiName = (poi && typeof poi === 'object') ? (poi.name || poi.n || '') : String(poi);
+        const checked = (window._wizCityState[city].pois || []).includes(poiName) ? 'checked' : '';
+        const safeCity = city.replace(/'/g, "\\'");
+        const safeName = poiName.replace(/'/g, "\\'");
+        return '<label class="wiz-poi-label"><input type="checkbox" ' + checked + ' onchange="wizTogglePoi(\'' + safeCity + '\',\'' + safeName + '\',this.checked)"> ' + poiName + '</label>';
       }).join('') + '</div>';
     } else {
       poiHtml = '<p style="color:#888">Configuración disponible al guardar</p>';
@@ -9264,7 +9266,8 @@ function wizRenderStep6() {
   const noches = VWIZ.duracion_noches;
   const flexTxt = VWIZ.fechas_flexibles ? ' (±' + VWIZ.margen_flexibilidad + ' días)' : '';
   const menoresTxt = VWIZ.menores.length > 0 ? ', ' + VWIZ.menores.length + ' menor(es)' : '';
-  const srvActivos = Object.entries(VWIZ.servicios).filter(([,v]) => v).map(([k]) => k).join(', ');
+  const srvNames = { hotel: 'Alojamiento', transporte: 'Transporte', tour_leader: 'Acompañamiento durante el viaje', guia_local: 'Visitas guiadas', experiencia_culinaria: 'Experiencia gastronómica', experiencia_halal: 'Necesidades culturales y halal', llegada_internacional: 'Llegada internacional' };
+  const srvActivos = Object.entries(VWIZ.servicios).filter(([,v]) => v).map(([k]) => srvNames[k] || k).join(' · ');
   cont.innerHTML = '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>📅 Fechas</strong><a href="#" onclick="wizGoToStep(1);return false;">Editar</a></div>' +
     '<p>' + (VWIZ.fecha_inicio || '—') + ' → ' + (VWIZ.fecha_fin || '—') + ' · ' + noches + ' noches' + flexTxt + '</p></div>' +
     '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>👥 Viajeros</strong><a href="#" onclick="wizGoToStep(2);return false;">Editar</a></div>' +
@@ -9318,13 +9321,10 @@ async function wizSubmit() {
     let ref = '';
     try { const data = await resp.json(); ref = data.ref || data.id || ''; } catch(e) {}
     cerrarWizard();
-    const successOverlay = document.getElementById('solSuccessOverlay');
-    if (successOverlay) {
-      const refEl = document.getElementById('solSuccessRef');
-      if (refEl && ref) refEl.textContent = 'Ref: ' + ref;
-      successOverlay.setAttribute('aria-hidden', 'false');
-      successOverlay.style.display = 'flex';
-    }
+    const ok = document.getElementById('solSuccessModal');
+    const refEl = document.getElementById('solSuccessRef');
+    if (refEl) refEl.textContent = ref || ('VAA-' + new Date().getFullYear() + '-' + Math.floor(Math.random()*9000+1000));
+    if (ok) { ok.classList.add('open'); ok.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
   } catch(e) {
     wizShowError('Error al enviar. Por favor inténtalo de nuevo.');
   } finally {
