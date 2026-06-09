@@ -6023,7 +6023,7 @@ function getCiudades() {
     if (e.provincia && !RUTA_PROV.has(e.provincia)) return;
     const o = CIUDADES_CURADAS[e.nombre] || {};
     out.push({
-      n: e.nombre, c: [e.lat, e.lng], nivel: e.nivel || 3, emoji: ciuEmoji(e),
+      n: e.nombre, c: [e.lat, e.lng], nivel: o.nivel || e.nivel || 3, emoji: ciuEmoji(e),
       arabe: e.arabe || '', provincia: e.provincia || '',
       desc: o.desc || (e.cora || (typeof atlasArr === 'function' ? atlasArr(e.tipo).join(' \u00B7 ') : '') || ''),
       sub: o.sub || (e.gancho || e.monumentos || '')
