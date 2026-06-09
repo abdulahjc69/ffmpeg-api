@@ -4904,22 +4904,26 @@ img, video, iframe { max-width: 100%; height: auto; }
     }
   };
 
-  // Patrimonio por ciudad
+  // Patrimonio por ciudad/comarca (modal de servicios: Monumentos y Museos)
   var MONS_BY_CIUDAD={
-    'Granada':  ['Alhambra','Generalife','Albaicín','Bañuelo','Muralla zirí','Aljibes'],
-    'Córdoba':  ['Mezquita-Catedral','Medina Azahara','Judería / entorno histórico','Puente Romano','Alcázar'],
-    'Sevilla':  ['Real Alcázar','Giralda / antigua aljama','Torre del Oro','Barrio de Santa Cruz'],
-    'Málaga':   ['Alcazaba','Gibralfaro','Centro histórico andalusí (pendiente)'],
-    'Toledo':   ['Mezquita del Cristo de la Luz','Puerta de Bisagra / murallas','Baños y restos islámicos','Barrios históricos'],
-    'Madrid':   ['Mayrit / muralla árabe','Entorno de la Almudena','Restos islámicos de Madrid']
+    'Granada':      ['Alhambra','Generalife','Albaicín','Sacromonte','Bañuelo','Muralla zirí','Aljibes','Palacio de la Madraza'],
+    'Córdoba':      ['Mezquita-Catedral','Medina Azahara','Judería / Calle de las Flores','Puente Romano','Alcázar de los Reyes Cristianos','Torre de la Calahorra','Sinagoga de Córdoba'],
+    'Sevilla':      ['Real Alcázar','Giralda / antigua aljama','Torre del Oro','Barrio de Santa Cruz','Murallas almorávides','Palacio de las Dueñas'],
+    'Málaga':       ['Alcazaba','Gibralfaro','Teatro Romano','Centro histórico andalusí'],
+    'Ronda':        ['Baños árabes','Casa del Rey Moro','Puente Nuevo','Tajo de Ronda','Iglesia Sta. María sobre mezquita','Palacio Mondragón'],
+    'Toledo':       ['Mezquita del Cristo de la Luz','Puerta de Bisagra','Puente de Alcántara','San Juan de los Reyes','Sinagoga del Tránsito','Santa María la Blanca'],
+    'Madrid':       ['Muralla árabe de Mayrit','Plaza de la Villa / antigua Mayrit','Templo de Debod','Palacio Real (sobre alcázar islámico)','Catedral de la Almudena','Mezquita Central M-30'],
+    'La Alpujarra': ['Pampaneira','Bubión','Capileira','Trevélez','Lanjarón','Acequia árabe del Barranco de Poqueira']
   };
   var MUSEOS_BY_CIUDAD={
-    'Granada':  ['Museo de la Alhambra','Museo Arqueológico de Granada','Centro de interpretación (pendiente)'],
-    'Córdoba':  ['Museo de Medina Azahara','Museo Arqueológico de Córdoba'],
-    'Sevilla':  ['Espacios de patrimonio islámico (pendiente)'],
-    'Málaga':   ['Museo de Málaga (si procede)','Espacios patrimoniales (pendiente)'],
-    'Toledo':   ['Museo de Santa Cruz (contexto)','Patrimonio islámico (pendiente)'],
-    'Madrid':   ['Museo Arqueológico Nacional (contexto)','Restos de Mayrit (pendiente)']
+    'Granada':      ['Museo de la Alhambra','Museo Arqueológico de Granada','Centro de Interpretación del Albaicín'],
+    'Córdoba':      ['Museo de Medina Azahara','Museo Arqueológico de Córdoba','Museo de las Tres Culturas (Torre de la Calahorra)'],
+    'Sevilla':      ['Museo de Bellas Artes','Casa de Pilatos','Museo del Baile Flamenco'],
+    'Málaga':       ['Museo Picasso Málaga','Museo de la Alcazaba','Colección del Museo de Málaga'],
+    'Ronda':        ['Museo del Bandolero','Museo Lara','Museo Taurino de Ronda'],
+    'Toledo':       ['Museo del Greco','Museo de Santa Cruz','Museo Sefardí'],
+    'Madrid':       ['Museo del Prado','Museo Reina Sofía','Museo Arqueológico Nacional','Museo de Historia de Madrid'],
+    'La Alpujarra': ['Ecomuseo de la Alpujarra (Capileira)','Centro de Interpretación Morisco (pendiente)']
   };
 
   // Tipos de viajero (Bloque 2) — sin cambios
@@ -5011,10 +5015,18 @@ img, video, iframe { max-width: 100%; height: auto; }
         :'Primero selecciona una ciudad o población en el mapa para ver museos relacionados.';
       body.appendChild(hint); return;
     }
+    // Buscar coincidencia: nombre exacto o parcial (incluye Ronda, La Alpujarra, etc.)
     var matchKey=null;
     Object.keys(DATA).forEach(function(key){
-      if(ciudad.toLowerCase().indexOf(key.toLowerCase())>=0||key.toLowerCase().indexOf(ciudad.toLowerCase())>=0) matchKey=key;
+      var ck=ciudad.toLowerCase(), mk=key.toLowerCase();
+      if(ck===mk||ck.indexOf(mk)>=0||mk.indexOf(ck)>=0) matchKey=key;
     });
+    // Alias especiales
+    if(!matchKey){
+      var aliases={'alpujarra':'La Alpujarra','pampaneira':'La Alpujarra','capileira':'La Alpujarra','bubión':'La Alpujarra'};
+      var ck=ciudad.toLowerCase();
+      Object.keys(aliases).forEach(function(a){ if(ck.indexOf(a)>=0&&!matchKey) matchKey=aliases[a]; });
+    }
     if(!matchKey){
       hint.textContent=k==='monumentos'?'Monumentos pendientes de completar para esta ciudad.':'Base de museos pendiente de completar para esta ciudad.';
       body.appendChild(hint); return;
@@ -5961,31 +5973,33 @@ document.querySelectorAll('#nav a').forEach(a => {
 // ============================================
 // MAPA INTERACTIVO AL-ÁNDALUS 711-1492 (PORTADA)
 // ============================================
+// nivel: 1=capital provincial (pin en mapa), 2=sub-ciudad/comarca (dentro de su provincia)
 const CIUDADES_MAP = [
-  { n: 'Córdoba', emoji: '🕌', c: [37.8882, -4.7794],
+  { n: 'Córdoba',  nivel: 1, provincia: 'Córdoba', emoji: '🕌', c: [37.8882, -4.7794],
     desc: { es:'Capital del Califato', en:'Capital of the Caliphate', ar:'عاصمة الخلافة', fr:'Capitale du Califat', pt:'Capital do Califado' },
     sub:  { es:'Mezquita-Catedral · Medina Azahara', en:'Mosque-Cathedral · Medina Azahara', ar:'الجامع الكبير · مدينة الزهراء', fr:'Mosquée-Cathédrale · Medina Azahara', pt:'Mesquita-Catedral · Medina Azahara' } },
-  { n: 'Sevilla', emoji: '⛪', c: [37.3891, -5.9845],
+  { n: 'Sevilla',  nivel: 1, provincia: 'Sevilla', emoji: '⛪', c: [37.3891, -5.9845],
     desc: { es:'Capital almohade', en:'Almohad capital', ar:'العاصمة الموحدية', fr:'Capitale almohade', pt:'Capital almóada' },
     sub:  { es:'Giralda · Reales Alcázares', en:'Giralda · Royal Alcazars', ar:'الخيرالدا · القصور الملكية', fr:'Giralda · Alcazars Royaux', pt:'Giralda · Reales Alcázares' } },
-  { n: 'Granada', emoji: '🏰', c: [37.1773, -3.5986],
+  { n: 'Granada',  nivel: 1, provincia: 'Granada', emoji: '🏰', c: [37.1773, -3.5986],
     desc: { es:'Reino nazarí', en:'Nasrid kingdom', ar:'مملكة بني نصر', fr:'Royaume nasride', pt:'Reino nasrida' },
     sub:  { es:'Alhambra · Albaicín', en:'Alhambra · Albaicín', ar:'الحمراء · البياسين', fr:'Alhambra · Albaicín', pt:'Alhambra · Albaicín' } },
-  { n: 'Ronda', emoji: '🌉', c: [36.7426, -5.1659],
-    desc: { es:'Sobre el Tajo', en:'Above the gorge', ar:'فوق الوادي', fr:'Au-dessus des gorges', pt:'Sobre o desfiladeiro' },
-    sub:  { es:'Pueblos blancos · Baños árabes', en:'White villages · Arab baths', ar:'القرى البيضاء · الحمامات العربية', fr:'Villages blancs · Bains arabes', pt:'Aldeias brancas · Banhos árabes' } },
-  { n: 'Málaga', emoji: '🏛️', c: [36.7213, -4.4214],
+  { n: 'Málaga',   nivel: 1, provincia: 'Málaga', emoji: '🏛️', c: [36.7213, -4.4214],
     desc: { es:'Puerta del Mediterráneo', en:'Gateway to the Mediterranean', ar:'بوابة المتوسط', fr:'Porte de la Méditerranée', pt:'Porta do Mediterrâneo' },
     sub:  { es:'Alcazaba · Gibralfaro', en:'Alcazaba · Gibralfaro', ar:'القصبة · جبل فارو', fr:'Alcazaba · Gibralfaro', pt:'Alcazaba · Gibralfaro' } },
-  { n: 'Toledo', emoji: '🕍', c: [39.8628, -4.0273],
+  { n: 'Toledo',   nivel: 1, provincia: 'Toledo', emoji: '🕍', c: [39.8628, -4.0273],
     desc: { es:'Tres culturas', en:'Three cultures', ar:'ثلاث ثقافات', fr:'Trois cultures', pt:'Três culturas' },
     sub:  { es:'Sinagogas · Mezquitas · Catedral', en:'Synagogues · Mosques · Cathedral', ar:'الكنس · المساجد · الكاتدرائية', fr:'Synagogues · Mosquées · Cathédrale', pt:'Sinagogas · Mesquitas · Catedral' } },
-  { n: 'Madrid', emoji: '🖼️', c: [40.4168, -3.7038],
+  { n: 'Madrid',   nivel: 1, provincia: 'Madrid', emoji: '🏰', c: [40.4168, -3.7038],
     desc: { es:'Antigua Mayrit', en:'Ancient Mayrit', ar:'مَيْرِيْط القديمة', fr:'Ancienne Mayrit', pt:'Antiga Mayrit' },
-    sub:  { es:'Capital cosmopolita', en:'Cosmopolitan capital', ar:'العاصمة العالمية', fr:'Capitale cosmopolite', pt:'Capital cosmopolita' } },
-  { n: 'La Alpujarra', emoji: '🏘️', c: [36.9396, -3.3617],
+    sub:  { es:'Muralla árabe · Museos del Prado y Reina Sofía', en:'Arab wall · Prado & Reina Sofía museums', ar:'السور العربي · متاحف برادو ورينا صوفيا', fr:'Muraille arabe · Musées du Prado et Reina Sofía', pt:'Muralha árabe · Museus do Prado e Reina Sofía' } },
+  // nivel 2: sub-ciudades dentro de su provincia — no aparecen como pines principales
+  { n: 'Ronda',      nivel: 2, provincia: 'Málaga', emoji: '🌉', c: [36.7426, -5.1659],
+    desc: { es:'Ciudad sobre el Tajo', en:'City above the gorge', ar:'مدينة فوق الوادي', fr:'Ville au-dessus des gorges', pt:'Cidade sobre o desfiladeiro' },
+    sub:  { es:'Baños árabes · Puente Nuevo · Ciudad Medieval', en:'Arab baths · New Bridge · Medieval city', ar:'الحمامات العربية · الجسر الجديد · المدينة الوسطى', fr:'Bains arabes · Pont Nouveau · Ville médiévale', pt:'Banhos árabes · Ponte Nova · Cidade medieval' } },
+  { n: 'La Alpujarra', nivel: 2, provincia: 'Granada', emoji: '🏘️', c: [36.9396, -3.3617],
     desc: { es:'Pueblos blancos moriscos', en:'White Moorish villages', ar:'قرى مورسكية بيضاء', fr:'Villages blancs morisques', pt:'Aldeias brancas mouriscas' },
-    sub:  { es:'Sierra Nevada sur', en:'Southern Sierra Nevada', ar:'جنوب سييرا نيفادا', fr:'Sud de la Sierra Nevada', pt:'Sierra Nevada sul' } }
+    sub:  { es:'Pampaneira · Bubión · Capileira · Trevélez', en:'Pampaneira · Bubión · Capileira · Trevélez', ar:'بامبانيرا · بوبيون · كابيليرا · تريبيليث', fr:'Pampaneira · Bubión · Capileira · Trevélez', pt:'Pampaneira · Bubión · Capileira · Trevélez' } }
 ];
 
 // Helper: devuelve la versión localizada de un campo desc/sub
@@ -6016,9 +6030,9 @@ function getCiudades() {
     });
     vistos.add(e.nombre);
   });
-  // Curadas que no están en Notion (p.ej. La Alpujarra): se mantienen reservables
+  // Curadas que no están en Notion: usar nivel del CIUDADES_MAP (1=capital, 2=sub-ciudad)
   CIUDADES_MAP.forEach(c => {
-    if (!vistos.has(c.n)) out.push({ n: c.n, c: c.c, nivel: 1, emoji: c.emoji || '\uD83D\uDD4C', arabe: '', provincia: '', desc: c.desc || '', sub: c.sub || '' });
+    if (!vistos.has(c.n)) out.push({ n: c.n, c: c.c, nivel: c.nivel || 2, emoji: c.emoji || '\uD83D\uDD4C', arabe: '', provincia: c.provincia || '', desc: c.desc || '', sub: c.sub || '' });
   });
   return out;
 }
@@ -6619,11 +6633,14 @@ function toggleCiudad(name) {
   updatePanel();
 }
 
+// Solo las 6 capitales provinciales de la ruta estrella reciben pin dorado
+const CAPITALES_RUTA = new Set(['Madrid','Toledo','Córdoba','Sevilla','Málaga','Granada']);
+
 function buildCityMarkers() {
   if (!mapInstance) return;
   Object.keys(cityMarkers).forEach(k => { try { mapInstance.removeLayer(cityMarkers[k]); } catch (err) {} });
   cityMarkers = {};
-  getCiudades().filter(c => c.nivel === 1).forEach(c => {
+  getCiudades().filter(c => c.nivel === 1 && CAPITALES_RUTA.has(c.n)).forEach(c => {
     const icon = L.divIcon({
       className: 'ciudad-pin-wrap',
       html: '<div class="ciudad-pin" style="background:radial-gradient(circle at 30% 25%, #F6EEDF 0%, #e7b765 45%, #C2954A 100%);width:32px;height:32px;border-radius:50%;border:2px solid #1A1A1A;box-shadow:0 3px 10px rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;cursor:pointer;transition:all .25s;">' + (c.emoji || c.n[0]) + '</div>',
