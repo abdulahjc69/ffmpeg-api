@@ -4363,6 +4363,10 @@ img, video, iframe { max-width: 100%; height: auto; }
 .vaexp-toggle{display:inline-flex;border:1px solid #ddd6c8;border-radius:8px;overflow:hidden;}
 .vaexp-toggle button{border:0;background:#fff;color:#888;font-family:inherit;font-size:11.5px;font-weight:700;padding:5px 11px;cursor:pointer;}
 .vaexp-toggle button.on{background:#0E7C86;color:#fff;}
+.vaexp-privacy-row{margin-top:10px;}
+.vaexp-privacy-label{display:flex;gap:8px;align-items:flex-start;font-size:.82rem;color:#555;cursor:pointer;line-height:1.4;}
+.vaexp-privacy-label input[type=checkbox]{margin-top:2px;flex-shrink:0;accent-color:#b5862b;}
+.vaexp-privacy-label a{color:#b5862b;text-decoration:underline;}
 .vaexp-form-actions{display:flex;flex-direction:column;gap:7px;margin-top:2px;}
 .vaexp-form .vaexp-add{width:100%;}
 .vaexp-form-cancel{border:0;background:none;color:#999;font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline;}
@@ -4463,6 +4467,9 @@ img, video, iframe { max-width: 100%; height: auto; }
           </div>
           <div class="vaexp-field"><label>Observaciones</label><textarea id="vfObs" placeholder="Cuéntanos algo más sobre tu grupo o intereses (opcional)"></textarea></div>
 
+          <div class="vaexp-field vaexp-privacy-row">
+            <label class="vaexp-privacy-label"><input type="checkbox" id="vfPrivacy"> Acepto la <a href="/politica-de-privacidad" target="_blank">política de privacidad</a> y autorizo a Vive al Ándalus a contactar conmigo para preparar mi propuesta.</label>
+          </div>
           <div class="vaexp-form-err" id="vaexpFormErr" hidden></div>
           <div class="vaexp-form-actions">
             <button type="button" class="vaexp-add" id="vaexpFormSend">Solicitar mi viaje →</button>
@@ -4698,11 +4705,12 @@ img, video, iframe { max-width: 100%; height: auto; }
     if(cnt) cnt.textContent='('+S.trip.length+')';
     if(!list) return;
     list.innerHTML='';
-    var has=S.trip.length>0;
-    if(empty) empty.hidden=has;
-    if(sum) sum.hidden=!has;
-    if(clr) clr.hidden=!has;
-    // el CTA solo se muestra si hay lugares y el formulario no está abierto
+    var hasTrip=S.trip.length>0;
+    var has=hasTrip || (S.services&&S.services.length>0);
+    if(empty) empty.hidden=hasTrip;
+    if(sum) sum.hidden=!hasTrip;
+    if(clr) clr.hidden=!hasTrip;
+    // el CTA se muestra si hay lugares O servicios seleccionados, y el formulario no está abierto
     var formOpen=$('vaexpForm') && !$('vaexpForm').hidden;
     var okOpen=$('vaexpFormOk') && !$('vaexpFormOk').hidden;
     if(cta) cta.hidden=!has || formOpen || okOpen;
@@ -4764,9 +4772,20 @@ img, video, iframe { max-width: 100%; height: auto; }
     });
     var lang=(window.currentLang||'es');
     var pax=parseInt(($('vfPax')&&$('vfPax').value)||'0',10)||0;
+    var nombre=val('vfNombre'), email=val('vfEmail'), tel=val('vfTel');
+    var now=new Date();
+    var ref='VAE-'+now.getFullYear()+('0'+(now.getMonth()+1)).slice(-2)+('0'+now.getDate()).slice(-2)+'-'+Math.floor(Math.random()*9000+1000);
+    var tipoViajero=(function(){ var el=document.querySelector('.vaexp-tipo-btn.on'); return el?el.getAttribute('data-tipo')||'': ''; })();
     return {
-      contacto:{ nombre:val('vfNombre'), email:val('vfEmail'), telefono:val('vfTel'), comentarios:val('vfObs') },
+      referencia:ref,
+      fecha_solicitud:now.toISOString(),
+      contacto:{ nombre_apellidos:nombre, email:email, telefono:tel, comentarios:val('vfObs') },
+      nombre_apellidos:nombre,
+      email:email,
+      telefono:tel,
       grupo:{ adultos:pax, menores:0, halal:(S.prefs.halal==='si') },
+      tipo_viajero:tipoViajero,
+      idioma:lang,
       ciudades:ciudades,
       transporte:{ requerido:(S.prefs.transporte==='si') },
       hotel_requerido:(S.prefs.hotel==='si'),
@@ -4783,7 +4802,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       servicios:(S.services?S.services.slice():[]),
       servicios_detalle:(S.serviceDetails||{}),
       origen:'explorador_atlas',
-      ts:new Date().toISOString()
+      ts:now.toISOString()
     };
   }
   function val(id){ var el=$(id); return el?String(el.value||'').trim():''; }
@@ -4792,9 +4811,11 @@ img, video, iframe { max-width: 100%; height: auto; }
   function sendForm(){
     var err=$('vaexpFormErr'); if(err){ err.hidden=true; err.textContent=''; }
     var nombre=val('vfNombre'), email=val('vfEmail'), tel=val('vfTel');
+    var privacy=$('vfPrivacy');
     if(!nombre){ return showErr('Indícanos tu nombre.'); }
     if(!email||!validEmail(email)){ return showErr('Necesitamos un email válido para enviarte la propuesta.'); }
     if(!tel){ return showErr('Indícanos un teléfono o WhatsApp.'); }
+    if(!privacy||!privacy.checked){ return showErr('Debes aceptar la política de privacidad para continuar.'); }
     var payload=buildPayload();
     window.__vaexpLastPayload=payload; // disponible para inspección
     if(VAEXP_CFG.SUBMIT_MODE==='live'){
