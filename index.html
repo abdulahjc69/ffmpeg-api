@@ -17,9 +17,12 @@
 <link rel="alternate" hreflang="en" href="https://vivealandalus.com/?lang=en">
 <link rel="alternate" hreflang="ar" href="https://vivealandalus.com/?lang=ar">
 <link rel="alternate" hreflang="fr" href="https://vivealandalus.com/?lang=fr">
+<link rel="alternate" hreflang="pt" href="https://vivealandalus.com/?lang=pt">
 <link rel="alternate" hreflang="x-default" href="https://vivealandalus.com/">
 
 <!-- Open Graph -->
+<meta property="og:image" content="https://res.cloudinary.com/didxuy5wm/image/upload/f_auto,q_auto/vaa-logo.png">
+<meta name="twitter:image" content="https://res.cloudinary.com/didxuy5wm/image/upload/f_auto,q_auto/vaa-logo.png">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:locale:alternate" content="en_US">
@@ -44,7 +47,7 @@
   "legalName": "Bin Firnas Travel SL",
   "description": "Especialistas en grupos culturales por la España de Al-Ándalus",
   "url": "https://vivealandalus.com",
-  "logo": "https://vivealandalus.com/logo.png",
+  "logo": "https://res.cloudinary.com/didxuy5wm/image/upload/f_auto,q_auto/vaa-logo.png",
   "telephone": "+34633305906",
   "email": "reservas@vivealandalus.com",
   "address": {
@@ -4363,6 +4366,10 @@ img, video, iframe { max-width: 100%; height: auto; }
 .vaexp-toggle{display:inline-flex;border:1px solid #ddd6c8;border-radius:8px;overflow:hidden;}
 .vaexp-toggle button{border:0;background:#fff;color:#888;font-family:inherit;font-size:11.5px;font-weight:700;padding:5px 11px;cursor:pointer;}
 .vaexp-toggle button.on{background:#0E7C86;color:#fff;}
+.vaexp-privacy-row{margin-top:10px;}
+.vaexp-privacy-label{display:flex;gap:8px;align-items:flex-start;font-size:.82rem;color:#555;cursor:pointer;line-height:1.4;}
+.vaexp-privacy-label input[type=checkbox]{margin-top:2px;flex-shrink:0;accent-color:#b5862b;}
+.vaexp-privacy-label a{color:#b5862b;text-decoration:underline;}
 .vaexp-form-actions{display:flex;flex-direction:column;gap:7px;margin-top:2px;}
 .vaexp-form .vaexp-add{width:100%;}
 .vaexp-form-cancel{border:0;background:none;color:#999;font-size:12px;cursor:pointer;font-family:inherit;text-decoration:underline;}
@@ -4463,6 +4470,9 @@ img, video, iframe { max-width: 100%; height: auto; }
           </div>
           <div class="vaexp-field"><label>Observaciones</label><textarea id="vfObs" placeholder="Cuéntanos algo más sobre tu grupo o intereses (opcional)"></textarea></div>
 
+          <div class="vaexp-field vaexp-privacy-row">
+            <label class="vaexp-privacy-label"><input type="checkbox" id="vfPrivacy"> Acepto la <a href="/politica-de-privacidad" target="_blank">política de privacidad</a> y autorizo a Vive al Ándalus a contactar conmigo para preparar mi propuesta.</label>
+          </div>
           <div class="vaexp-form-err" id="vaexpFormErr" hidden></div>
           <div class="vaexp-form-actions">
             <button type="button" class="vaexp-add" id="vaexpFormSend">Solicitar mi viaje →</button>
@@ -4698,11 +4708,12 @@ img, video, iframe { max-width: 100%; height: auto; }
     if(cnt) cnt.textContent='('+S.trip.length+')';
     if(!list) return;
     list.innerHTML='';
-    var has=S.trip.length>0;
-    if(empty) empty.hidden=has;
-    if(sum) sum.hidden=!has;
-    if(clr) clr.hidden=!has;
-    // el CTA solo se muestra si hay lugares y el formulario no está abierto
+    var hasTrip=S.trip.length>0;
+    var has=hasTrip || (S.services&&S.services.length>0);
+    if(empty) empty.hidden=hasTrip;
+    if(sum) sum.hidden=!hasTrip;
+    if(clr) clr.hidden=!hasTrip;
+    // el CTA se muestra si hay lugares O servicios seleccionados, y el formulario no está abierto
     var formOpen=$('vaexpForm') && !$('vaexpForm').hidden;
     var okOpen=$('vaexpFormOk') && !$('vaexpFormOk').hidden;
     if(cta) cta.hidden=!has || formOpen || okOpen;
@@ -4764,9 +4775,20 @@ img, video, iframe { max-width: 100%; height: auto; }
     });
     var lang=(window.currentLang||'es');
     var pax=parseInt(($('vfPax')&&$('vfPax').value)||'0',10)||0;
+    var nombre=val('vfNombre'), email=val('vfEmail'), tel=val('vfTel');
+    var now=new Date();
+    var ref='VAE-'+now.getFullYear()+('0'+(now.getMonth()+1)).slice(-2)+('0'+now.getDate()).slice(-2)+'-'+Math.floor(Math.random()*9000+1000);
+    var tipoViajero=(function(){ var el=document.querySelector('.vaexp-tipo-btn.on'); return el?el.getAttribute('data-tipo')||'': ''; })();
     return {
-      contacto:{ nombre:val('vfNombre'), email:val('vfEmail'), telefono:val('vfTel'), comentarios:val('vfObs') },
+      referencia:ref,
+      fecha_solicitud:now.toISOString(),
+      contacto:{ nombre_apellidos:nombre, email:email, telefono:tel, comentarios:val('vfObs') },
+      nombre_apellidos:nombre,
+      email:email,
+      telefono:tel,
       grupo:{ adultos:pax, menores:0, halal:(S.prefs.halal==='si') },
+      tipo_viajero:tipoViajero,
+      idioma:lang,
       ciudades:ciudades,
       transporte:{ requerido:(S.prefs.transporte==='si') },
       hotel_requerido:(S.prefs.hotel==='si'),
@@ -4783,7 +4805,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       servicios:(S.services?S.services.slice():[]),
       servicios_detalle:(S.serviceDetails||{}),
       origen:'explorador_atlas',
-      ts:new Date().toISOString()
+      ts:now.toISOString()
     };
   }
   function val(id){ var el=$(id); return el?String(el.value||'').trim():''; }
@@ -4792,9 +4814,11 @@ img, video, iframe { max-width: 100%; height: auto; }
   function sendForm(){
     var err=$('vaexpFormErr'); if(err){ err.hidden=true; err.textContent=''; }
     var nombre=val('vfNombre'), email=val('vfEmail'), tel=val('vfTel');
+    var privacy=$('vfPrivacy');
     if(!nombre){ return showErr('Indícanos tu nombre.'); }
     if(!email||!validEmail(email)){ return showErr('Necesitamos un email válido para enviarte la propuesta.'); }
     if(!tel){ return showErr('Indícanos un teléfono o WhatsApp.'); }
+    if(!privacy||!privacy.checked){ return showErr('Debes aceptar la política de privacidad para continuar.'); }
     var payload=buildPayload();
     window.__vaexpLastPayload=payload; // disponible para inspección
     if(VAEXP_CFG.SUBMIT_MODE==='live'){
@@ -5429,6 +5453,13 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="footer-legal">
       <div>© 2026 Bin Firnas Travel SL · CIF B56080765 · <span data-t="ft.cian">Licencia</span> CIAN-147996-3</div>
       <div data-t="ft.dir">C/ Teatro 19, bajo · 14200 Peñarroya-Pueblonuevo · Córdoba · España</div>
+      <div style="margin-top:6px;">
+        <a href="/politica-de-privacidad" target="_blank" rel="noopener">Política de privacidad</a>
+        &nbsp;·&nbsp;
+        <a href="/aviso-legal" target="_blank" rel="noopener">Aviso legal</a>
+        &nbsp;·&nbsp;
+        <a href="/cookies" target="_blank" rel="noopener">Política de cookies</a>
+      </div>
     </div>
     <div class="footer-brand">
       <a href="https://binfirnastravel.com/" target="_blank" rel="noopener" class="footer-brand-link">
@@ -5513,8 +5544,15 @@ img, video, iframe { max-width: 100%; height: auto; }
         <div class="cfg-warn" id="warnContacto" style="display:none;"></div>
       </div>
 
+      <div class="sol-privacy-check">
+        <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#444;cursor:pointer;line-height:1.45;">
+          <input type="checkbox" id="solPrivacyCheck" style="margin-top:2px;flex-shrink:0;accent-color:#BD4523;">
+          <span>He leído y acepto la <a href="/politica-de-privacidad" target="_blank" rel="noopener" style="color:#BD4523;text-decoration:underline;">Política de privacidad</a>.</span>
+        </label>
+        <div id="warnPrivacy" style="display:none;color:#c0392b;font-size:12px;font-weight:700;margin-top:5px;padding:6px 10px;background:rgba(192,57,43,0.07);border-radius:6px;">Debes aceptar la política de privacidad antes de enviar la solicitud.</div>
+      </div>
+
       <button class="sol-submit" id="solSubmit" data-t="sol.enviar">Enviar solicitud →</button>
-      <p class="sol-privacy"><small data-t="sol.privacy">Tus datos son tratados según nuestra política de privacidad. Sin spam, sin terceros.</small></p>
     </div>
   </div>
 </div>
@@ -7492,7 +7530,7 @@ const IBN_FIRNAS_OFFSCOPE = [
 ];
 
 function ibnFirnasGuardrail(text) {
-  return ZIRYAB_OFFSCOPE.some(function(re){ return re.test(text); });
+  return IBN_FIRNAS_OFFSCOPE.some(function(re){ return re.test(text); });
 }
 
 const IBN_FIRNAS_SYSTEM = `Eres Ibn Firnas, asistente de Vive al Ándalus. Tu único propósito es ayudar a diseñar rutas culturales, históricos y viajes organizados por el legado de Al-Ándalus (Córdoba, Sevilla, Granada, Toledo, Málaga, Madrid, Ronda y ciudades andalusíes de España).
@@ -8217,15 +8255,23 @@ function buildSolicitudPayload() {
     idioma_cliente: currentLang,
     nivel: CFG.nivel,
     origen: 'vivealandalus.com',
+    privacidad_aceptada: true,
+    privacidad_fecha: new Date().toISOString(),
     ts: new Date().toISOString()
   };
 }
 
 document.getElementById('solSubmit').addEventListener('click', async () => {
-  ['warnFechas','warnContacto'].forEach(id => {
+  ['warnFechas','warnContacto','warnPrivacy'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) { el.style.display = 'none'; el.textContent = ''; }
+    if (el) { el.style.display = 'none'; el.textContent = el.id === 'warnPrivacy' ? el.textContent : ''; }
   });
+  const privacyCheck = document.getElementById('solPrivacyCheck');
+  if (!privacyCheck || !privacyCheck.checked) {
+    const w = document.getElementById('warnPrivacy');
+    if (w) w.style.display = 'block';
+    return;
+  }
   const errors = solValidate();
   if (errors.length > 0) {
     const seen = new Set();
