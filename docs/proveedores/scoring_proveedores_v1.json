@@ -1,0 +1,280 @@
+{
+  "$schema": "scoring_proveedores_v1",
+  "_doc": "Sistema de Scoring de Proveedores VAA — Bin Firnas Travel SL — Marca: Vive al Ándalus",
+  "_version": "1.0",
+  "_fecha_creacion_esquema": "2026-06-10",
+  "_responsable": "Abdulah Jiménez Contreras",
+  "_interno": true,
+  "_advertencia": "ESTE DOCUMENTO ES ESTRICTAMENTE INTERNO. El scoring nunca se comunica al proveedor ni al cliente.",
+  "_regla_calculo": "score_total es un campo CALCULADO. No editar manualmente. Editar solo las dimensiones individuales y recalcular.",
+
+  "config": {
+    "score_maximo_general": 100,
+    "score_maximo_halal": 50,
+
+    "dimensiones_general": [
+      { "id": "rapidez_respuesta",    "label": "Rapidez de respuesta",      "peso_maximo": 15 },
+      { "id": "calidad_respuesta",    "label": "Calidad de respuesta",      "peso_maximo": 20 },
+      { "id": "cumplimiento",         "label": "Cumplimiento",              "peso_maximo": 25 },
+      { "id": "halal",                "label": "Cumplimiento halal",        "peso_maximo": 20 },
+      { "id": "idiomas",              "label": "Idiomas",                   "peso_maximo": 10 },
+      { "id": "precio_competitividad","label": "Precio / Competitividad",   "peso_maximo": 10 }
+    ],
+
+    "dimensiones_halal": [
+      { "id": "certificacion_documentada",  "label": "Certificación documentada",      "peso_maximo": 20 },
+      { "id": "ausencia_alcohol",           "label": "Ausencia de alcohol en servicio","peso_maximo": 15 },
+      { "id": "trazabilidad_ingredientes",  "label": "Trazabilidad de ingredientes",   "peso_maximo": 10 },
+      { "id": "formacion_personal",         "label": "Formación del personal",         "peso_maximo": 5  }
+    ],
+
+    "formula_score_total": "MAX(0, subtotal_base + ajuste_incidencias)",
+    "formula_subtotal_base": "rapidez_respuesta + calidad_respuesta + cumplimiento + halal + idiomas + precio_competitividad",
+
+    "descuentos_por_incidencia": {
+      "baja":    { "sin_compensacion": -2,  "con_compensacion": -1   },
+      "media":   { "sin_compensacion": -5,  "con_compensacion": -2.5 },
+      "alta":    { "sin_compensacion": -10, "con_compensacion": -5   },
+      "critica": { "sin_compensacion": -20, "con_compensacion": -10  }
+    },
+
+    "descuento_incumplimiento_halal": {
+      "descuento_score_halal_por_incidencia": -10,
+      "descuento_por_resolucion": false,
+      "_nota": "El descuento por incumplimiento_halal en score_halal es permanente. No se reduce aunque haya compensación."
+    },
+
+    "niveles_clasificacion_general": [
+      { "min": 85,  "max": 100, "estrellas": 5, "nivel": "Excelente",  "descripcion": "Proveedor preferente. Primera opción para expedientes compatibles." },
+      { "min": 70,  "max": 84,  "estrellas": 4, "nivel": "Bueno",      "descripcion": "Proveedor fiable. Segunda opción o alternativa sólida." },
+      { "min": 55,  "max": 69,  "estrellas": 3, "nivel": "Aceptable",  "descripcion": "Usar con supervisión activa. No para grupos grandes o VIP." },
+      { "min": 40,  "max": 54,  "estrellas": 2, "nivel": "Deficiente", "descripcion": "Usar solo si no hay alternativa. Abdu decide explícitamente." },
+      { "min": 0,   "max": 39,  "estrellas": 1, "nivel": "Critico",    "descripcion": "Revisar continuidad. Candidato a en_observacion o bloqueado." }
+    ],
+
+    "niveles_clasificacion_halal": [
+      { "min": 45, "max": 50, "nivel": "halal_certificado_fiable",     "descripcion": "Halal certificado y fiable." },
+      { "min": 35, "max": 44, "nivel": "halal_aceptable_verificacion", "descripcion": "Halal aceptable con verificación en cada servicio." },
+      { "min": 20, "max": 34, "nivel": "halal_dudoso",                 "descripcion": "Halal dudoso. Verificar en cada servicio." },
+      { "min": 0,  "max": 19, "nivel": "no_apto_halal",                "descripcion": "No apto para grupos VAA con requisito halal." }
+    ],
+
+    "estados_evaluacion_posibles": ["provisional", "activo", "en_revision"]
+  },
+
+  "plantilla_scoring": {
+    "id_proveedor": "PRV-AAAA-NNNN",
+    "nombre_proveedor": "string",
+    "tipo_proveedor": "string",
+    "fecha_primera_evaluacion": null,
+    "fecha_ultima_evaluacion": null,
+    "evaluado_por": "Abdulah Jiménez Contreras",
+    "estado_evaluacion": "provisional",
+    "num_mediciones": 0,
+    "datos_insuficientes": true,
+    "_datos_insuficientes_nota": "true si num_mediciones < 2 o alguna dimensión no puede evaluarse por falta de servicio real.",
+
+    "score_general": {
+      "rapidez_respuesta":    { "puntos": null, "maximo": 15, "notas": null },
+      "calidad_respuesta":    { "puntos": null, "maximo": 20, "notas": null },
+      "cumplimiento":         { "puntos": null, "maximo": 25, "notas": null },
+      "halal":                { "puntos": null, "maximo": 20, "notas": null },
+      "idiomas":              { "puntos": null, "maximo": 10, "notas": null },
+      "precio_competitividad":{ "puntos": null, "maximo": 10, "notas": null },
+      "subtotal_base": null,
+      "ajuste_incidencias": 0,
+      "score_total": null,
+      "_score_total_nota": "CALCULADO. No editar. = MAX(0, subtotal_base + ajuste_incidencias)",
+      "nivel": null,
+      "estrellas": null
+    },
+
+    "score_halal": {
+      "aplica": false,
+      "_aplica_nota": "true solo si el proveedor opera en contextos halal o tiene certificación halal.",
+      "certificacion_documentada":  { "puntos": null, "maximo": 20, "notas": null },
+      "ausencia_alcohol":           { "puntos": null, "maximo": 15, "notas": null },
+      "trazabilidad_ingredientes":  { "puntos": null, "maximo": 10, "notas": null },
+      "formacion_personal":         { "puntos": null, "maximo": 5,  "notas": null },
+      "subtotal_base": null,
+      "ajuste_incumplimientos_halal": 0,
+      "num_incumplimientos_halal": 0,
+      "score_halal_total": null,
+      "_score_halal_total_nota": "CALCULADO. = MAX(0, subtotal_base + ajuste_incumplimientos_halal)",
+      "nivel_halal": null,
+      "certificado_vigente": false,
+      "fecha_caducidad_certificado": null
+    },
+
+    "ajustes_por_incidencias": [
+      {
+        "_plantilla": true,
+        "id_incidencia": "INC-AAAA-NNNN",
+        "tipo_incidencia": "string",
+        "gravedad": "baja | media | alta | critica",
+        "compensacion_otorgada": false,
+        "descuento_aplicado_score_general": null,
+        "descuento_aplicado_score_halal": null,
+        "fecha_ajuste": "YYYY-MM-DD",
+        "notas": null
+      }
+    ],
+
+    "historial_evaluaciones": [
+      {
+        "_plantilla": true,
+        "fecha": "YYYY-MM-DD",
+        "evaluado_por": "string",
+        "num_mediciones_en_fecha": 0,
+        "score_general_total": null,
+        "score_halal_total": null,
+        "estado_evaluacion": "provisional",
+        "motivo_evaluacion": "alta_proveedor | post_servicio | post_incidencia | revision_periodica",
+        "notas": null
+      }
+    ],
+
+    "notas_internas_scoring": null
+  },
+
+  "ejemplos": [
+    {
+      "_comentario": "Ejemplo 1 — Hotel Meliá Sevilla: proveedor excelente, halal certificado, sin incidencias",
+      "id_proveedor": "PRV-2026-0008",
+      "nombre_proveedor": "Hotel Meliá Sevilla (halal certificado)",
+      "tipo_proveedor": "alojamiento",
+      "fecha_primera_evaluacion": "2026-03-15",
+      "fecha_ultima_evaluacion": "2026-06-05",
+      "evaluado_por": "Abdulah Jiménez Contreras",
+      "estado_evaluacion": "activo",
+      "num_mediciones": 2,
+      "datos_insuficientes": false,
+
+      "score_general": {
+        "rapidez_respuesta":    { "puntos": 14, "maximo": 15, "notas": "Responde en < 4h. Confirmaciones el mismo día." },
+        "calidad_respuesta":    { "puntos": 18, "maximo": 20, "notas": "Documentación siempre correcta. Error menor en una factura resuelto al día siguiente." },
+        "cumplimiento":         { "puntos": 24, "maximo": 25, "notas": "Cumple siempre lo confirmado. Sin sorpresas en servicio. Habitaciones según categoría." },
+        "halal":                { "puntos": 20, "maximo": 20, "notas": "Sin alcohol en mesa. Menú halal diferenciado y etiquetado correctamente. Cero incidencias." },
+        "idiomas":              { "puntos": 7,  "maximo": 10, "notas": "Inglés fluido. Español nativo. Sin árabe propio pero con personal de apoyo." },
+        "precio_competitividad":{ "puntos": 7,  "maximo": 10, "notas": "Precio algo superior a la media de Sevilla, justificado por certificación halal y calidad." },
+        "subtotal_base": 90,
+        "ajuste_incidencias": 0,
+        "score_total": 90,
+        "nivel": "Excelente",
+        "estrellas": 5
+      },
+
+      "score_halal": {
+        "aplica": true,
+        "certificacion_documentada":  { "puntos": 20, "maximo": 20, "notas": "Certificado halal vigente hasta 2027-06-30. Verificado presencialmente por Abdu." },
+        "ausencia_alcohol":           { "puntos": 15, "maximo": 15, "notas": "Sin alcohol en carta, buffet ni servicio de habitaciones durante estancias VAA." },
+        "trazabilidad_ingredientes":  { "puntos": 8,  "maximo": 10, "notas": "Acredita origen halal de carnes. Postres: algunos sin documentación completa." },
+        "formacion_personal":         { "puntos": 4,  "maximo": 5,  "notas": "Personal de cocina formado. Personal de sala con formación básica." },
+        "subtotal_base": 47,
+        "ajuste_incumplimientos_halal": 0,
+        "num_incumplimientos_halal": 0,
+        "score_halal_total": 47,
+        "nivel_halal": "halal_certificado_fiable",
+        "certificado_vigente": true,
+        "fecha_caducidad_certificado": "2027-06-30"
+      },
+
+      "ajustes_por_incidencias": [],
+
+      "historial_evaluaciones": [
+        {
+          "fecha": "2026-03-15",
+          "evaluado_por": "Abdulah Jiménez Contreras",
+          "num_mediciones_en_fecha": 0,
+          "score_general_total": 86,
+          "score_halal_total": 44,
+          "estado_evaluacion": "provisional",
+          "motivo_evaluacion": "alta_proveedor",
+          "notas": "Evaluación inicial basada en visita presencial y referencias de otros operadores. Sin servicio real VAA aún."
+        },
+        {
+          "fecha": "2026-06-05",
+          "evaluado_por": "Abdulah Jiménez Contreras",
+          "num_mediciones_en_fecha": 2,
+          "score_general_total": 90,
+          "score_halal_total": 47,
+          "estado_evaluacion": "activo",
+          "motivo_evaluacion": "post_servicio",
+          "notas": "Actualización tras 2 servicios reales. Grupo Mezquita Birmingham (VAA-2026-0071) y visita de verificación halal. Puntuación mejorada en cumplimiento y halal."
+        }
+      ],
+
+      "notas_internas_scoring": "Proveedor referente en Sevilla para grupos musulmanes. Renovar verificación halal antes de caducidad del certificado (2027-06-30)."
+    },
+
+    {
+      "_comentario": "Ejemplo 2 — Transportes Al-Andalus SL: proveedor aceptable con incidencia media documentada",
+      "id_proveedor": "PRV-2026-0007",
+      "nombre_proveedor": "Transportes Al-Andalus SL",
+      "tipo_proveedor": "transporte",
+      "fecha_primera_evaluacion": "2026-02-10",
+      "fecha_ultima_evaluacion": "2026-06-01",
+      "evaluado_por": "Abdulah Jiménez Contreras",
+      "estado_evaluacion": "activo",
+      "num_mediciones": 3,
+      "datos_insuficientes": false,
+
+      "score_general": {
+        "rapidez_respuesta":    { "puntos": 10, "maximo": 15, "notas": "Responde en < 24h en general. Confirmación de vehículos adaptados puede tardar 2 días." },
+        "calidad_respuesta":    { "puntos": 15, "maximo": 20, "notas": "Respuestas correctas. Documentación bien. Algún error puntual en facturación." },
+        "cumplimiento":         { "puntos": 18, "maximo": 25, "notas": "Un retraso de 45 min documentado (INC-2026-0003). En general cumple." },
+        "halal":                { "puntos": 14, "maximo": 20, "notas": "Sin incidencias halal. No aplica directamente (transporte). Sin alcohol a bordo." },
+        "idiomas":              { "puntos": 5,  "maximo": 10, "notas": "Solo español. Conductor sin inglés. No es bloqueante para el servicio." },
+        "precio_competitividad":{ "puntos": 9,  "maximo": 10, "notas": "Precio competitivo. Sin sorpresas en facturación." },
+        "subtotal_base": 71,
+        "ajuste_incidencias": -5,
+        "score_total": 66,
+        "_ajuste_detalle": "INC-2026-0003: retraso gravedad media, sin compensación. Descuento -5 pts.",
+        "nivel": "Aceptable",
+        "estrellas": 3
+      },
+
+      "score_halal": {
+        "aplica": false
+      },
+
+      "ajustes_por_incidencias": [
+        {
+          "id_incidencia": "INC-2026-0003",
+          "tipo_incidencia": "retraso",
+          "gravedad": "media",
+          "compensacion_otorgada": false,
+          "descuento_aplicado_score_general": -5,
+          "descuento_aplicado_score_halal": null,
+          "fecha_ajuste": "2026-05-20",
+          "notas": "Conductor llegó 45 min tarde al aeropuerto MAD. Grupo esperó en llegadas. Proveedor no ofreció compensación."
+        }
+      ],
+
+      "historial_evaluaciones": [
+        {
+          "fecha": "2026-02-10",
+          "evaluado_por": "Abdulah Jiménez Contreras",
+          "num_mediciones_en_fecha": 0,
+          "score_general_total": 76,
+          "score_halal_total": null,
+          "estado_evaluacion": "provisional",
+          "motivo_evaluacion": "alta_proveedor",
+          "notas": "Evaluación inicial. Proveedor recomendado por otro operador. Sin servicio real VAA aún."
+        },
+        {
+          "fecha": "2026-05-20",
+          "evaluado_por": "Abdulah Jiménez Contreras",
+          "num_mediciones_en_fecha": 3,
+          "score_general_total": 66,
+          "score_halal_total": null,
+          "estado_evaluacion": "activo",
+          "motivo_evaluacion": "post_incidencia",
+          "notas": "Ajuste tras INC-2026-0003 (retraso media sin compensación, -5 pts). Proveedor sigue siendo aceptable pero bajo supervisión. Una nueva incidencia media lo llevaría a 61 pts."
+        }
+      ],
+
+      "notas_internas_scoring": "Vigilar confirmación de bus adaptado para grupo Birmingham (VAA-2026-0071). Si no confirman antes del 15 de junio, activar proveedor alternativo. Próxima revisión periódica: 2026-12-01."
+    }
+  ]
+}
