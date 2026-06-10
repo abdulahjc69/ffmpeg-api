@@ -6091,11 +6091,20 @@ img, video, iframe { max-width: 100%; height: auto; }
   transition: background 0.2s, transform 0.15s;
 }
 .btn-wizard-trigger:hover { background: #a33c1e; transform: translateY(-1px); }
+/* Hint ruta: mobile oculto por defecto en escritorio */
+.wiz-ruta-hint-mobile { display: none; }
 @media (max-width: 600px) {
   .wiz-city-grid { grid-template-columns: repeat(2, 1fr); }
   .wiz-contact-grid { grid-template-columns: 1fr; }
   .wiz-contact-grid .full-width { grid-column: 1; }
   .wiz-row-2 { grid-template-columns: 1fr; }
+  /* Ayuda visual ruta — solo móvil */
+  .wiz-ruta-hint-desktop { display: none; }
+  .wiz-ruta-hint-mobile { display: block; margin-bottom: 14px; }
+  .wiz-ruta-hint-mobile__title { font-family: 'El Messiri', serif; font-size: 1rem; font-weight: 700; color: var(--negro, #1A1A1A); margin: 0 0 8px; }
+  .wiz-ruta-hint-mobile__line { font-size: 0.85rem; color: #5b4a2e; margin: 0 0 4px; font-family: 'Inter', sans-serif; }
+  .wiz-ruta-hint-mobile__ex { display: inline-block; background: var(--crema, #F6EEDF); border-radius: 20px; padding: 2px 10px; font-size: 0.78rem; color: var(--terra, #BD4523); font-weight: 600; margin-left: 4px; }
+  .wiz-ruta-hint-mobile__tip { font-size: 0.78rem; color: #888; margin: 6px 0 0; font-family: 'Inter', sans-serif; }
 }
 </style>
 
@@ -6151,7 +6160,13 @@ img, video, iframe { max-width: 100%; height: auto; }
       <!-- PASO 2: Ruta -->
       <div id="wizPanel2" class="wiz-panel">
         <h3 class="wiz-step-title">🗺️ Paso 2 · Tu ruta</h3>
-        <p style="font-size:0.85rem;color:#888;margin:0 0 14px;font-family:'Inter',sans-serif;">Selecciona las ciudades y ordénalas a tu gusto</p>
+        <p class="wiz-ruta-hint-desktop" style="font-size:0.85rem;color:#888;margin:0 0 14px;font-family:'Inter',sans-serif;">Selecciona las ciudades y ordénalas a tu gusto</p>
+        <div class="wiz-ruta-hint-mobile">
+          <p class="wiz-ruta-hint-mobile__title">📅 Diseña tu recorrido</p>
+          <p class="wiz-ruta-hint-mobile__line">¿Dónde empieza vuestra experiencia? <span class="wiz-ruta-hint-mobile__ex">1️⃣ Selecciona la primera ciudad</span></p>
+          <p class="wiz-ruta-hint-mobile__line">¿Dónde termina? <span class="wiz-ruta-hint-mobile__ex">2️⃣ Luego el resto</span></p>
+          <p class="wiz-ruta-hint-mobile__tip">Puedes cambiar el orden usando las flechas ▲▼</p>
+        </div>
         <div class="wiz-city-grid" id="wizCityGrid">
           <div class="wiz-city-card" data-city="Madrid" onclick="wizCityToggle('Madrid')">
             <span class="city-emoji">🏛️</span>
