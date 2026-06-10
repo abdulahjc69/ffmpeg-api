@@ -112,7 +112,7 @@ Reserva:    {{id_reserva}}
 | `{{programa_dia_a_dia}}` | Programa definitivo aprobado (`programa_definitivo_cerrado = true`) |
 | `{{punto_encuentro_llegada}}` | Instrucción de bienvenida en aeropuerto / estación de llegada |
 | `{{cartel_nombre}}` | `expediente.llegada_internacional.cartel_nombre` |
-| `{{telefono_emergencia_vaa}}` | `+34 633 30 59 09` (fijo) |
+| `{{telefono_emergencia_vaa}}` | `+34 633 30 59 06` (fijo) |
 | `{{email_emergencia_vaa}}` | `reservas@vivealandalus.com` (fijo) |
 
 ### Opcionales
@@ -270,7 +270,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Teléfono: 633 30 59 09  
+Teléfono: 633 30 59 06  
 Correo: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -382,7 +382,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Teléfono: 633 30 59 09  
+Teléfono: 633 30 59 06  
 Correo: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -496,7 +496,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Phone: 633 30 59 09  
+Phone: 633 30 59 06  
 Email: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -610,7 +610,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Téléphone : 633 30 59 09  
+Téléphone : 633 30 59 06  
 Courriel : reservas@vivealandalus.com  
 Web : www.vivealandalus.com
 
@@ -724,7 +724,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Telefone: 633 30 59 09  
+Telefone: 633 30 59 06  
 E-mail: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 

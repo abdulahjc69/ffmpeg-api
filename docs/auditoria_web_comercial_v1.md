@@ -26,8 +26,8 @@ La web de Vive al Ándalus y el sistema documental están bien alineados en los 
 | Email operativo | `reservas@vivealandalus.com` | `reservas@vivealandalus.com` | ✅ Correcto |
 | Web | `www.vivealandalus.com` | `www.vivealandalus.com` | ✅ Correcto |
 | Dirección | C/ Teatro 19, bajo, Peñarroya-Pueblonuevo | C/ Teatro 19, bajo, Peñarroya-Pueblonuevo, Córdoba 14200 | ✅ Correcto |
-| Teléfono visible | 633 30 59 09 | 633 30 59 09 | ✅ Correcto |
-| Teléfono structured data | +34633305906 | +34 633 30 59 09 | ⚠️ Discrepancia menor (ver §4.1) |
+| Teléfono visible | 633 30 59 06 | 633 30 59 06 | ✅ Correcto |
+| Teléfono structured data | +34633305906 | +34 633 30 59 06 | ⚠️ Discrepancia menor (ver §4.1) |
 
 ---
 
@@ -122,11 +122,11 @@ La web de Vive al Ándalus y el sistema documental están bien alineados en los 
 
 ### 4.1 — Teléfono en structured data vs. documentación
 
-**Hallazgo:** El structured data JSON-LD en `index.html` declara `"telephone": "+34633305906"`. La documentación interna y el pie de correos usa `633 30 59 09` (sin prefijo internacional, con espacios).
+**Hallazgo:** El structured data JSON-LD en `index.html` declara `"telephone": "+34633305906"`. La documentación interna y el pie de correos usa `633 30 59 06` (sin prefijo internacional, con espacios).
 
 **Impacto:** Ninguno operativo. Ambos referencian el mismo número. La versión con prefijo internacional (`+34633305906`) es correcta para structured data (formato E.164).
 
-**Acción recomendada:** Mantener como está. Documentar que el formato canónico para uso externo es `+34 633 30 59 09` y para structured data `+34633305906`.
+**Acción recomendada:** Mantener como está. Documentar que el formato canónico para uso externo es `+34 633 30 59 06` y para structured data `+34633305906`.
 
 **Prioridad:** Baja (informativa).
 

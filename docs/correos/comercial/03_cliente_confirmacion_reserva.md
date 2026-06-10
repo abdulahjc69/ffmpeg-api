@@ -170,7 +170,7 @@ Reserva:    {{id_reserva}}
 
 ---
 
-للاستفسار أو التعديل، يمكنك التواصل معنا في أي وقت عبر البريد الإلكتروني أو واتساب على الرقم: **+34 633 30 59 09**
+للاستفسار أو التعديل، يمكنك التواصل معنا في أي وقت عبر البريد الإلكتروني أو واتساب على الرقم: **+34 633 30 59 06**
 
 مع أطيب التحيات،
 
@@ -180,7 +180,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Teléfono: 633 30 59 09  
+Teléfono: 633 30 59 06  
 Correo: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -234,7 +234,7 @@ Comenzamos inmediatamente la coordinación de todos los servicios. Recibirás tu
 
 ---
 
-Para cualquier consulta, responde a este correo o contáctanos por WhatsApp en el **+34 633 30 59 09**.
+Para cualquier consulta, responde a este correo o contáctanos por WhatsApp en el **+34 633 30 59 06**.
 
 Un cordial saludo,
 
@@ -244,7 +244,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Teléfono: 633 30 59 09  
+Teléfono: 633 30 59 06  
 Correo: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -298,7 +298,7 @@ We have started coordinating all your travel services. You will receive your vou
 
 ---
 
-For any questions, simply reply to this email or contact us via WhatsApp at **+34 633 30 59 09**.
+For any questions, simply reply to this email or contact us via WhatsApp at **+34 633 30 59 06**.
 
 Kind regards,
 
@@ -308,7 +308,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Phone: 633 30 59 09  
+Phone: 633 30 59 06  
 Email: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -362,7 +362,7 @@ Nous commençons immédiatement la coordination de tous vos services de voyage. 
 
 ---
 
-Pour toute question, répondez simplement à cet e-mail ou contactez-nous via WhatsApp au **+34 633 30 59 09**.
+Pour toute question, répondez simplement à cet e-mail ou contactez-nous via WhatsApp au **+34 633 30 59 06**.
 
 Cordialement,
 
@@ -372,7 +372,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Téléphone : 633 30 59 09  
+Téléphone : 633 30 59 06  
 Courriel : reservas@vivealandalus.com  
 Web : www.vivealandalus.com
 
@@ -426,7 +426,7 @@ Começámos imediatamente a coordenar todos os serviços da sua viagem. Receber�
 
 ---
 
-Para qualquer dúvida, responda a este e-mail ou contacte-nos via WhatsApp para o **+34 633 30 59 09**.
+Para qualquer dúvida, responda a este e-mail ou contacte-nos via WhatsApp para o **+34 633 30 59 06**.
 
 Com os melhores cumprimentos,
 
@@ -436,7 +436,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Telefone: 633 30 59 09  
+Telefone: 633 30 59 06  
 E-mail: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 

@@ -217,7 +217,7 @@ docs/
 | CIF | ESB56080765 |
 | Licencia | CIAN-147996-3 |
 | Dirección | C/ Teatro 19, bajo, Peñarroya-Pueblonuevo, Córdoba 14200 |
-| Teléfono | 633 30 59 09 |
+| Teléfono | 633 30 59 06 |
 | Email operativo | reservas@vivealandalus.com |
 | Web | www.vivealandalus.com |
 | Responsable | Abdulah Jiménez Contreras |

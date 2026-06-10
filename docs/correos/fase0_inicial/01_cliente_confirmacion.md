@@ -32,7 +32,7 @@
 
 سيتولى **`{{agente}}`** متابعة ملفك شخصياً وسيتواصل معك في أقرب وقت ممكن لتأكيد التفاصيل وتقديم العرض الأنسب لعائلتك.
 
-إذا كان لديك أي سؤال أو تغيير، لا تتردد في التواصل معنا عبر هذا البريد الإلكتروني أو عبر الواتساب على الرقم: **+34 633 30 59 09**
+إذا كان لديك أي سؤال أو تغيير، لا تتردد في التواصل معنا عبر هذا البريد الإلكتروني أو عبر الواتساب على الرقم: **+34 633 30 59 06**
 
 نحن هنا لنجعل رحلتكم إلى الأندلس تجربة لا تُنسى.
 
@@ -44,7 +44,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Teléfono: 633 30 59 09  
+Teléfono: 633 30 59 06  
 Correo: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -73,7 +73,7 @@ Gracias por ponerte en contacto con **Vive al Ándalus**. Hemos recibido tu soli
 
 **`{{agente}}`** se encargará personalmente de tu expediente y se pondrá en contacto contigo a la mayor brevedad para confirmar los detalles y enviarte la propuesta más adecuada para tu grupo.
 
-Si tienes alguna duda o quieres hacer algún cambio, puedes responder a este correo o contactarnos por WhatsApp en el: **+34 633 30 59 09**
+Si tienes alguna duda o quieres hacer algún cambio, puedes responder a este correo o contactarnos por WhatsApp en el: **+34 633 30 59 06**
 
 Estamos aquí para que tu viaje por Al-Ándalus sea una experiencia inolvidable.
 
@@ -85,7 +85,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Teléfono: 633 30 59 09  
+Teléfono: 633 30 59 06  
 Correo: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -114,7 +114,7 @@ Thank you for contacting **Vive al Ándalus**. We have successfully received you
 
 **`{{agente}}`** will personally handle your file and will be in touch as soon as possible to confirm the details and send you the most suitable proposal for your group.
 
-If you have any questions or would like to make any changes, please reply to this email or contact us via WhatsApp at: **+34 633 30 59 09**
+If you have any questions or would like to make any changes, please reply to this email or contact us via WhatsApp at: **+34 633 30 59 06**
 
 We look forward to making your journey through Al-Andalus an unforgettable experience.
 
@@ -126,7 +126,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Teléfono: 633 30 59 09  
+Teléfono: 633 30 59 06  
 Correo: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -155,7 +155,7 @@ Merci de nous avoir contacté chez **Vive al Ándalus**. Nous avons bien reçu v
 
 **`{{agente}}`** s'occupera personnellement de votre dossier et vous contactera dans les meilleurs délais pour confirmer les détails et vous envoyer la proposition la plus adaptée à votre groupe.
 
-Pour toute question ou modification, n'hésitez pas à répondre à cet e-mail ou à nous contacter via WhatsApp au: **+34 633 30 59 09**
+Pour toute question ou modification, n'hésitez pas à répondre à cet e-mail ou à nous contacter via WhatsApp au: **+34 633 30 59 06**
 
 Nous sommes là pour faire de votre voyage en Al-Andalus une expérience inoubliable.
 
@@ -167,7 +167,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Téléphone: 633 30 59 09  
+Téléphone: 633 30 59 06  
 E-mail: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
@@ -196,7 +196,7 @@ Obrigado por nos contactar na **Vive al Ándalus**. Recebemos o seu pedido com s
 
 **`{{agente}}`** tratará pessoalmente do seu processo e entrará em contacto o mais brevemente possível para confirmar os detalhes e enviar-lhe a proposta mais adequada para o seu grupo.
 
-Se tiver alguma dúvida ou quiser fazer alguma alteração, pode responder a este e-mail ou contactar-nos via WhatsApp para: **+34 633 30 59 09**
+Se tiver alguma dúvida ou quiser fazer alguma alteração, pode responder a este e-mail ou contactar-nos via WhatsApp para: **+34 633 30 59 06**
 
 Estamos aqui para tornar a sua viagem pela Al-Andalus numa experiência inesquecível.
 
@@ -208,7 +208,7 @@ Vive al Ándalus
 BIN FIRNAS TRAVEL SL
 
 Abdulah Jiménez Contreras  
-Telefone: 633 30 59 09  
+Telefone: 633 30 59 06  
 E-mail: reservas@vivealandalus.com  
 Web: www.vivealandalus.com
 
