@@ -1,0 +1,441 @@
+{
+  "_meta_esquema": {
+    "version": "1.0",
+    "empresa": "Bin Firnas Travel SL",
+    "marca": "Vive al Ándalus",
+    "documento": "Maestro de Proveedores VAA",
+    "fecha_creacion": "2026-06-10",
+    "nota": "Este JSON define la estructura oficial del maestro de proveedores VAA. Los proveedores son entidades independientes de los expedientes. Ningún dato de proveedor se duplica dentro de los expedientes; solo se guardan referencias (id_interno)."
+  },
+
+  "tipos_proveedor": [
+    "hotel",
+    "transporte",
+    "restaurante",
+    "guia_local",
+    "tour_leader",
+    "seguro",
+    "entrada",
+    "actividad",
+    "fotografo",
+    "otro"
+  ],
+
+  "estados_posibles": [
+    "en_evaluacion",
+    "activo",
+    "pausado",
+    "en_observacion",
+    "bloqueado",
+    "inactivo"
+  ],
+
+  "niveles_estrategicos_posibles": [
+    "en_evaluacion",
+    "secundario",
+    "habitual",
+    "prioritario",
+    "en_observacion",
+    "bloqueado"
+  ],
+
+  "niveles_halal_posibles": [
+    "halal_certificado",
+    "halal_verificado",
+    "halal_declarado",
+    "apto_parcial",
+    "no_apto",
+    "pendiente"
+  ],
+
+  "niveles_idioma_posibles": [
+    "nativo",
+    "profesional",
+    "fluido",
+    "funcional",
+    "basico",
+    "no"
+  ],
+
+  "idiomas_posibles": ["es", "en", "ar", "fr", "pt", "de", "it", "zh", "ru", "otro"],
+
+  "proveedor_plantilla": {
+
+    "_meta": {
+      "id_interno": "PRV-AAAA-NNNN",
+      "fecha_alta": null,
+      "fecha_actualizacion": null,
+      "creado_por": "",
+      "activo": true,
+      "version_esquema": "1.0"
+    },
+
+    "identificacion": {
+      "nombre_comercial": "",
+      "razon_social": "",
+      "nif_cif": "",
+      "tipo": "",
+      "subtipo": "",
+      "descripcion": ""
+    },
+
+    "contacto": {
+      "nombre_contacto": "",
+      "cargo": "",
+      "email_principal": "",
+      "email_secundario": "",
+      "telefono": "",
+      "whatsapp": "",
+      "idioma_comunicacion": "es",
+      "zona_horaria": ""
+    },
+
+    "ubicacion": {
+      "ciudad": "",
+      "ciudades_cobertura": [],
+      "provincia": "",
+      "pais": "España",
+      "direccion": "",
+      "coordenadas": {
+        "lat": null,
+        "lng": null
+      }
+    },
+
+    "clasificacion": {
+      "estado": "en_evaluacion",
+      "estado_posibles": ["en_evaluacion", "activo", "pausado", "en_observacion", "bloqueado", "inactivo"],
+      "motivo_bloqueo": "",
+      "_nota_bloqueo": "motivo_bloqueo es OBLIGATORIO si estado = bloqueado. Sin motivo documentado no se puede bloquear un proveedor.",
+
+      "nivel_estrategico": "en_evaluacion",
+      "nivel_estrategico_posibles": ["en_evaluacion", "secundario", "habitual", "prioritario", "en_observacion", "bloqueado"],
+      "nivel_estrategico_fecha_asignacion": null,
+      "nivel_estrategico_asignado_por": "",
+      "nivel_estrategico_motivo": "",
+      "nivel_estrategico_historial": [],
+
+      "halal": {
+        "nivel": "pendiente",
+        "nivel_posibles": ["halal_certificado", "halal_verificado", "halal_declarado", "apto_parcial", "no_apto", "pendiente"],
+        "certificacion": {
+          "tiene_certificacion": false,
+          "organismo_emisor": "",
+          "numero_certificado": "",
+          "fecha_emision": null,
+          "fecha_caducidad": null,
+          "documento_adjunto": ""
+        },
+        "verificado_por_vaa": false,
+        "_nota_verificacion": "verificado_por_vaa y tiene_certificacion son campos independientes. Un proveedor puede estar verificado por VAA sin certificado formal. Ambos deben registrarse por separado.",
+        "fecha_verificacion": null,
+        "verificado_por": "",
+        "incumplimientos_halal_count": 0,
+        "_nota_incumplimientos": "Incrementar solo cuando un incumplimiento halal esté documentado y verificado. Nunca decrementar.",
+        "notas": ""
+      },
+
+      "idiomas": [],
+      "_idiomas_nota": "Array de objetos {idioma, nivel, verificado, nota}. Para guia_local y tour_leader es OBLIGATORIO tener al menos un idioma ar con nivel >= funcional.",
+      "_idiomas_ejemplo": [
+        {
+          "idioma": "es",
+          "idioma_posibles": ["es", "en", "ar", "fr", "pt", "de", "it", "zh", "ru", "otro"],
+          "nivel": "nativo",
+          "nivel_posibles": ["nativo", "profesional", "fluido", "funcional", "basico", "no"],
+          "verificado": false,
+          "nota": ""
+        }
+      ],
+
+      "etiquetas": [],
+      "_etiquetas_nota": "Tags libres. Ejemplos: favorito_abdu, temporada_alta, grupo_golf, descuento_frecuente, requiere_antelacion"
+    },
+
+    "datos_especificos": {
+      "_nota": "Este bloque varía según el tipo de proveedor. Solo rellenar los campos que apliquen al tipo. Ver subbloques por tipo abajo.",
+
+      "hotel": {
+        "categoria_estrellas": null,
+        "regimenes_disponibles": [],
+        "regimenes_posibles": ["sin_pension", "con_desayuno", "media_pension", "pension_completa"],
+        "num_habitaciones_total": null,
+        "admite_grupos": null,
+        "capacidad_max_grupo": null,
+        "tiene_piscina": null,
+        "tiene_sala_reunion": null,
+        "parking": null,
+        "accesibilidad": null,
+        "notas_operativas": ""
+      },
+
+      "transporte": {
+        "flota": [],
+        "_flota_ejemplo": [
+          {
+            "tipo_vehiculo": "minibus_8",
+            "tipo_posibles": ["turismo_4", "minibus_8", "minibus_16", "autobus_30", "autocar_55"],
+            "capacidad_pax": 8,
+            "matricula": "",
+            "anio_vehiculo": null,
+            "aire_acondicionado": true
+          }
+        ],
+        "cobertura_nacional": true,
+        "cobertura_internacional": false,
+        "tiene_conductor_arabe": false,
+        "normativa_descanso_conoce": null,
+        "experiencia_grupos_halal": null,
+        "notas_operativas": ""
+      },
+
+      "restaurante": {
+        "tipo_cocina": "",
+        "capacidad_max_pax": null,
+        "tiene_menu_grupos": null,
+        "precio_medio_por_pax_eur": null,
+        "tiene_terraza": null,
+        "accesibilidad": null,
+        "tiene_menu_infantil": null,
+        "notas_operativas": ""
+      },
+
+      "guia_local": {
+        "numero_licencia": "",
+        "comunidad_autonoma": "",
+        "ciudades_habilitadas": [],
+        "especialidades": [],
+        "_especialidades_ejemplos": ["historia_islamica", "patrimonio_andalusi", "gastronomia", "arte", "arquitectura"],
+        "tiene_seguro_rc": null,
+        "gestiona_entradas": null,
+        "notas_operativas": ""
+      },
+
+      "tour_leader": {
+        "numero_licencia": "",
+        "regiones_experiencia": [],
+        "especialidades": [],
+        "tiene_seguro_rc": null,
+        "disponibilidad_pernocta": null,
+        "experiencia_grupos_golf": null,
+        "notas_operativas": ""
+      }
+    },
+
+    "referencias_futuras": {
+      "_nota": "Campos reservados para fases v1.1+. En v1.0 se inicializan vacíos. No modificar la estructura; solo añadir datos cuando los módulos correspondientes estén implementados.",
+
+      "ids_presupuestos": [],
+      "_ids_presupuestos_nota": "IDs de todos los presupuestos recibidos de este proveedor. Formato: PRS-AAAA-NNNN. Se poblará en v1.1 cuando presupuestos_proveedores esté activo.",
+
+      "ids_expedientes_asignado": [],
+      "_ids_expedientes_nota": "IDs de expedientes VAA donde este proveedor fue seleccionado. Formato: VAA-AAAA-NNNN.",
+
+      "scoring_resumen": {
+        "_nota": "Reservado para módulo de scoring v1.1. No modificar manualmente.",
+        "puntuacion_global": null,
+        "fecha_ultimo_calculo": null,
+        "num_expedientes_participado": 0,
+        "num_expedientes_seleccionado": 0
+      },
+
+      "num_incidencias": 0,
+      "_num_incidencias_nota": "Contador de incidencias. Detalle completo se implementa en v1.1.",
+
+      "num_negociaciones": 0,
+      "_num_negociaciones_nota": "Contador de negociaciones. Detalle completo se implementa en v1.1."
+    },
+
+    "notas_internas": [],
+    "_notas_internas_nota": "Array de strings. Observaciones libres de Abdu sobre el proveedor. No visible al proveedor ni al cliente."
+  },
+
+  "ejemplos": [
+    {
+      "_comentario": "Ejemplo 1: Hotel en Sevilla descubierto por internet. Sin historial con VAA todavía.",
+      "_meta": {
+        "id_interno": "PRV-2026-0001",
+        "fecha_alta": "2026-06-10",
+        "fecha_actualizacion": "2026-06-10",
+        "creado_por": "Abdu",
+        "activo": true,
+        "version_esquema": "1.0"
+      },
+      "identificacion": {
+        "nombre_comercial": "Hotel Los Seises",
+        "razon_social": "",
+        "nif_cif": "",
+        "tipo": "hotel",
+        "subtipo": "hotel_boutique",
+        "descripcion": "Hotel boutique 4 estrellas en el corazón del barrio de Santa Cruz, Sevilla."
+      },
+      "contacto": {
+        "nombre_contacto": "Marta García",
+        "cargo": "Responsable de grupos",
+        "email_principal": "grupos@losseises.com",
+        "email_secundario": "",
+        "telefono": "+34 954 229 495",
+        "whatsapp": "",
+        "idioma_comunicacion": "es",
+        "zona_horaria": "Europe/Madrid"
+      },
+      "ubicacion": {
+        "ciudad": "Sevilla",
+        "ciudades_cobertura": [],
+        "provincia": "Sevilla",
+        "pais": "España",
+        "direccion": "Calle Segovias, 6, 41004 Sevilla",
+        "coordenadas": { "lat": 37.3861, "lng": -5.9922 }
+      },
+      "clasificacion": {
+        "estado": "en_evaluacion",
+        "motivo_bloqueo": "",
+        "nivel_estrategico": "en_evaluacion",
+        "nivel_estrategico_fecha_asignacion": "2026-06-10",
+        "nivel_estrategico_asignado_por": "Abdu",
+        "nivel_estrategico_motivo": "Alta inicial. Sin historial real con VAA.",
+        "nivel_estrategico_historial": [],
+        "halal": {
+          "nivel": "pendiente",
+          "certificacion": {
+            "tiene_certificacion": false,
+            "organismo_emisor": "",
+            "numero_certificado": "",
+            "fecha_emision": null,
+            "fecha_caducidad": null,
+            "documento_adjunto": ""
+          },
+          "verificado_por_vaa": false,
+          "fecha_verificacion": null,
+          "verificado_por": "",
+          "incumplimientos_halal_count": 0,
+          "notas": "Pendiente solicitar información halal en primera cotización (P01)."
+        },
+        "idiomas": [
+          { "idioma": "es", "nivel": "nativo", "verificado": true, "nota": "" }
+        ],
+        "etiquetas": ["barrio_santa_cruz", "piscina_no_confirmada"]
+      },
+      "datos_especificos": {
+        "hotel": {
+          "categoria_estrellas": 4,
+          "regimenes_disponibles": ["con_desayuno", "sin_pension"],
+          "num_habitaciones_total": 42,
+          "admite_grupos": true,
+          "capacidad_max_grupo": 30,
+          "tiene_piscina": false,
+          "tiene_sala_reunion": true,
+          "parking": false,
+          "accesibilidad": true,
+          "notas_operativas": "Edificio del siglo XVI. Ambiente histórico. Sin piscina."
+        }
+      },
+      "referencias_futuras": {
+        "ids_presupuestos": [],
+        "ids_expedientes_asignado": [],
+        "scoring_resumen": { "puntuacion_global": null, "fecha_ultimo_calculo": null, "num_expedientes_participado": 0, "num_expedientes_seleccionado": 0 },
+        "num_incidencias": 0,
+        "num_negociaciones": 0
+      },
+      "notas_internas": [
+        "Encontrado en búsqueda de hoteles boutique Sevilla. Pendiente contactar para solicitar tarifas y verificar halal."
+      ]
+    },
+    {
+      "_comentario": "Ejemplo 2: Transportista con historial. Ya ha trabajado con VAA.",
+      "_meta": {
+        "id_interno": "PRV-2026-0003",
+        "fecha_alta": "2025-03-15",
+        "fecha_actualizacion": "2026-06-10",
+        "creado_por": "Abdu",
+        "activo": true,
+        "version_esquema": "1.0"
+      },
+      "identificacion": {
+        "nombre_comercial": "Transportes Sur Andaluz SL",
+        "razon_social": "Transportes Sur Andaluz SL",
+        "nif_cif": "B-12345678",
+        "tipo": "transporte",
+        "subtipo": "autocar_55_minibus_16",
+        "descripcion": "Empresa de transporte discrecional de viajeros. Cubre toda Andalucía y Madrid."
+      },
+      "contacto": {
+        "nombre_contacto": "Juan Romero",
+        "cargo": "Propietario y coordinador operativo",
+        "email_principal": "juanromero@tsur.es",
+        "email_secundario": "reservas@tsur.es",
+        "telefono": "+34 600 112 233",
+        "whatsapp": "+34 600 112 233",
+        "idioma_comunicacion": "es",
+        "zona_horaria": "Europe/Madrid"
+      },
+      "ubicacion": {
+        "ciudad": "Sevilla",
+        "ciudades_cobertura": ["Madrid", "Toledo", "Córdoba", "Sevilla", "Granada", "Málaga", "Ronda"],
+        "provincia": "Sevilla",
+        "pais": "España",
+        "direccion": "",
+        "coordenadas": { "lat": null, "lng": null }
+      },
+      "clasificacion": {
+        "estado": "activo",
+        "motivo_bloqueo": "",
+        "nivel_estrategico": "habitual",
+        "nivel_estrategico_fecha_asignacion": "2025-10-01",
+        "nivel_estrategico_asignado_por": "Abdu",
+        "nivel_estrategico_motivo": "Completó 2 expedientes sin incidencias en 2025.",
+        "nivel_estrategico_historial": [
+          { "fecha": "2025-03-15", "nivel_anterior": null, "nivel_nuevo": "en_evaluacion", "motivo": "Alta inicial" },
+          { "fecha": "2025-10-01", "nivel_anterior": "en_evaluacion", "nivel_nuevo": "habitual", "motivo": "2 expedientes completados sin incidencias" }
+        ],
+        "halal": {
+          "nivel": "apto_parcial",
+          "certificacion": {
+            "tiene_certificacion": false,
+            "organismo_emisor": "",
+            "numero_certificado": "",
+            "fecha_emision": null,
+            "fecha_caducidad": null,
+            "documento_adjunto": ""
+          },
+          "verificado_por_vaa": true,
+          "fecha_verificacion": "2025-04-20",
+          "verificado_por": "Abdu",
+          "incumplimientos_halal_count": 0,
+          "notas": "El transportista cumple normas de operación. No aplica halal alimentario (no provee comida). Conductor discreto, no fuma, sin alcohol en vehículo."
+        },
+        "idiomas": [
+          { "idioma": "es", "nivel": "nativo", "verificado": true, "nota": "" },
+          { "idioma": "ar", "nivel": "funcional", "verificado": true, "nota": "Conocimientos básicos-medios de árabe. Suficiente para comunicación con grupo." }
+        ],
+        "etiquetas": ["toda_andalucia", "madrid", "flexible", "respuesta_rapida"]
+      },
+      "datos_especificos": {
+        "transporte": {
+          "flota": [
+            { "tipo_vehiculo": "minibus_16", "capacidad_pax": 16, "matricula": "", "anio_vehiculo": 2022, "aire_acondicionado": true },
+            { "tipo_vehiculo": "autocar_55", "capacidad_pax": 55, "matricula": "", "anio_vehiculo": 2021, "aire_acondicionado": true }
+          ],
+          "cobertura_nacional": true,
+          "cobertura_internacional": false,
+          "tiene_conductor_arabe": false,
+          "normativa_descanso_conoce": true,
+          "experiencia_grupos_halal": true,
+          "notas_operativas": "Propietario implicado directamente. Hablar siempre con Juan Romero, no con la oficina."
+        }
+      },
+      "referencias_futuras": {
+        "ids_presupuestos": ["PRS-2025-0003", "PRS-2025-0011"],
+        "ids_expedientes_asignado": ["VAA-2025-0002", "VAA-2025-0005"],
+        "scoring_resumen": { "puntuacion_global": null, "fecha_ultimo_calculo": null, "num_expedientes_participado": 2, "num_expedientes_seleccionado": 2 },
+        "num_incidencias": 0,
+        "num_negociaciones": 2
+      },
+      "notas_internas": [
+        "Siempre negociar directamente con Juan. Si llamas a la oficina general, los precios son más altos.",
+        "En temporada alta (julio-septiembre) tiene agenda muy ocupada. Confirmar con mínimo 45 días de antelación.",
+        "En 2025 nos hizo precio especial en el segundo expediente por fidelidad."
+      ]
+    }
+  ]
+}
