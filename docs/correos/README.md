@@ -12,16 +12,19 @@
 
 ```
 docs/correos/
-├── README.md                          ← Este archivo
+├── README.md                                      ← Este archivo
 ├── fase0_inicial/
-│   ├── 01_cliente_confirmacion.md     ← C01: Confirmación automática al cliente
-│   └── 02_interno_abdu.md             ← A01: Alerta interna para Abdu
+│   ├── 01_cliente_confirmacion.md                 ← C01: Confirmación automática al cliente
+│   └── 02_interno_abdu.md                         ← A01: Alerta interna para Abdu
+├── comercial/
+│   ├── 02_cliente_propuesta.md                    ← C02: Envío de propuesta comercial
+│   └── 03_cliente_confirmacion_reserva.md         ← C03: Confirmación de reserva (pago 30%)
 └── proveedores/
-    ├── 01_proveedor_hotel.md          ← P01: Solicitud de disponibilidad a hotel
-    ├── 02_proveedor_transporte.md     ← P02: Solicitud a proveedor de transporte
-    ├── 03_proveedor_restaurante.md    ← P03: Solicitud a restaurante halal
-    ├── 04_proveedor_guia_local.md     ← P04: Solicitud a guía local
-    └── 05_proveedor_tour_leader.md    ← P05: Solicitud a tour leader
+    ├── 01_proveedor_hotel.md                      ← P01: Solicitud de disponibilidad a hotel
+    ├── 02_proveedor_transporte.md                 ← P02: Solicitud a proveedor de transporte
+    ├── 03_proveedor_restaurante.md                ← P03: Solicitud a restaurante halal
+    ├── 04_proveedor_guia_local.md                 ← P04: Solicitud a guía local
+    └── 05_proveedor_tour_leader.md                ← P05: Solicitud a tour leader
 ```
 
 ---
@@ -71,6 +74,22 @@ Generado automáticamente por Sistema Vive al Ándalus
 | P03 | proveedores/03_proveedor_restaurante.md | Restaurante halal | Fase cotización | ES |
 | P04 | proveedores/04_proveedor_guia_local.md | Guía local | Fase cotización | ES |
 | P05 | proveedores/05_proveedor_tour_leader.md | Tour leader | Fase cotización | ES |
+
+## Catálogo de plantillas Fase Comercial
+
+| Código | Archivo | Destinatario | Trigger | Idioma | CC obligatorio |
+|--------|---------|--------------|---------|--------|----------------|
+| C02 | comercial/02_cliente_propuesta.md | Cliente | `propuesta.aprobacion_humana.aprobada = true` | Idioma cliente | reservas@vivealandalus.com |
+| C03 | comercial/03_cliente_confirmacion_reserva.md | Cliente | Pago 30% confirmado + reserva activa | Idioma cliente | reservas@vivealandalus.com |
+
+### Reglas específicas de la fase comercial
+
+- **C02** nunca puede enviarse automáticamente. Requiere revisión y envío manual por Abdu.
+- **C03** nunca puede enviarse antes de verificar el ingreso bancario real. Un pago "registrado" no es suficiente.
+- **CC obligatorio:** todo envío de C02 y C03 incluye copia interna a `reservas@vivealandalus.com` para archivo.
+- **Identificadores visibles:** C02 muestra `Expediente` + `Propuesta`. C03 muestra `Expediente` + `Reserva`.
+- **Bloque de idioma:** C02 y C03 usan `idioma_envio_final` (puede diferir de `idioma_preferido` si el cliente se comunicó en otro idioma). Fallback a `en`.
+- **Datos internos prohibidos:** márgenes, costes, proveedores, scoring, incidencias, IDs SEL/PRS nunca aparecen en correos al cliente.
 
 ---
 
