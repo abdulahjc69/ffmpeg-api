@@ -18,7 +18,9 @@ docs/correos/
 │   └── 02_interno_abdu.md                         ← A01: Alerta interna para Abdu
 ├── comercial/
 │   ├── 02_cliente_propuesta.md                    ← C02: Envío de propuesta comercial
-│   └── 03_cliente_confirmacion_reserva.md         ← C03: Confirmación de reserva (pago 30%)
+│   ├── 03_cliente_confirmacion_reserva.md         ← C03: Confirmación de reserva (pago 30%)
+│   ├── 04_cliente_documentacion_final.md          ← C04: Documentación final del viaje
+│   └── 05_cliente_post_viaje.md                   ← C05: Seguimiento post-viaje
 └── proveedores/
     ├── 01_proveedor_hotel.md                      ← P01: Solicitud de disponibilidad a hotel
     ├── 02_proveedor_transporte.md                 ← P02: Solicitud a proveedor de transporte
@@ -82,14 +84,17 @@ Generado automáticamente por Sistema Vive al Ándalus
 | C02 | comercial/02_cliente_propuesta.md | Cliente | `propuesta.aprobacion_humana.aprobada = true` | Idioma cliente | reservas@vivealandalus.com |
 | C03 | comercial/03_cliente_confirmacion_reserva.md | Cliente | Pago 30% confirmado + reserva activa | Idioma cliente | reservas@vivealandalus.com |
 | C04 | comercial/04_cliente_documentacion_final.md | Cliente | `programa_definitivo_cerrado = true` + pago 100% + todos los proveedores con localizador | Idioma cliente | reservas@vivealandalus.com |
+| C05 | comercial/05_cliente_post_viaje.md | Cliente | Tras finalización del viaje (fecha_fin + 2–5 días) | Idioma cliente | reservas@vivealandalus.com |
 
 ### Reglas específicas de la fase comercial
 
 - **C02** nunca puede enviarse automáticamente. Requiere revisión y envío manual por Abdu.
 - **C03** nunca puede enviarse antes de verificar el ingreso bancario real. Un pago "registrado" no es suficiente.
-- **CC obligatorio:** todo envío de C02 y C03 incluye copia interna a `reservas@vivealandalus.com` para archivo.
-- **Identificadores visibles:** C02 muestra `Expediente` + `Propuesta`. C03 muestra `Expediente` + `Reserva`.
-- **Bloque de idioma:** C02 y C03 usan `idioma_envio_final` (puede diferir de `idioma_preferido` si el cliente se comunicó en otro idioma). Fallback a `en`.
+- **C04** nunca puede enviarse sin `programa_definitivo_cerrado = true` en la reserva. Abdu aprueba ese campo manualmente.
+- **C05** nunca automático. Abdu decide el momento (orientativo: 2–5 días tras fecha_fin). No enviar si hay incidencia grave pendiente de gestión directa.
+- **CC obligatorio:** todo envío de C02, C03, C04 y C05 incluye copia interna a `reservas@vivealandalus.com` para archivo.
+- **Identificadores visibles:** C02 muestra `Expediente` + `Propuesta`. C03 muestra `Expediente` + `Reserva`. C04 y C05 muestran `Expediente`.
+- **Bloque de idioma:** C02–C05 usan `idioma_envio_final` (puede diferir de `idioma_preferido` si el cliente se comunicó en otro idioma). Fallback a `en`.
 - **Datos internos prohibidos:** márgenes, costes, proveedores, scoring, incidencias, IDs SEL/PRS nunca aparecen en correos al cliente.
 
 ---
