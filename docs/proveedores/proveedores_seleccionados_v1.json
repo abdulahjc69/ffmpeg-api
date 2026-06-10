@@ -1,0 +1,479 @@
+{
+  "_meta_esquema": {
+    "version": "1.0",
+    "empresa": "Bin Firnas Travel SL",
+    "marca": "Vive al Ándalus",
+    "documento": "Registro de Proveedores Seleccionados VAA",
+    "fecha_creacion": "2026-06-10",
+    "regla_fundamental": "Ninguna selección se borra. Un proveedor sustituido queda en estado 'sustituido' con historial completo. El nuevo proveedor crea un registro nuevo.",
+    "regla_presupuesto": "No puede existir selección sin id_presupuesto registrado en presupuestos_proveedores_v1. Seleccionar sin presupuesto guardado está prohibido.",
+    "regla_unicidad": "Por cada combinación [id_expediente + tipo_servicio + ciudad + fecha_inicio] solo puede existir una selección con estado activo o superior. Antes de activar una nueva, la anterior debe marcarse como 'sustituido' o 'cancelado_vaa'."
+  },
+
+  "tipos_servicio_posibles": [
+    "alojamiento",
+    "transporte_ruta",
+    "transfer_llegada",
+    "transfer_salida",
+    "restauracion",
+    "guia_local",
+    "tour_leader",
+    "entrada_monumento",
+    "actividad",
+    "seguro",
+    "otro"
+  ],
+
+  "estados_posibles": [
+    "pendiente_confirmar",
+    "activo",
+    "confirmado_deposito",
+    "servicio_completado",
+    "servicio_con_incidencia",
+    "sustituido",
+    "cancelado_vaa",
+    "cancelado_proveedor"
+  ],
+
+  "tipos_cambio_historial_posibles": [
+    "creacion",
+    "activacion",
+    "sustitucion",
+    "cancelacion",
+    "modificacion_estado",
+    "deposito_pagado",
+    "confirmacion_recibida"
+  ],
+
+  "seleccion_plantilla": {
+
+    "_meta": {
+      "id_seleccion": "SEL-AAAA-NNNN",
+      "fecha_creacion": null,
+      "fecha_actualizacion": null,
+      "creado_por": "",
+      "version_esquema": "1.0"
+    },
+
+    "referencias": {
+      "id_expediente": "",
+      "_id_expediente_nota": "OBLIGATORIO. Formato VAA-AAAA-NNNN.",
+      "id_proveedor": "",
+      "_id_proveedor_nota": "OBLIGATORIO. Formato PRV-AAAA-NNNN. Debe existir en proveedores_maestro_v1.",
+      "id_presupuesto": "",
+      "_id_presupuesto_nota": "OBLIGATORIO. Formato PRS-AAAA-NNNN. Debe existir en presupuestos_proveedores_v1. Sin presupuesto previo registrado, la selección no es válida."
+    },
+
+    "servicio": {
+      "tipo_servicio": "",
+      "tipo_servicio_posibles": ["alojamiento","transporte_ruta","transfer_llegada","transfer_salida","restauracion","guia_local","tour_leader","entrada_monumento","actividad","seguro","otro"],
+      "ciudad": null,
+      "_ciudad_nota": "Obligatorio si el servicio es por ciudad. Null para transporte_ruta, tour_leader, seguro.",
+      "descripcion": "",
+      "_descripcion_nota": "Descripción operativa completa. Ej: 'Alojamiento 4 noches Sevilla — 2 hab dobles + 1 triple + 1 operativa staff — con desayuno halal'.",
+      "fecha_inicio": null,
+      "fecha_fin": null,
+      "noches": null,
+      "dias": null
+    },
+
+    "contacto_operativo": {
+      "_nota": "Contacto directo para el día del servicio. Puede diferir del contacto general en proveedores_maestro_v1. Es el número que llama el tour leader si hay un problema a las 23:00.",
+      "nombre": "",
+      "cargo": "",
+      "telefono": "",
+      "_telefono_nota": "OBLIGATORIO. Sin teléfono operativo no hay selección completa.",
+      "whatsapp": "",
+      "email": "",
+      "disponibilidad": "",
+      "_disponibilidad_nota": "Ej: '24h durante el servicio', 'L-V 9:00-19:00', 'Solo WhatsApp fuera de horario'.",
+      "nota": "",
+      "_nota_contacto": "Observaciones clave. Ej: 'Llamar siempre a Juan directamente, no a recepción general'."
+    },
+
+    "deadlines": {
+      "_nota": "Fechas límite críticas para la operativa del servicio.",
+      "deadline_respuesta": null,
+      "_deadline_respuesta_nota": "Fecha límite para que el proveedor confirme disponibilidad. Si no responde antes, buscar alternativa inmediatamente.",
+      "deadline_confirmacion": null,
+      "_deadline_confirmacion_nota": "Fecha límite para confirmar y pagar depósito. Pasada esta fecha el proveedor puede liberar la disponibilidad sin aviso.",
+      "deadline_documentacion": null,
+      "_deadline_documentacion_nota": "Opcional. Fecha límite para recibir certificaciones, licencias u otros documentos del proveedor.",
+      "alerta_deadline_activa": true,
+      "_alerta_nota": "Mantener true hasta que el depósito esté pagado y la confirmación recibida.",
+      "notas_deadlines": ""
+    },
+
+    "decision": {
+      "estado": "pendiente_confirmar",
+      "estado_posibles": ["pendiente_confirmar","activo","confirmado_deposito","servicio_completado","servicio_con_incidencia","sustituido","cancelado_vaa","cancelado_proveedor"],
+      "motivo_seleccion": "",
+      "_motivo_nota": "OBLIGATORIO. Por qué se eligió este proveedor sobre los demás. Sin motivo documentado la selección no es válida operativamente.",
+      "seleccionado_por": "",
+      "fecha_decision": null,
+      "alternativas_evaluadas": [],
+      "_alternativas_nota": "Array de ids_presupuesto (PRS-AAAA-NNNN) descartados en favor de este. El motivo de rechazo de cada alternativa se documenta en su propio registro PRS."
+    },
+
+    "economico": {
+      "moneda": "EUR",
+      "coste_confirmado": null,
+      "_coste_confirmado_nota": "Importe acordado definitivamente con el proveedor. Puede coincidir o diferir del presupuesto original.",
+      "coste_base_presupuesto": null,
+      "_coste_base_nota": "Importe del presupuesto PRS original. Foto fija. No modificar.",
+      "variacion_importe": null,
+      "_variacion_nota": "coste_confirmado - coste_base_presupuesto. Se calcula al confirmar.",
+      "variacion_motivo": "",
+      "_variacion_motivo_nota": "Obligatorio si variacion_importe != 0.",
+      "iva_incluido": null
+    },
+
+    "condiciones_confirmadas": {
+      "deposito_requerido": null,
+      "deposito_pct": null,
+      "deposito_importe": null,
+      "deposito_pagado": false,
+      "deposito_fecha_pago": null,
+      "deposito_referencia": "",
+      "_deposito_referencia_nota": "Número de transferencia, referencia de pago o justificante.",
+      "plazo_cancelacion": "",
+      "politica_noshow": "",
+      "notas_condiciones": ""
+    },
+
+    "confirmacion_proveedor": {
+      "confirmado": false,
+      "fecha_confirmacion": null,
+      "localizador": "",
+      "_localizador_nota": "Número de reserva o localizador del proveedor. Esencial para check-in y resolución de incidencias.",
+      "metodo_confirmacion": "",
+      "metodo_posibles": ["email", "whatsapp", "telefono", "web", "en_persona", "otro"],
+      "documento_confirmacion": "",
+      "_documento_nota": "Ruta al email de confirmación, PDF de reserva o captura de confirmación.",
+      "notas_operativas": ""
+    },
+
+    "historial_cambios": [],
+    "_historial_nota": "Array inmutable. Solo se añaden entradas. Nunca se modifican ni borran. Registra toda la vida del registro.",
+    "_historial_ejemplo": [
+      {
+        "fecha": "2026-06-12T10:00:00",
+        "tipo_cambio": "creacion",
+        "estado_anterior": null,
+        "estado_nuevo": "pendiente_confirmar",
+        "motivo": "Selección inicial. Mejor precio con certificación halal confirmada.",
+        "realizado_por": "Abdu",
+        "id_seleccion_nueva": null
+      },
+      {
+        "fecha": "2026-06-14T16:30:00",
+        "tipo_cambio": "activacion",
+        "estado_anterior": "pendiente_confirmar",
+        "estado_nuevo": "activo",
+        "motivo": "Hotel confirmó disponibilidad por email. Localizador recibido.",
+        "realizado_por": "Abdu",
+        "id_seleccion_nueva": null
+      }
+    ],
+
+    "notas_internas": "",
+    "_notas_nota": "Observaciones libres de Abdu. No visible al proveedor ni al cliente."
+  },
+
+  "ejemplos": [
+    {
+      "_comentario": "Ejemplo 1: Hotel en Sevilla seleccionado para expediente VAA-2026-0087. Estado: depósito pagado.",
+      "_meta": {
+        "id_seleccion": "SEL-2026-0001",
+        "fecha_creacion": "2026-06-12T10:00:00",
+        "fecha_actualizacion": "2026-06-16T09:00:00",
+        "creado_por": "Abdu",
+        "version_esquema": "1.0"
+      },
+      "referencias": {
+        "id_expediente": "VAA-2026-0087",
+        "id_proveedor": "PRV-2026-0001",
+        "id_presupuesto": "PRS-2026-0001"
+      },
+      "servicio": {
+        "tipo_servicio": "alojamiento",
+        "ciudad": "Sevilla",
+        "descripcion": "Alojamiento 4 noches — 2 hab dobles + 1 triple + 1 individual operativa staff — con desayuno halal",
+        "fecha_inicio": "2026-09-17",
+        "fecha_fin": "2026-09-21",
+        "noches": 4,
+        "dias": null
+      },
+      "contacto_operativo": {
+        "nombre": "Marta García",
+        "cargo": "Responsable de grupos",
+        "telefono": "+34 954 229 495",
+        "whatsapp": "+34 654 100 200",
+        "email": "grupos@losseises.com",
+        "disponibilidad": "L–V 9:00–19:00. WhatsApp 24h durante estancia del grupo.",
+        "nota": "En caso de urgencia nocturna llamar a recepción y pedir al encargado de turno que contacte con Marta."
+      },
+      "deadlines": {
+        "deadline_respuesta": "2026-06-14T18:00:00",
+        "deadline_confirmacion": "2026-06-20T18:00:00",
+        "deadline_documentacion": "2026-07-15T00:00:00",
+        "alerta_deadline_activa": false,
+        "notas_deadlines": "Documentación halal solicitada para antes del 15 de julio."
+      },
+      "decision": {
+        "estado": "confirmado_deposito",
+        "motivo_seleccion": "Único hotel de los tres cotizados que confirmó desayuno halal verificable. Precio dentro del rango objetivo. Ubicación en Santa Cruz ideal para el grupo.",
+        "seleccionado_por": "Abdu",
+        "fecha_decision": "2026-06-12T10:00:00",
+        "alternativas_evaluadas": ["PRS-2026-0002"]
+      },
+      "economico": {
+        "moneda": "EUR",
+        "coste_confirmado": 2560.00,
+        "coste_base_presupuesto": 2560.00,
+        "variacion_importe": 0.00,
+        "variacion_motivo": "",
+        "iva_incluido": true
+      },
+      "condiciones_confirmadas": {
+        "deposito_requerido": true,
+        "deposito_pct": 30,
+        "deposito_importe": 768.00,
+        "deposito_pagado": true,
+        "deposito_fecha_pago": "2026-06-16",
+        "deposito_referencia": "TRF-2026-0341",
+        "plazo_cancelacion": "Gratuita hasta 21 días antes. 50% hasta 7 días. No reembolsable desde 7 días.",
+        "politica_noshow": "100% del importe total",
+        "notas_condiciones": "Desayuno halal confirmado con aviso 48h previas. Solicitar explícitamente al check-in."
+      },
+      "confirmacion_proveedor": {
+        "confirmado": true,
+        "fecha_confirmacion": "2026-06-14T11:30:00",
+        "localizador": "LSS-26-0441",
+        "metodo_confirmacion": "email",
+        "documento_confirmacion": "docs/adjuntos/SEL-2026-0001-confirmacion.pdf",
+        "notas_operativas": "Han asignado habitaciones en planta baja para el grupo (solicitud del padre). Confirmar al check-in."
+      },
+      "historial_cambios": [
+        {
+          "fecha": "2026-06-12T10:00:00",
+          "tipo_cambio": "creacion",
+          "estado_anterior": null,
+          "estado_nuevo": "pendiente_confirmar",
+          "motivo": "Selección inicial tras comparar PRS-2026-0001 y PRS-2026-0002. Se opta por Los Seises por garantías halal.",
+          "realizado_por": "Abdu",
+          "id_seleccion_nueva": null
+        },
+        {
+          "fecha": "2026-06-14T11:30:00",
+          "tipo_cambio": "confirmacion_recibida",
+          "estado_anterior": "pendiente_confirmar",
+          "estado_nuevo": "activo",
+          "motivo": "Hotel confirmó disponibilidad por email. Localizador LSS-26-0441 recibido.",
+          "realizado_por": "Abdu",
+          "id_seleccion_nueva": null
+        },
+        {
+          "fecha": "2026-06-16T09:00:00",
+          "tipo_cambio": "deposito_pagado",
+          "estado_anterior": "activo",
+          "estado_nuevo": "confirmado_deposito",
+          "motivo": "Depósito 30% (768 EUR) pagado por transferencia TRF-2026-0341.",
+          "realizado_por": "Abdu",
+          "id_seleccion_nueva": null
+        }
+      ],
+      "notas_internas": "Padre solicitó hab. en planta baja. Confirmado por el hotel. Recordar al check-in. Certificación halal del desayuno pendiente de recibir antes del 15 de julio."
+    },
+    {
+      "_comentario": "Ejemplo 2: Transportista para ruta completa. Selección activa.",
+      "_meta": {
+        "id_seleccion": "SEL-2026-0002",
+        "fecha_creacion": "2026-06-13T15:00:00",
+        "fecha_actualizacion": "2026-06-13T15:00:00",
+        "creado_por": "Abdu",
+        "version_esquema": "1.0"
+      },
+      "referencias": {
+        "id_expediente": "VAA-2026-0087",
+        "id_proveedor": "PRV-2026-0003",
+        "id_presupuesto": "PRS-2026-0005"
+      },
+      "servicio": {
+        "tipo_servicio": "transporte_ruta",
+        "ciudad": null,
+        "descripcion": "Transporte ruta completa Madrid→Toledo→Córdoba→Sevilla→Granada→Málaga — 16 días — Minibus 8 pax + conductor — Transfer llegada MAD + transfer salida AGP incluidos",
+        "fecha_inicio": "2026-09-10",
+        "fecha_fin": "2026-09-25",
+        "noches": null,
+        "dias": 16
+      },
+      "contacto_operativo": {
+        "nombre": "Juan Romero",
+        "cargo": "Propietario y conductor",
+        "telefono": "+34 600 112 233",
+        "whatsapp": "+34 600 112 233",
+        "email": "juanromero@tsur.es",
+        "disponibilidad": "24h durante el servicio activo.",
+        "nota": "Es el conductor directo. Contacto de máxima confianza. No llamar a la oficina general."
+      },
+      "deadlines": {
+        "deadline_respuesta": "2026-06-15T18:00:00",
+        "deadline_confirmacion": "2026-06-25T18:00:00",
+        "deadline_documentacion": null,
+        "alerta_deadline_activa": true,
+        "notas_deadlines": "Confirmar antes del 25 de junio. Juan advirtió que tiene otra solicitud para esas fechas."
+      },
+      "decision": {
+        "estado": "activo",
+        "motivo_seleccion": "Proveedor habitual con experiencia demostrada en rutas similares. Árabe funcional confirmado. Precio competitivo. Minibus 8 pax adecuado para el grupo de 6 + 2 staff.",
+        "seleccionado_por": "Abdu",
+        "fecha_decision": "2026-06-13T15:00:00",
+        "alternativas_evaluadas": []
+      },
+      "economico": {
+        "moneda": "EUR",
+        "coste_confirmado": 4200.00,
+        "coste_base_presupuesto": 4200.00,
+        "variacion_importe": 0.00,
+        "variacion_motivo": "",
+        "iva_incluido": false
+      },
+      "condiciones_confirmadas": {
+        "deposito_requerido": true,
+        "deposito_pct": 30,
+        "deposito_importe": 1260.00,
+        "deposito_pagado": false,
+        "deposito_fecha_pago": null,
+        "deposito_referencia": "",
+        "plazo_cancelacion": "Gratuita hasta 30 días antes. 50% entre 30 y 15 días. 100% desde 15 días.",
+        "politica_noshow": "100% no reembolsable",
+        "notas_condiciones": "IVA no incluido en cotización. Confirmar tipo IVA aplicable a transporte discrecional."
+      },
+      "confirmacion_proveedor": {
+        "confirmado": true,
+        "fecha_confirmacion": "2026-06-13T17:00:00",
+        "localizador": "TSA-2026-089",
+        "metodo_confirmacion": "whatsapp",
+        "documento_confirmacion": "",
+        "notas_operativas": "Confirmación por WhatsApp. Solicitar email formal con condiciones. Pendiente depósito antes del 25 de junio."
+      },
+      "historial_cambios": [
+        {
+          "fecha": "2026-06-13T15:00:00",
+          "tipo_cambio": "creacion",
+          "estado_anterior": null,
+          "estado_nuevo": "pendiente_confirmar",
+          "motivo": "Selección proveedor habitual para ruta completa.",
+          "realizado_por": "Abdu",
+          "id_seleccion_nueva": null
+        },
+        {
+          "fecha": "2026-06-13T17:00:00",
+          "tipo_cambio": "confirmacion_recibida",
+          "estado_anterior": "pendiente_confirmar",
+          "estado_nuevo": "activo",
+          "motivo": "Juan Romero confirmó disponibilidad por WhatsApp. Localizador TSA-2026-089.",
+          "realizado_por": "Abdu",
+          "id_seleccion_nueva": null
+        }
+      ],
+      "notas_internas": "Pendiente: pagar depósito antes del 25/06. Solicitar email formal de confirmación con condiciones por escrito. Recordar verificar normativa descanso conductor para tramo Granada-Málaga."
+    },
+    {
+      "_comentario": "Ejemplo 3: Sustitución de proveedor. Hotel original sustituido por otro. Historial preservado.",
+      "_meta": {
+        "id_seleccion": "SEL-2026-0003",
+        "fecha_creacion": "2026-06-10T09:00:00",
+        "fecha_actualizacion": "2026-06-12T14:00:00",
+        "creado_por": "Abdu",
+        "version_esquema": "1.0"
+      },
+      "referencias": {
+        "id_expediente": "VAA-2026-0087",
+        "id_proveedor": "PRV-2026-0007",
+        "id_presupuesto": "PRS-2026-0008"
+      },
+      "servicio": {
+        "tipo_servicio": "alojamiento",
+        "ciudad": "Madrid",
+        "descripcion": "Alojamiento 3 noches Madrid — 3 hab + 1 operativa — con desayuno",
+        "fecha_inicio": "2026-09-10",
+        "fecha_fin": "2026-09-13",
+        "noches": 3,
+        "dias": null
+      },
+      "contacto_operativo": {
+        "nombre": "Carlos Fuentes",
+        "cargo": "Jefe de reservas",
+        "telefono": "+34 91 555 0000",
+        "whatsapp": "",
+        "email": "reservas@hoteleje.com",
+        "disponibilidad": "L–V 9:00–18:00",
+        "nota": ""
+      },
+      "deadlines": {
+        "deadline_respuesta": "2026-06-11T18:00:00",
+        "deadline_confirmacion": "2026-06-12T18:00:00",
+        "deadline_documentacion": null,
+        "alerta_deadline_activa": false,
+        "notas_deadlines": ""
+      },
+      "decision": {
+        "estado": "sustituido",
+        "motivo_seleccion": "Primera opción para Madrid. Precio adecuado. Pendiente verificar halal.",
+        "seleccionado_por": "Abdu",
+        "fecha_decision": "2026-06-10T09:00:00",
+        "alternativas_evaluadas": []
+      },
+      "economico": {
+        "moneda": "EUR",
+        "coste_confirmado": null,
+        "coste_base_presupuesto": 1920.00,
+        "variacion_importe": null,
+        "variacion_motivo": "",
+        "iva_incluido": true
+      },
+      "condiciones_confirmadas": {
+        "deposito_requerido": true,
+        "deposito_pct": 30,
+        "deposito_importe": 576.00,
+        "deposito_pagado": false,
+        "deposito_fecha_pago": null,
+        "deposito_referencia": "",
+        "plazo_cancelacion": "Gratuita hasta 14 días antes",
+        "politica_noshow": "100%",
+        "notas_condiciones": ""
+      },
+      "confirmacion_proveedor": {
+        "confirmado": false,
+        "fecha_confirmacion": null,
+        "localizador": "",
+        "metodo_confirmacion": "",
+        "documento_confirmacion": "",
+        "notas_operativas": ""
+      },
+      "historial_cambios": [
+        {
+          "fecha": "2026-06-10T09:00:00",
+          "tipo_cambio": "creacion",
+          "estado_anterior": null,
+          "estado_nuevo": "pendiente_confirmar",
+          "motivo": "Primera selección para Madrid. Pendiente confirmación halal.",
+          "realizado_por": "Abdu",
+          "id_seleccion_nueva": null
+        },
+        {
+          "fecha": "2026-06-12T14:00:00",
+          "tipo_cambio": "sustitucion",
+          "estado_anterior": "pendiente_confirmar",
+          "estado_nuevo": "sustituido",
+          "motivo": "El hotel no pudo confirmar desayuno halal para el grupo. Requisito innegociable. Sustituido por Hotel VP Madrid (SEL-2026-0009) que sí ofrece garantías halal.",
+          "realizado_por": "Abdu",
+          "id_seleccion_nueva": "SEL-2026-0009"
+        }
+      ],
+      "notas_internas": "No eliminar este registro. El hotel no pudo garantizar halal. Mantener en historial para referencia futura: este proveedor no es válido para grupos con requisito halal."
+    }
+  ]
+}
