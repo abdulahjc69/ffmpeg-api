@@ -1,5 +1,5 @@
 # EXPEDIENTE MAESTRO — VIVE AL ÁNDALUS
-**Versión:** 1.1 | **Empresa:** Bin Firnas Travel SL | **Marca:** Vive al Ándalus
+**Versión:** 1.2 | **Empresa:** Bin Firnas Travel SL | **Marca:** Vive al Ándalus
 
 ---
 
@@ -161,9 +161,129 @@
 
 ---
 
-### BLOQUE 8 — SERVICIOS CONTRATADOS
+### BLOQUE 8 — OPERACIÓN DE RUTA ⚠️ TÉCNICO-OPERATIVO — NUNCA VISIBLE AL CLIENTE
 
-#### 8.1 Alojamiento
+> Este bloque es **exclusivo para uso operativo interno**. Sus datos son **estimaciones orientativas** hasta que el transportista las valide formalmente.
+
+#### Regla fundamental
+
+> **La IA calcula. El transportista valida. Abdu decide.**  
+> Ningún dato de `operacion_ruta` se considera definitivo hasta que `_meta.validado_por_transportista = true`.
+
+#### 8.1 — Meta del bloque
+
+| Campo | Descripción | Valor por defecto |
+|---|---|---|
+| `_meta.version_bloque` | Versión del bloque `operacion_ruta` | `"1.0"` |
+| `_meta.fuente_distancias` | Origen de los datos de distancias | `"pendiente — OSRM / OpenRouteService"` |
+| `_meta.fuente_cartografia` | Base cartográfica utilizada | `"OpenStreetMap"` |
+| `_meta.fecha_calculo` | Fecha del último cálculo automático | `null` |
+| `_meta.validado_por_transportista` | Si el transportista ha confirmado viabilidad | `false` |
+
+#### 8.2 — Resumen
+
+| Campo | Descripción | Valor por defecto |
+|---|---|---|
+| `resumen.km_estimados_totales` | Kilómetros estimados totales de la ruta | `null` |
+| `resumen.tiempo_conduccion_estimado_min` | Minutos estimados totales de conducción pura | `null` |
+| `resumen.tiempo_conduccion_estimado_hh_mm` | Formato legible del tiempo total | `null` |
+| `resumen.numero_tramos` | Número de tramos entre ciudades | `0` |
+| `resumen.ciudad_inicio` | Primera ciudad de la ruta | `""` |
+| `resumen.ciudad_final` | Última ciudad de la ruta | `""` |
+| `resumen.dias_con_traslado` | Días con cambio de ciudad | `0` |
+| `resumen.dias_sin_traslado` | Días de estancia sin traslado | `0` |
+| `resumen.alertas_activas` | Número de alertas generadas | `0` |
+| `resumen.operativamente_viable` | Viabilidad operativa global | `"pendiente_validacion"` |
+
+> **`operativamente_viable`** — valores posibles: `null` / `"pendiente_validacion"` / `"si"` / `"no"`  
+> Solo puede cambiar a `"si"` o `"no"` tras validación del transportista o decisión de Abdu.
+
+#### 8.3 — Tramos
+
+Cada tramo entre ciudades consecutivas contiene:
+
+| Campo | Descripción | Valor por defecto |
+|---|---|---|
+| `id` | Número de orden del tramo | `1`, `2`… |
+| `origen` | Ciudad de salida | `""` |
+| `destino` | Ciudad de llegada | `""` |
+| `km_estimados` | Kilómetros estimados por carretera | `null` |
+| `tiempo_conduccion_estimado_min` | Minutos estimados de conducción | `null` |
+| `tiempo_conduccion_estimado_hh_mm` | Formato legible | `null` |
+| `carretera_principal` | Vía principal del tramo | `""` |
+| `nota_operativa` | Observación operativa del tramo | `""` |
+| `alertas` | Lista de alertas activas en el tramo | `[]` |
+
+**Ejemplo documental — ruta Madrid → Málaga (15 días):**
+
+| Tramo | Km estimados | Tiempo estimado | Alerta |
+|---|---|---|---|
+| Madrid → Toledo | ~75 km | ~1h 00min | — |
+| Toledo → Córdoba | ~320 km | ~3h 05min | ⚠️ jornada_larga |
+| Córdoba → Sevilla | ~140 km | ~1h 30min | — |
+| Sevilla → Granada | ~250 km | ~2h 45min | — |
+| Granada → Málaga | ~125 km | ~1h 30min | — |
+| **Total estimado** | **~910 km** | **~9h 50min** | **1 alerta activa** |
+
+> Los valores anteriores son **estimaciones documentales orientativas**. No son datos de producción. Serán calculados automáticamente por OSRM/OpenRouteService en una fase futura y validados por el transportista.
+
+#### 8.4 — Ciudades (detalle operativo)
+
+Complementa al bloque 7 (`ruta.detalle_ciudades`) con datos técnicos no visibles al cliente:
+
+| Campo | Descripción | Valor por defecto |
+|---|---|---|
+| `ciudad` | Nombre de la ciudad | `""` |
+| `orden` | Posición en la ruta | `0` |
+| `noches` | Noches de alojamiento | `0` |
+| `dias_visita_disponibles` | Días reales para visitar (excluye traslados) | `null` |
+| `fecha_entrada` | Fecha de llegada a la ciudad | `null` |
+| `fecha_salida` | Fecha de salida de la ciudad | `null` |
+| `hora_check_in_prevista` | Hora estimada de llegada al hotel | `null` |
+| `hora_check_out_prevista` | Hora estimada de salida del hotel | `null` |
+| `transfer_entrada` | Tipo de llegada a la ciudad | `""` |
+| `transfer_salida` | Tipo de salida de la ciudad | `""` |
+| `alertas` | Alertas específicas de esta ciudad | `[]` |
+
+> **`dias_visita_disponibles`** se calcula como `noches - 0.5` (día de llegada = tarde = 0.5 día). El transportista puede ajustar este cálculo según horarios reales.
+
+#### 8.5 — Conductor
+
+| Campo | Descripción | Valor por defecto |
+|---|---|---|
+| `aplica` | Si hay conductor en el servicio | `false` |
+| `km_estimados_totales` | Kilómetros estimados totales a recorrer | `null` |
+| `dias_servicio_activo` | Días totales que el conductor está en servicio | `0` |
+| `dias_conduccion_efectiva` | Días con conducción real entre ciudades | `0` |
+| `dias_espera_en_ciudad` | Días de espera sin conducción | `0` |
+| `numero_conductores_recomendado` | Número de conductores recomendado | `null` |
+| `alerta_normativa_descanso` | Si hay riesgo de incumplir normativa de descanso | `false` |
+| `tramo_mas_largo` | Datos del tramo de mayor duración estimada | `{}` |
+| `nota` | Aviso legal obligatorio sobre viabilidad | texto fijo |
+
+> **`numero_conductores_recomendado`** — campo reservado para futura lógica automática basada en km estimados, tiempos y normativa. Hasta su implementación: `null`. La decisión final corresponde al transportista y a Abdu.
+
+> **Aviso legal del bloque conductor:**  
+> *"Estimaciones orientativas. El transportista debe confirmar viabilidad completa según normativa vigente de tiempos de conducción y descanso antes de aceptar el servicio."*
+
+#### 8.6 — Sistema de alertas
+
+| Tipo | Condición de disparo | Severidad |
+|---|---|---|
+| `jornada_larga` | Tiempo estimado conducción > 180 min (3h) | Media |
+| `riesgo_conductor` | Tiempo estimado conducción > 270 min (4.5h) | Alta |
+| `visita_muy_corta` | `dias_visita_disponibles < 0.75` | Baja |
+| `llegada_tardia_hotel` | Hora llegada prevista > 20:00 | Media |
+| `salida_muy_temprana` | Hora salida prevista < 07:00 | Baja |
+| `exceso_traslados` | ≥2 cambios de ciudad en 3 días consecutivos | Media |
+| `grupo_menores_tramo_largo` | Menores > 0 y conducción estimada > 180 min | Baja |
+| `transfer_aeropuerto_ajustado` | Margen < 90 min entre vuelo y traslado | Alta |
+
+---
+
+### BLOQUE 9 — SERVICIOS CONTRATADOS
+
+#### 9.1 Alojamiento
 
 | Campo | Descripción | Ejemplo |
 |---|---|---|
@@ -177,7 +297,7 @@
 | `accesibilidad_hab` | Habitación adaptada | `false` |
 | `servicio_maletas` | Traslado de maletas entre hoteles | `true` |
 
-#### 8.2 Transporte Interno
+#### 9.2 Transporte Interno
 
 | Campo | Descripción | Ejemplo |
 |---|---|---|
@@ -188,7 +308,7 @@
 | `transporte_llegada_aeropuerto` | Transfer llegada incluido | `true` |
 | `transporte_salida_aeropuerto` | Transfer salida incluido | `true` |
 
-#### 8.3 Tour Leader
+#### 9.3 Tour Leader
 
 | Campo | Descripción | Ejemplo |
 |---|---|---|
@@ -197,7 +317,7 @@
 | `tour_leader_idioma` | Idioma del tour leader | `ar` |
 | `tour_leader_nombre` | Nombre si ya asignado | `` |
 
-#### 8.4 Guía Local
+#### 9.4 Guía Local
 
 | Campo | Descripción | Ejemplo |
 |---|---|---|
@@ -206,7 +326,7 @@
 | `guia_local_idioma` | Idioma del guía | `ar` |
 | `guia_local_duracion` | Duración por visita | `medio_dia` / `dia_completo` |
 
-#### 8.5 Restauración
+#### 9.5 Restauración
 
 | Campo | Descripción | Ejemplo |
 |---|---|---|
@@ -215,7 +335,7 @@
 | `tipo_cocina` | Preferencia culinaria | `andaluza_tradicional` / `arabe` / `internacional` |
 | `restaurantes_preconcertados` | Si son restaurantes de acuerdo previo | `true` |
 
-#### 8.6 Servicio Halal
+#### 9.6 Servicio Halal
 
 | Campo | Descripción | Ejemplo |
 |---|---|---|
@@ -225,7 +345,7 @@
 
 ---
 
-### BLOQUE 9 — OPERACIÓN INTERNA ⚠️ NUNCA VISIBLE AL CLIENTE
+### BLOQUE 10 — OPERACIÓN INTERNA ⚠️ NUNCA VISIBLE AL CLIENTE
 
 > Este bloque es **exclusivo para uso interno de Bin Firnas Travel**. No aparece en ningún correo ni resumen enviado al cliente.
 
@@ -269,9 +389,9 @@ Descuentos:
 
 ---
 
-### BLOQUE 10 — COMUNICACIONES
+### BLOQUE 11 — COMUNICACIONES
 
-#### 10.1 Resumen para el Cliente (VISIBLE)
+#### 11.1 Resumen para el Cliente (VISIBLE)
 
 El correo al cliente debe incluir **únicamente**:
 - Nombre del cliente
@@ -280,15 +400,16 @@ El correo al cliente debe incluir **únicamente**:
 - Próximos pasos
 - Contacto directo de Vive al Ándalus
 
-**No incluir nunca:** precios de coste, nombres de proveedores, hab. de staff, márgenes, notas internas.
+**No incluir nunca:** precios de coste, nombres de proveedores, hab. de staff, márgenes, notas internas, datos de `operacion_ruta`.
 
-#### 10.2 Expediente Interno para Abdu (OPERATIVO)
+#### 11.2 Expediente Interno para Abdu (OPERATIVO)
 
-El expediente interno incluye todos los bloques: 1 a 9 completos, incluyendo:
+El expediente interno incluye todos los bloques: 1 a 10 completos, incluyendo:
 - Coste estimado y margen
 - Proveedores asignados
 - Habitaciones de staff
 - Alertas de revisión manual (vuelos, barcos, ferrys)
+- Operación de ruta completa con alertas
 - Notas de operación
 
 ---
@@ -313,6 +434,30 @@ El expediente interno incluye todos los bloques: 1 a 9 completos, incluyendo:
 | Sevilla | 4 | Alcázar, Giralda, Barrio de Santa Cruz, flamenco |
 | Granada | 3 | Alhambra, Albaicín, Sacromonte |
 | Málaga | 2 | Costa, Alcazaba, Picasso. Salida vuelo |
+
+#### Operación de ruta — ejemplo documental (estimaciones orientativas)
+
+> Los datos siguientes son **estimaciones orientativas** con fines documentales. No son datos de producción. `validado_por_transportista = false`.
+
+| Tramo | Km estimados | Tiempo estimado | Alerta |
+|---|---|---|---|
+| Madrid → Toledo | ~75 km | ~1h 00min | — |
+| Toledo → Córdoba | ~320 km | ~3h 05min | ⚠️ jornada_larga — pausa recomendada en La Carlota o Andújar |
+| Córdoba → Sevilla | ~140 km | ~1h 30min | — |
+| Sevilla → Granada | ~250 km | ~2h 45min | — |
+| Granada → Málaga | ~125 km | ~1h 30min | — |
+| **Total estimado** | **~910 km** | **~9h 50min** | **1 alerta activa** |
+
+| Ciudad | Días visita disponibles | Alerta |
+|---|---|---|
+| Madrid | 2.0 | — |
+| Toledo | 0.5 | ⚠️ visita_muy_corta |
+| Córdoba | 1.5 | — |
+| Sevilla | 3.0 | — |
+| Granada | 2.0 | — |
+| Málaga | 1.0 | — |
+
+`operativamente_viable`: `pendiente_validacion` — el transportista debe confirmar antes de avanzar.
 
 #### Servicios contratados
 
@@ -377,4 +522,4 @@ En cualquier punto → cancelado
 
 ---
 
-*Documento oficial — Bin Firnas Travel SL / Vive al Ándalus — Versión 1.1 — Junio 2026*
+*Documento oficial — Bin Firnas Travel SL / Vive al Ándalus — Versión 1.2 — Junio 2026*

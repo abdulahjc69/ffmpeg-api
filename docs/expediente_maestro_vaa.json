@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "version": "1.1",
+    "version": "1.2",
     "empresa": "Bin Firnas Travel SL",
     "marca": "Vive al Ándalus",
     "documento": "Expediente Maestro VAA",
@@ -156,6 +156,97 @@
     ]
   },
 
+  "operacion_ruta": {
+    "_interno": true,
+    "_advertencia": "Datos estimados orientativos. El transportista debe validar viabilidad legal y operativa antes de confirmar.",
+
+    "_meta": {
+      "version_bloque": "1.0",
+      "fuente_distancias": "pendiente — OSRM / OpenRouteService",
+      "fuente_cartografia": "OpenStreetMap",
+      "fecha_calculo": null,
+      "validado_por_transportista": false,
+      "regla_fundamental": "La IA calcula. El transportista valida. Abdu decide. Ningún dato es definitivo hasta validado_por_transportista = true."
+    },
+
+    "resumen": {
+      "km_estimados_totales": null,
+      "tiempo_conduccion_estimado_min": null,
+      "tiempo_conduccion_estimado_hh_mm": null,
+      "numero_tramos": 0,
+      "ciudad_inicio": "",
+      "ciudad_final": "",
+      "dias_con_traslado": 0,
+      "dias_sin_traslado": 0,
+      "alertas_activas": 0,
+      "operativamente_viable": "pendiente_validacion",
+      "operativamente_viable_posibles": [null, "pendiente_validacion", "si", "no"],
+      "operativamente_viable_nota": "Solo puede cambiar a 'si' o 'no' tras validación del transportista o decisión de Abdu."
+    },
+
+    "tramos": [
+      {
+        "id": 1,
+        "origen": "",
+        "destino": "",
+        "km_estimados": null,
+        "tiempo_conduccion_estimado_min": null,
+        "tiempo_conduccion_estimado_hh_mm": null,
+        "carretera_principal": "",
+        "nota_operativa": "",
+        "alertas": []
+      }
+    ],
+
+    "ciudades": [
+      {
+        "ciudad": "",
+        "orden": 0,
+        "noches": 0,
+        "dias_visita_disponibles": null,
+        "fecha_entrada": null,
+        "fecha_salida": null,
+        "hora_check_in_prevista": null,
+        "hora_check_out_prevista": null,
+        "transfer_entrada": "",
+        "transfer_salida": "",
+        "alertas": []
+      }
+    ],
+
+    "conductor": {
+      "aplica": false,
+      "km_estimados_totales": null,
+      "dias_servicio_activo": 0,
+      "dias_conduccion_efectiva": 0,
+      "dias_espera_en_ciudad": 0,
+      "numero_conductores_recomendado": null,
+      "numero_conductores_recomendado_nota": "Campo reservado para futura lógica automática basada en km estimados, tiempos y normativa. La decisión final corresponde al transportista y a Abdu.",
+      "alerta_normativa_descanso": false,
+      "tramo_mas_largo": {
+        "tramo": "",
+        "km_estimados": null,
+        "tiempo_estimado_min": null,
+        "alerta": "",
+        "pausa_recomendada": ""
+      },
+      "nota": "Estimaciones orientativas. El transportista debe confirmar viabilidad completa según normativa vigente de tiempos de conducción y descanso antes de aceptar el servicio."
+    },
+
+    "alertas": [],
+
+    "catalogo_alertas": [
+      { "tipo": "jornada_larga",                "condicion": "tiempo_conduccion_estimado_min > 180", "severidad": "media",  "descripcion": "Tramo estimado superior a 3h. Recomendable pausa." },
+      { "tipo": "riesgo_conductor",              "condicion": "tiempo_conduccion_estimado_min > 270", "severidad": "alta",   "descripcion": "Tramo estimado superior a 4.5h. Revisar con transportista." },
+      { "tipo": "visita_muy_corta",              "condicion": "dias_visita_disponibles < 0.75",       "severidad": "baja",   "descripcion": "Ciudad con tiempo de visita muy reducido." },
+      { "tipo": "llegada_tardia_hotel",          "condicion": "hora_llegada_prevista > 20:00",        "severidad": "media",  "descripcion": "Llegada al hotel después de las 20:00. Avisar recepción." },
+      { "tipo": "salida_muy_temprana",           "condicion": "hora_salida_prevista < 07:00",         "severidad": "baja",   "descripcion": "Salida antes de las 07:00. Coordinar desayuno o servicio en ruta." },
+      { "tipo": "exceso_traslados",              "condicion": ">=2 cambios de ciudad en 3 dias",      "severidad": "media",  "descripcion": "Ritmo intenso de traslados. Riesgo de fatiga grupal." },
+      { "tipo": "grupo_menores_tramo_largo",     "condicion": "menores > 0 AND conduccion > 180 min", "severidad": "baja",   "descripcion": "Grupo con menores en tramo largo. Planificar parada familiar." },
+      { "tipo": "transfer_aeropuerto_ajustado",  "condicion": "margen < 90 min llegada/salida vuelo", "severidad": "alta",   "descripcion": "Margen ajustado entre vuelo y traslado. Verificar horarios." }
+    ]
+  },
+
   "servicios": {
 
     "alojamiento": {
@@ -299,7 +390,8 @@
         "habitaciones_staff",
         "notas_internas",
         "comisiones",
-        "alertas_internas"
+        "alertas_internas",
+        "operacion_ruta"
       ],
       "plantilla_asunto": "Tu viaje a Al-Ándalus — Propuesta VAA-2026-0087",
       "plantilla_apertura": "Estimada Fatima, gracias por confiar en Vive al Ándalus para organizar tu viaje familiar por Al-Ándalus."
@@ -307,7 +399,7 @@
 
     "expediente_interno_abdu": {
       "_visible_cliente": false,
-      "incluir": "todos_los_bloques_1_a_9",
+      "incluir": "todos_los_bloques_1_a_10",
       "formato": "PDF + JSON",
       "canal": "email_interno + Notion"
     },
