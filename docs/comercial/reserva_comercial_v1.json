@@ -1,5 +1,5 @@
 {
-  "$schema": "reserva_comercial_v1",
+  "$schema": "reserva_comercial_v1.1",
   "_doc": "Sistema de Reservas Comerciales VAA — Bin Firnas Travel SL — Marca: Vive al Ándalus",
   "_version": "1.0",
   "_fecha_creacion_esquema": "2026-06-10",
@@ -66,6 +66,12 @@
       "vouchers_generados": false,
       "vouchers_enviados": false,
       "programa_enviado": false,
+      "programa_definitivo_cerrado": false,
+      "_programa_definitivo_cerrado_regla": "Solo puede pasar a true mediante aprobación humana explícita de Abdu. Ninguna automatización puede activar este campo. C04 no puede enviarse si este campo es false.",
+      "programa_definitivo_aprobado_por": null,
+      "_programa_definitivo_aprobado_por_nota": "Obligatorio si programa_definitivo_cerrado = true. Solo Abdu o aprobador autorizado.",
+      "programa_definitivo_fecha_aprobacion": null,
+      "_programa_definitivo_fecha_aprobacion_nota": "Obligatorio si programa_definitivo_cerrado = true. Fecha y hora exacta de aprobación. Inmutable una vez registrada.",
       "seguro_viaje": false,
       "notas_documentacion": null
     },
@@ -216,6 +222,9 @@
         "vouchers_generados": false,
         "vouchers_enviados": false,
         "programa_enviado": false,
+        "programa_definitivo_cerrado": false,
+        "programa_definitivo_aprobado_por": null,
+        "programa_definitivo_fecha_aprobacion": null,
         "seguro_viaje": false,
         "notas_documentacion": "Pendiente solicitar copia de 6 pasaportes tras primer pago."
       },
@@ -379,7 +388,10 @@
         "fecha_recepcion_pasaportes": null,
         "vouchers_generados": false,
         "vouchers_enviados": false,
-        "programa_enviado": true,
+        "programa_enviado": false,
+        "programa_definitivo_cerrado": false,
+        "programa_definitivo_aprobado_por": null,
+        "programa_definitivo_fecha_aprobacion": null,
         "seguro_viaje": false,
         "notas_documentacion": "Pendiente recibir 22 pasaportes. Mohammed confirmó que los envía antes del 20 de junio."
       },

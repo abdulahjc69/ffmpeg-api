@@ -2,7 +2,7 @@
 
 **Empresa:** Bin Firnas Travel SL  
 **Marca:** Vive al Ándalus  
-**Versión:** 1.0  
+**Versión:** 1.1  
 **Fecha creación:** 2026-06-10  
 **Responsable:** Abdulah Jiménez Contreras  
 **Documento paralelo:** `reserva_comercial_v1.json`
@@ -180,9 +180,18 @@ El bloque `responsable_actual` resuelve en todo momento quién tiene la pelota.
 | `fecha_recepcion_pasaportes` | date | Condicional | Obligatorio si `pasaportes_recibidos = true` |
 | `vouchers_generados` | bool | ✅ | Si los vouchers han sido generados |
 | `vouchers_enviados` | bool | ✅ | Si los vouchers han sido enviados al cliente |
-| `programa_enviado` | bool | ✅ | Si el programa definitivo fue enviado |
+| `programa_enviado` | bool | ✅ | Si el programa definitivo fue enviado al cliente (C04 enviado) |
+| `programa_definitivo_cerrado` | bool | ✅ | Si el programa definitivo ha sido aprobado por Abdu y está listo para enviar. `false` por defecto. **C04 no puede enviarse si este campo es `false`.** |
+| `programa_definitivo_aprobado_por` | string | Condicional | Obligatorio si `programa_definitivo_cerrado = true`. Nombre del aprobador humano. Solo Abdu o aprobador autorizado. |
+| `programa_definitivo_fecha_aprobacion` | datetime | Condicional | Obligatorio si `programa_definitivo_cerrado = true`. Fecha y hora exacta de la aprobación. |
 | `seguro_viaje` | bool | ✅ | Si el cliente tiene seguro de viaje |
 | `notas_documentacion` | string | ❌ | Observaciones sobre documentación |
+
+**Regla de programa definitivo:**
+`programa_definitivo_cerrado` solo puede pasar a `true` mediante acción humana explícita de Abdu (o aprobador autorizado). Ninguna automatización puede activar este campo. El aprobador y la fecha de aprobación quedan registrados de forma permanente. Una vez `true`, cualquier cambio al programa obliga a volver a `false` y requerir nueva aprobación antes de poder enviar C04.
+
+**Dependencia con C04:**
+C04 (correo de documentación final al cliente) tiene como condición de disparo obligatoria `programa_definitivo_cerrado = true`. Un programa en borrador, provisional o no aprobado por Abdu **nunca puede enviarse al cliente como documentación definitiva**.
 
 ### Bloque `estado_proveedores`
 
