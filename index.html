@@ -653,6 +653,10 @@ a:hover { color: var(--terra-d); }
 .pos-card h3 { font-size: 20px; margin-bottom: 12px; color: var(--terra-d); }
 .pos-card p { color: var(--gris); font-size: 15px; }
 
+/* ============ CONFIANZA ============ */
+.confianza { background: var(--crema); }
+.confianza .pos-card:hover { background: var(--blanco); }
+
 .section-head { text-align: center; max-width: 720px; margin: 0 auto 24px; }
 .section-tag {
   display: inline-block;
@@ -834,6 +838,7 @@ a:hover { color: var(--terra-d); }
   box-shadow: 0 4px 14px rgba(0,0,0,0.12);
   pointer-events: auto;
 }
+.mapa-controls-overlay .mc-group.mc-layers-dd { overflow: visible; }
 .mapa-controls-overlay .mc-zoom {
   align-self: flex-end;
 }
@@ -950,15 +955,13 @@ a:hover { color: var(--terra-d); }
   font-weight: 600;
 }
 .epoca-desc {
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(246,238,223,0.65);
-  line-height: 1.3;
-  margin: 0;
+  line-height: 1.4;
+  margin: 2px 0 0;
   max-width: 100%;
   flex-basis: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
 }
 
 .btn-tour {
@@ -1814,14 +1817,14 @@ a:hover { color: var(--terra-d); }
 
 .timeline-wrapper {
   background: var(--negro);
-  padding: 10px 28px 8px;
+  padding: 14px 28px 12px;
   color: var(--crema);
 }
 .timeline-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   font-family: 'Amiri', 'Playfair Display', serif;
   gap: 20px;
 }
@@ -4065,13 +4068,12 @@ img, video, iframe { max-width: 100%; height: auto; }
       </a>
     </div>
     <nav class="nav" id="nav">
-      <a href="#inicio" data-t="nav.inicio">Inicio</a>
       <a href="#mapa-section" data-t="nav.explora">Explora Al-Ándalus</a>
-      <a href="#mapa-section" data-t="nav.ciudades">Crea tu ruta</a>
       <a href="#proceso" data-t="nav.proceso">Cómo funciona</a>
       <a href="#niveles" data-t="nav.experiencia">Tu experiencia</a>
       <a href="#b2b" data-t="nav.b2b">Profesionales</a>
       <a href="#perfiles" data-t="nav.perfiles">Para ti</a>
+      <a href="#ventajas" data-t="nav.ventajas">Ventajas</a>
       <a href="#nosotros" data-t="nav.nosotros">Quiénes somos</a>
       <a href="#contacto" data-t="nav.contacto">Contacto</a>
     </nav>
@@ -4090,8 +4092,8 @@ img, video, iframe { max-width: 100%; height: auto; }
       <h1 data-t-html="hero.title">Descubre <em>Al-Ándalus</em></h1>
       <p class="hero-sub" data-t="hero.sub">Diseña tu propia ruta y viaja acompañado por especialistas en la historia y la cultura de Al-Ándalus.</p>
       <div class="hero-cta" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;">
-        <button class="btn-wizard-trigger" onclick="abrirWizard()" style="font-family:inherit;">🗺️ Planifica tu viaje →</button>
-        <a href="#mapa-section" class="btn-secondary" data-t="hero.ctaAtlas">Explora Al-Ándalus</a>
+        <a href="#mapa-section" class="btn-primary" data-t="hero.ctaAtlas">Explora Al-Ándalus</a>
+        <button class="btn-wizard-trigger" onclick="abrirWizard()" style="font-family:inherit;background:transparent;color:var(--terra);border:2px solid var(--terra);border-radius:999px;padding:14px 26px;font-size:15px;font-weight:700;box-shadow:none;">🗺️ Planifica tu viaje →</button>
       </div>
       
     </div>
@@ -4142,7 +4144,7 @@ img, video, iframe { max-width: 100%; height: auto; }
           <div class="camino-cuerpo">
             <h3 class="camino-titulo" data-t="pro.s3t">Diseñamos</h3>
             <p class="camino-texto" data-t="pro.s3p">Transformamos tus ideas en una propuesta real adaptada a tu tiempo, intereses y forma de viajar.</p>
-            <a class="camino-btn" href="#mapa-section" data-t="pro.s3btn">Solicitar propuesta</a>
+            <a class="camino-btn" onclick="abrirWizard()" style="cursor:pointer;" data-t="pro.s3btn">Solicitar propuesta</a>
           </div>
         </li>
         <li class="camino-paso">
@@ -5244,29 +5246,34 @@ img, video, iframe { max-width: 100%; height: auto; }
 </script>
 </section>
 
-<!-- ============ POSITIONING ============ -->
-<section class="section positioning" id="ventajas">
+<!-- ============ CONFIANZA ============ -->
+<section class="section positioning confianza" id="ventajas">
   <div class="container">
     <div class="section-head">
-      <span class="section-tag" data-t="pos.tag">Por qué Vive al Ándalus</span>
-      <h2 data-t="pos.title">Una agencia que entiende lo que buscas</h2>
-      <p data-t="pos.sub">Somos especialistas, no generalistas. Diseñamos grupos culturales por la España andalusí con la calidad de un boutique y la fuerza operativa de un mayorista.</p>
+      <span class="section-tag" data-t="con.tag">Por qué Vive al Ándalus</span>
+      <h2 data-t="con.title">Una agencia registrada, operativa y especializada</h2>
+      <p data-t="con.sub">Detrás de cada propuesta hay una licencia oficial, un sistema real y un equipo dedicado a Al-Ándalus.</p>
     </div>
     <div class="positioning-grid">
       <div class="pos-card">
         <div class="pos-icon">🏛</div>
-        <h3 data-t="pos.c1t">Circuitos a medida</h3>
-        <p data-t="pos.c1p">Cada grupo recibe una propuesta única: ruta, ritmo y experiencias adaptadas al perfil del cliente.</p>
+        <h3 data-t="con.c1t">Licencia turística activa</h3>
+        <p data-t="con.c1p">Agencia mayorista-minorista registrada. CIAN-147996-3. Operamos bajo la legislación turística española.</p>
       </div>
       <div class="pos-card">
-        <div class="pos-icon">🧭</div>
-        <h3 data-t="pos.c2t">Un único interlocutor</h3>
-        <p data-t="pos.c2p">Olvídate de coordinar con hoteles, guías y transporte. Hablas con una persona y se ocupa todo el equipo.</p>
+        <div class="pos-icon">☽</div>
+        <h3 data-t="con.c2t">Gestión halal real</h3>
+        <p data-t="con.c2p">Restaurantes verificados, horarios de oración respetados, servicios adaptados al viajero musulmán.</p>
       </div>
       <div class="pos-card">
-        <div class="pos-icon">✦</div>
-        <h3 data-t="pos.c3t">3 maneras de vivir la experiencia</h3>
-        <p data-t="pos.c3p">Adaptamos el ritmo, el alojamiento y los servicios al grupo y al viaje que quieren vivir.</p>
+        <div class="pos-icon">🌐</div>
+        <h3 data-t="con.c3t">Atención en 5 idiomas</h3>
+        <p data-t="con.c3p">Español, inglés, árabe, francés y portugués. Respondemos en el idioma del viajero.</p>
+      </div>
+      <div class="pos-card">
+        <div class="pos-icon">🗺️</div>
+        <h3 data-t="con.c4t">Atlas histórico propio</h3>
+        <p data-t="con.c4p">8 siglos de Al-Ándalus documentados en 7 ciudades. Cada ruta construida sobre conocimiento real.</p>
       </div>
     </div>
   </div>
@@ -5338,7 +5345,7 @@ img, video, iframe { max-width: 100%; height: auto; }
           <li data-t="b2b.l4"><strong>Guías, autónomos, hoteles y proveedores:</strong> colaboración ordenada dentro de una red profesional.</li>
         </ul>
         <p style="font-size:13px;color:rgba(246,238,223,0.65);margin:16px 0 24px;line-height:1.6;" data-t="b2b.sys">Detrás de Vive al Ándalus hay un sistema real: CRM, seguimiento de leads, proveedores verificados, rutas documentadas y un equipo que convierte cada consulta en una propuesta trabajada.</p>
-        <a href="#contacto" class="btn-primary" data-t="b2b.cta">Contactar con el equipo →</a>
+        <a onclick="abrirWizard()" style="cursor:pointer;" class="btn-primary" data-t="b2b.cta">Contactar con el equipo →</a>
       </div>
       <div class="b2b-card">
         <h3 data-t="b2b.ct">Bin Firnas Travel SL</h3>
@@ -5415,7 +5422,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       </div>
     </div>
     <div style="text-align:center;margin-top:40px;">
-      <a href="#contacto" class="btn-cta" style="display:inline-block;text-decoration:none;padding:14px 32px;border-radius:30px;font-size:15px;font-weight:700;">Cuéntanos tu viaje →</a>
+      <a onclick="abrirWizard()" style="cursor:pointer;display:inline-block;text-decoration:none;padding:14px 32px;border-radius:30px;font-size:15px;font-weight:700;" class="btn-cta">Cuéntanos tu viaje →</a>
     </div>
   </div>
 </section>
@@ -6630,10 +6637,22 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'chat.online':'Asistente de rutas y viajes andalusíes',
       'chat.greet':'Salam, bienvenido a Vive al Ándalus. Soy Ibn Firnas, tu asistente para diseñar rutas históricas, culturales y viajes organizados por el legado andalusí. ¿Cómo te llamas y qué tipo de experiencia te gustaría preparar?',
       'chat.guardrail':'No quiero desviarte. Soy Ibn Firnas, el asistente de Vive al Ándalus, y puedo ayudarte con rutas históricas, viajes culturales, monumentos andalusíes, grupos, presupuestos y organización de circuitos. Para otros temas, prefiero no salirme del propósito de este viaje.',
+      'nav.ventajas':'Confianza',
       'nav.perfiles':'Para ti',
       'perfiles.tag':'Tipos de viajero',
       'perfiles.title':'Diseñamos viajes para cada tipo de viajero',
-      'perfiles.sub':'Desde una familia que sueña con Granada hasta una universidad, una agencia o una empresa: adaptamos cada circuito al grupo, al idioma, al ritmo y al propósito del viaje.'
+      'perfiles.sub':'Desde una familia que sueña con Granada hasta una universidad, una agencia o una empresa: adaptamos cada circuito al grupo, al idioma, al ritmo y al propósito del viaje.',
+      'con.tag':'Por qué Vive al Ándalus',
+      'con.title':'Una agencia registrada, operativa y especializada',
+      'con.sub':'Detrás de cada propuesta hay una licencia oficial, un sistema real y un equipo dedicado a Al-Ándalus.',
+      'con.c1t':'Licencia turística activa',
+      'con.c1p':'Agencia mayorista-minorista registrada. CIAN-147996-3. Operamos bajo la legislación turística española.',
+      'con.c2t':'Gestión halal real',
+      'con.c2p':'Restaurantes verificados, horarios de oración respetados, servicios adaptados al viajero musulmán.',
+      'con.c3t':'Atención en 5 idiomas',
+      'con.c3p':'Español, inglés, árabe, francés y portugués. Respondemos en el idioma del viajero.',
+      'con.c4t':'Atlas histórico propio',
+      'con.c4p':'8 siglos de Al-Ándalus documentados en 7 ciudades. Cada ruta construida sobre conocimiento real.'
     },
     en: {
       'niv.tag':'Your experience','niv.title':'3 ways to live the experience',
@@ -6665,10 +6684,22 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'chat.online':'Al-Andalus routes and travel assistant',
       'chat.greet':'Salam, welcome to Vive al Ándalus. I am Ibn Firnas, your assistant for designing historical, cultural routes and organised trips through the Andalusian legacy. What is your name and what kind of trip would you like to plan?',
       'chat.guardrail':'I don\'t want to get off track. I\'m Ibn Firnas, the Vive al Ándalus assistant, and I can help you with historical routes, cultural trips, Andalusian monuments, groups, budgets and circuit organisation. For other topics, I prefer to stay focused on the purpose of this journey.',
+      'nav.ventajas':'Trust',
       'nav.perfiles':'For you',
       'perfiles.tag':'Traveller types',
       'perfiles.title':'We design trips for every type of traveller',
-      'perfiles.sub':'From a family dreaming of Granada to a university, agency or company: we adapt each circuit to the group, language, pace and purpose of the trip.'
+      'perfiles.sub':'From a family dreaming of Granada to a university, agency or company: we adapt each circuit to the group, language, pace and purpose of the trip.',
+      'con.tag':'Why Vive al Ándalus',
+      'con.title':'A registered, operational and specialist agency',
+      'con.sub':'Behind every proposal: an official licence, a real system and a team dedicated to Al-Andalus.',
+      'con.c1t':'Active tourism licence',
+      'con.c1p':'Registered wholesale and retail agency. CIAN-147996-3. Operating under Spanish tourism law.',
+      'con.c2t':'Real halal management',
+      'con.c2p':'Verified restaurants, prayer times respected, services adapted for Muslim travellers.',
+      'con.c3t':'Support in 5 languages',
+      'con.c3p':'Spanish, English, Arabic, French and Portuguese. We respond in the traveller\'s own language.',
+      'con.c4t':'Our own historical atlas',
+      'con.c4p':'8 centuries of Al-Andalus documented across 7 cities. Every route built on real knowledge.'
     },
     fr: {
       'niv.tag':'Votre expérience','niv.title':'3 façons de vivre l\'expérience',
@@ -6700,10 +6731,22 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'chat.online':'Assistant voyages et routes andalouses',
       'chat.greet':'Salam, bienvenue chez Vive al Ándalus. Je suis Ibn Firnas, votre assistant pour concevoir des itinéraires historiques et culturels à travers le patrimoine andalou. Comment vous appelez-vous et quel type de voyage souhaitez-vous préparer ?',
       'chat.guardrail':'Je ne veux pas vous dérouter. Je suis Ibn Firnas, l\'assistant de Vive al Ándalus, et je peux vous aider avec les routes historiques, les voyages culturels, les monuments andalous, les groupes, les budgets et l\'organisation des circuits. Pour d\'autres sujets, je préfère rester dans le fil de ce voyage.',
+      'nav.ventajas':'Confiance',
       'nav.perfiles':'Pour vous',
       'perfiles.tag':'Types de voyageurs',
       'perfiles.title':'Nous concevons des voyages pour chaque type de voyageur',
-      'perfiles.sub':'D\'une famille qui rêve de Grenade à une université, une agence ou une entreprise : nous adaptons chaque circuit au groupe, à la langue, au rythme et à l\'objectif du voyage.'
+      'perfiles.sub':'D\'une famille qui rêve de Grenade à une université, une agence ou une entreprise : nous adaptons chaque circuit au groupe, à la langue, au rythme et à l\'objectif du voyage.',
+      'con.tag':'Pourquoi Vive al Ándalus',
+      'con.title':'Une agence enregistrée, opérationnelle et spécialisée',
+      'con.sub':'Derrière chaque proposition : une licence officielle, un vrai système et une équipe dédiée à Al-Andalus.',
+      'con.c1t':'Licence touristique active',
+      'con.c1p':'Agence grossiste-détaillant enregistrée. CIAN-147996-3. Nous opérons dans le cadre de la législation touristique espagnole.',
+      'con.c2t':'Gestion halal réelle',
+      'con.c2p':'Restaurants vérifiés, horaires de prière respectés, services adaptés aux voyageurs musulmans.',
+      'con.c3t':'Assistance en 5 langues',
+      'con.c3p':'Espagnol, anglais, arabe, français et portugais. Nous répondons dans la langue du voyageur.',
+      'con.c4t':'Atlas historique propre',
+      'con.c4p':'8 siècles d\'Al-Andalus documentés dans 7 villes. Chaque itinéraire construit sur de vraies connaissances.'
     },
     pt: {
       'niv.tag':'A sua experiência','niv.title':'3 formas de viver a experiência',
@@ -6735,10 +6778,22 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'chat.online':'Assistente de rotas e viagens andaluzas',
       'chat.greet':'Salam, bem-vindo ao Vive al Ándalus. Sou Ibn Firnas, o seu assistente para desenhar rotas históricas, culturais e viagens organizadas pelo legado andaluz. Como se chama e que tipo de viagem gostaria de preparar?',
       'chat.guardrail':'Não quero desviar-me. Sou Ibn Firnas, o assistente do Vive al Ándalus, e posso ajudar com rotas históricas, viagens culturais, monumentos andaluzes, grupos, orçamentos e organização de circuitos. Para outros temas, prefiro não sair do propósito desta viagem.',
+      'nav.ventajas':'Confiança',
       'nav.perfiles':'Para si',
       'perfiles.tag':'Tipos de viajante',
       'perfiles.title':'Desenhamos viagens para cada tipo de viajante',
-      'perfiles.sub':'De uma família que sonha com Granada a uma universidade, agência ou empresa: adaptamos cada circuito ao grupo, idioma, ritmo e propósito da viagem.'
+      'perfiles.sub':'De uma família que sonha com Granada a uma universidade, agência ou empresa: adaptamos cada circuito ao grupo, idioma, ritmo e propósito da viagem.',
+      'con.tag':'Porquê Vive al Ándalus',
+      'con.title':'Uma agência registada, operacional e especializada',
+      'con.sub':'Por trás de cada proposta: uma licença oficial, um sistema real e uma equipa dedicada a Al-Ândalus.',
+      'con.c1t':'Licença turística ativa',
+      'con.c1p':'Agência grossista-retalhista registada. CIAN-147996-3. Operamos ao abrigo da legislação turística espanhola.',
+      'con.c2t':'Gestão halal real',
+      'con.c2p':'Restaurantes verificados, horários de oração respeitados, serviços adaptados ao viajante muçulmano.',
+      'con.c3t':'Atendimento em 5 idiomas',
+      'con.c3p':'Espanhol, inglês, árabe, francês e português. Respondemos no idioma do viajante.',
+      'con.c4t':'Atlas histórico próprio',
+      'con.c4p':'8 séculos de Al-Ândalus documentados em 7 cidades. Cada rota construída sobre conhecimento real.'
     },
     ar: {
       'niv.tag':'تجربتك','niv.title':'٣ طرق لعيش التجربة',
@@ -6770,10 +6825,22 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'chat.online':'مساعد الرحلات والمسارات الأندلسية',
       'chat.greet':'السلام عليكم، مرحباً بكم في Vive al Ándalus. أنا ابن فرناس، مساعدكم لتصميم المسارات التاريخية والثقافية والرحلات المنظمة في تراث الأندلس. ما اسمك وما نوع الرحلة التي تودّ تنظيمها؟',
       'chat.guardrail':'لا أريد الخروج عن الموضوع. أنا زرياب مساعد Vive al Ándalus، ويمكنني مساعدتك في المسارات التاريخية والرحلات الثقافية والمعالم الأندلسية والمجموعات والميزانيات وتنظيم الجولات. للمواضيع الأخرى، أُفضّل التركيز على هدف هذه الرحلة.',
+      'nav.ventajas':'الثقة',
       'nav.perfiles':'لك',
       'perfiles.tag':'أنواع المسافرين',
       'perfiles.title':'نصمم رحلات لكل نوع من المسافرين',
-      'perfiles.sub':'من عائلة تحلم بغرناطة إلى جامعة أو وكالة أو شركة: نكيّف كل مسار مع المجموعة واللغة والإيقاع وهدف الرحلة.'
+      'perfiles.sub':'من عائلة تحلم بغرناطة إلى جامعة أو وكالة أو شركة: نكيّف كل مسار مع المجموعة واللغة والإيقاع وهدف الرحلة.',
+      'con.tag':'لماذا Vive al Ándalus',
+      'con.title':'وكالة مسجلة وعاملة ومتخصصة',
+      'con.sub':'خلف كل مقترح: ترخيص رسمي ونظام حقيقي وفريق مخصص لخدمة الأندلس.',
+      'con.c1t':'ترخيص سياحي سارٍ',
+      'con.c1p':'وكالة جملة وتجزئة مسجلة. CIAN-147996-3. نعمل وفق التشريع السياحي الإسباني.',
+      'con.c2t':'إدارة حلال حقيقية',
+      'con.c2p':'مطاعم موثقة، أوقات الصلاة محترمة، خدمات مُكيَّفة مع المسافر المسلم.',
+      'con.c3t':'خدمة بـ٥ لغات',
+      'con.c3p':'الإسبانية والإنجليزية والعربية والفرنسية والبرتغالية. نجيب بلغة المسافر.',
+      'con.c4t':'أطلس تاريخي خاص',
+      'con.c4p':'٨ قرون من الأندلس موثقة في ٧ مدن. كل مسار مبني على معرفة حقيقية.'
     }
   };
   Object.keys(patches).forEach(function(lang) {
