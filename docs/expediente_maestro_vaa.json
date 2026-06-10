@@ -1,0 +1,269 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "empresa": "Bin Firnas Travel SL",
+    "marca": "Vive al Ándalus",
+    "documento": "Expediente Maestro VAA",
+    "fecha_creacion": "2026-06-10",
+    "nota": "Este JSON define la estructura oficial de todos los expedientes VAA. Los campos marcados con _interno:true NUNCA se envían al cliente."
+  },
+
+  "expediente": {
+    "referencia": "VAA-2026-0087",
+    "fecha_solicitud": "2026-07-15T10:32:00",
+    "estado": "nuevo",
+    "estados_posibles": ["nuevo","en_cotizacion","propuesta_enviada","negociacion","confirmado","en_operacion","finalizado","cancelado"],
+    "urgencia": "normal",
+    "urgencia_posibles": ["normal","alta","muy_alta"],
+    "canal_entrada": "wizard_web",
+    "canal_posibles": ["wizard_web","formulario_legacy","whatsapp","email","referido"],
+    "agente_asignado": "Abdu"
+  },
+
+  "cliente": {
+    "nombre": "Fatima",
+    "apellidos": "Al-Rashidi Al-Otaibi",
+    "email": "fatima@example.com",
+    "telefono_whatsapp": "+966501234567",
+    "pais_residencia": "Arabia Saudí",
+    "idioma_comunicacion": "ar",
+    "idiomas_posibles": ["ar","en","es","fr","pt"],
+    "tipo_cliente": "familia",
+    "tipos_posibles": ["familia","pareja","grupo_amigos","empresa","luna_de_miel","grupo_organizado"]
+  },
+
+  "grupo": {
+    "adultos": 4,
+    "menores": 2,
+    "edades_menores": [7, 12],
+    "total_viajeros": 6,
+    "tipo_grupo": "familia",
+    "necesidades_accesibilidad": false
+  },
+
+  "fechas": {
+    "fecha_inicio": "2026-09-10",
+    "fecha_fin": "2026-09-25",
+    "duracion_dias": 16,
+    "duracion_noches": 15,
+    "fechas_flexibles": false,
+    "margen_flexibilidad_dias": 0,
+    "temporada": "alta",
+    "temporadas_posibles": ["alta","media","baja"]
+  },
+
+  "llegada_internacional": {
+    "medio": "avion",
+    "medios_posibles": ["avion","tren","autobus","vehiculo_propio","barco"],
+    "aeropuerto_ciudad": "Aeropuerto Adolfo Suárez Madrid-Barajas (MAD)",
+    "terminal": "T4",
+    "fecha": "2026-09-10",
+    "hora": "09:45",
+    "numero_vuelo": "SV136",
+    "recogida_incluida": true,
+    "cartel_nombre": "Al-Rashidi"
+  },
+
+  "salida_internacional": {
+    "medio": "avion",
+    "aeropuerto_ciudad": "Aeropuerto de Málaga-Costa del Sol (AGP)",
+    "terminal": "T3",
+    "fecha": "2026-09-25",
+    "hora": "18:20",
+    "numero_vuelo": "SV137",
+    "transfer_aeropuerto": true,
+    "hora_necesaria_en_aeropuerto": "16:20"
+  },
+
+  "ruta": {
+    "ciudades_orden": ["Madrid","Toledo","Córdoba","Sevilla","Granada","Málaga"],
+    "ciudad_inicio": "Madrid",
+    "ciudad_final": "Málaga",
+    "total_noches_ruta": 15,
+    "noches_por_ciudad": {
+      "Madrid": 3,
+      "Toledo": 1,
+      "Córdoba": 2,
+      "Sevilla": 4,
+      "Granada": 3,
+      "Málaga": 2
+    },
+    "detalle_ciudades": [
+      {
+        "ciudad": "Madrid",
+        "noches": 3,
+        "nota_operativa": "Check-in día llegada. Transfer aeropuerto MAD incluido."
+      },
+      {
+        "ciudad": "Toledo",
+        "noches": 1,
+        "nota_operativa": "Excursión o noche independiente. Coordinar traslado desde Madrid."
+      },
+      {
+        "ciudad": "Córdoba",
+        "noches": 2,
+        "nota_operativa": "Reservar Mezquita-Catedral con antelación. Posible visita Medina Azahara."
+      },
+      {
+        "ciudad": "Sevilla",
+        "noches": 4,
+        "nota_operativa": "Hub central. Mayor densidad de actividades y restaurantes halal."
+      },
+      {
+        "ciudad": "Granada",
+        "noches": 3,
+        "nota_operativa": "ALHAMBRA: reservar entradas con 60 días mínimo de antelación."
+      },
+      {
+        "ciudad": "Málaga",
+        "noches": 2,
+        "nota_operativa": "Check-out día vuelo. Transfer aeropuerto AGP incluido."
+      }
+    ]
+  },
+
+  "servicios": {
+
+    "alojamiento": {
+      "incluido": true,
+      "categoria_estrellas": 4,
+      "regimen": "con_desayuno",
+      "regimenes_posibles": ["sin_pension","con_desayuno","media_pension","pension_completa"],
+      "hab_dobles": 2,
+      "hab_individuales": 0,
+      "hab_triples": 1,
+      "hab_familiares": 0,
+      "accesibilidad_hab": false,
+      "servicio_maletas": true
+    },
+
+    "transporte": {
+      "incluido": true,
+      "tipo_vehiculo": "minibus_8",
+      "tipos_vehiculo_posibles": ["turismo_4","minibus_8","minibus_16","autobus_30","autocar_55"],
+      "conductor_incluido": true,
+      "cobertura": "toda_ruta",
+      "cobertura_posibles": ["toda_ruta","parcial","solo_transfers"],
+      "transfer_llegada_aeropuerto": true,
+      "transfer_salida_aeropuerto": true
+    },
+
+    "tour_leader": {
+      "incluido": true,
+      "cobertura": "toda_ruta",
+      "idioma": "ar",
+      "nombre_asignado": ""
+    },
+
+    "guia_local": {
+      "incluido": true,
+      "ciudades": ["Córdoba","Sevilla","Granada"],
+      "idioma": "ar",
+      "duracion": "medio_dia",
+      "duraciones_posibles": ["medio_dia","dia_completo"]
+    },
+
+    "restauracion": {
+      "incluida": true,
+      "comidas_incluidas": ["almuerzo"],
+      "comidas_posibles": ["desayuno","almuerzo","cena"],
+      "tipo_cocina": "andaluza_tradicional_halal",
+      "restaurantes_preconcertados": true,
+      "dias_restaurante": 10
+    },
+
+    "halal": {
+      "requerido": true,
+      "opciones": ["comida_halal","hotel_sin_alcohol_en_mesa"],
+      "opciones_posibles": ["comida_halal","hotel_sin_alcohol_en_mesa","oratorio_disponible","quibla_en_habitacion"],
+      "certificacion_documentada": false
+    },
+
+    "llegada_internacional_servicio": {
+      "incluido": true,
+      "descripcion": "Transfer y bienvenida en aeropuerto de llegada"
+    }
+  },
+
+  "operacion_interna": {
+    "_interno": true,
+    "_advertencia": "ESTE BLOQUE NUNCA SE ENVÍA AL CLIENTE. Solo para uso interno de Bin Firnas Travel SL.",
+
+    "habitaciones": {
+      "hab_cliente_dobles": 2,
+      "hab_cliente_individuales": 0,
+      "hab_cliente_triples": 1,
+      "hab_cliente_familiares": 0,
+      "hab_cliente_subtotal": 3,
+      "hab_staff_conductor": 1,
+      "hab_staff_tour_leader": 1,
+      "hab_staff_subtotal": 2,
+      "total_hab_a_solicitar": 5,
+      "nota": "Siempre solicitar hab. individuales de staff al hotel. No facturar al cliente."
+    },
+
+    "financiero": {
+      "margen_objetivo_pct": 25,
+      "margen_recomendado_pct": 30,
+      "coste_estimado_base": null,
+      "precio_venta_objetivo": null,
+      "precio_venta_final": null,
+      "formula": "precio_venta_minimo = coste_base * 1.25 | precio_venta_objetivo = coste_base * 1.30"
+    },
+
+    "proveedores": {
+      "transporte": "",
+      "hoteles": "",
+      "guias_locales": "",
+      "restaurantes": "",
+      "otros": ""
+    },
+
+    "comisiones": {
+      "estado": "pendiente",
+      "importe": null,
+      "notas": ""
+    },
+
+    "notas_internas": [
+      "Familia pide confirmación de certificación halal en todos los restaurantes.",
+      "Padre solicita habitación en planta baja (accesibilidad relativa, no estricta).",
+      "Preferencia de hoteles con piscina en Sevilla y Málaga para los menores.",
+      "Alhambra: reservar entradas con 60 días de antelación mínimo.",
+      "Posible extensión a 2 noches en Ronda — consultar antes del cierre."
+    ]
+  },
+
+  "comunicaciones": {
+
+    "resumen_cliente": {
+      "_visible_cliente": true,
+      "incluir": [
+        "nombre_cliente",
+        "ciudades_y_fechas",
+        "lista_servicios_incluidos",
+        "proximos_pasos",
+        "contacto_vaa"
+      ],
+      "excluir_siempre": [
+        "costes_operativos",
+        "margenes",
+        "nombres_proveedores",
+        "habitaciones_staff",
+        "notas_internas",
+        "comisiones"
+      ],
+      "plantilla_asunto": "Tu viaje a Al-Ándalus — Propuesta VAA-2026-0087",
+      "plantilla_apertura": "Estimada Fatima, gracias por confiar en Vive al Ándalus para organizar tu viaje familiar por Al-Ándalus."
+    },
+
+    "expediente_interno_abdu": {
+      "_visible_cliente": false,
+      "incluir": "todos_los_bloques_1_a_9",
+      "formato": "PDF + JSON",
+      "canal": "email_interno + Notion"
+    },
+
+    "historial": []
+  }
+}
