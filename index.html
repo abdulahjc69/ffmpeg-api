@@ -9136,9 +9136,9 @@ document.querySelectorAll('#solicitudModal input, #solicitudModal textarea').for
 });
 
 // Construye el payload con la estructura que espera el webhook n8n
+// Compatible con Expediente Maestro VAA v1.1 — campos legacy preservados para compatibilidad n8n
 function buildSolicitudPayload() {
   const ciudadesArr = (CFG.ruta === 'cliente' && CFG.rutaOrden.length > 0) ? CFG.rutaOrden : Array.from(ciudadesSeleccionadas);
-  // Garantizar que toda ciudad referenciada tenga estado válido
   ciudadesArr.forEach(cn => { if (!CIU[cn]) CIU[cn] = ciuDefault(cn); });
   const regimenMap = { sin_pension: 'sin_pension', media_pension: 'media_pension', pension_completa: 'pension_completa', restaurantes: 'restaurantes' };
   const ciudades = ciudadesArr.map(cn => {
@@ -9155,39 +9155,143 @@ function buildSolicitudPayload() {
       monumentos: c.monumentos
     };
   });
+
+  const fi = VWIZ.fecha_inicio || document.getElementById('solFechaInicio')?.value || '';
+  const ff = VWIZ.fecha_fin || document.getElementById('solFechaFin')?.value || '';
+  const durNoches = VWIZ.duracion_noches || 0;
+  const ts = new Date().toISOString();
+
+  // Fuente única llegada/salida: si el servicio llegada_internacional está activo usa sus campos,
+  // si no, usa los campos de llegada/salida del servicio transporte.
+  const useLlegIntl = VWIZ.servicios.llegada_internacional;
+  const dl = VWIZ.detalles.llegada_internacional;
+  const dt = VWIZ.detalles.transporte;
+  const llegadaIntl = {
+    medio: (useLlegIntl ? dl.modo : dt.llegada_modo) || '',
+    aeropuerto_ciudad: (useLlegIntl ? dl.punto : dt.llegada_punto) || '',
+    fecha: (useLlegIntl ? dl.fecha : dt.llegada_fecha) || '',
+    hora: (useLlegIntl ? dl.hora : dt.llegada_hora) || ''
+  };
+  const salidaIntl = {
+    aeropuerto_ciudad: (useLlegIntl ? dl.salida_punto : dt.salida_punto) || '',
+    fecha: (useLlegIntl ? dl.salida_fecha : dt.salida_fecha) || '',
+    hora: (useLlegIntl ? dl.salida_hora : dt.salida_hora) || ''
+  };
+
+  // noches por ciudad (valores reales cuando Fase A implemente contadores, 0 hasta entonces)
+  const nochesPorCiudad = {};
+  ciudadesArr.forEach(cn => { nochesPorCiudad[cn] = (CIU[cn] && CIU[cn].noches) || 0; });
+
   return {
+    // ── LEGACY ── campos originales preservados para compatibilidad con n8n existente ──────────
     contacto: {
-      nombre: document.getElementById('solNombre').value.trim(),
-      email: document.getElementById('solEmail').value.trim(),
-      telefono: document.getElementById('solWhatsapp').value.trim(),
-      empresa: document.getElementById('solEmpresa').value.trim(),
-      comentarios: document.getElementById('solComentarios').value.trim()
+      nombre: document.getElementById('solNombre')?.value.trim() || '',
+      email: document.getElementById('solEmail')?.value.trim() || '',
+      telefono: document.getElementById('solWhatsapp')?.value.trim() || '',
+      empresa: document.getElementById('solEmpresa')?.value.trim() || '',
+      comentarios: document.getElementById('solComentarios')?.value.trim() || ''
+    },
+    ciudades: ciudades,
+    transporte: VWIZ.servicios.transporte || CFG.transporte,
+    tour_lider: VWIZ.servicios.tour_leader || CFG.tourLider === 'si',
+    fecha_inicio: fi,
+    fecha_fin: ff,
+    fecha_aproximada: fi && ff ? (fi + ' → ' + ff) : '',
+    fechas_flexibles: VWIZ.fechas_flexibles,
+    margen_flexibilidad: VWIZ.margen_flexibilidad,
+    duracion_noches: durNoches,
+    tipo_cliente: VWIZ.tipo_cliente,
+    servicios: VWIZ.servicios,
+    detalles_servicios: VWIZ.detalles,
+    idioma_cliente: currentLang,
+    nivel: CFG.nivel,
+    origen: 'vivealandalus.com',
+    privacidad_aceptada: true,
+    privacidad_fecha: ts,
+    ts: ts,
+
+    // ── EXPEDIENTE MAESTRO VAA v1.1 ─────────────────────────────────────────────────────────────
+    expediente: {
+      fecha_solicitud: ts,
+      canal_entrada: 'wizard_web',
+      origen: 'vivealandalus.com'
+    },
+    // cliente: nombre/email/telefono/pais/idioma completados por wizSubmit tras buildSolicitudPayload()
+    cliente: {
+      tipo_cliente: VWIZ.tipo_cliente || ''
     },
     grupo: {
       adultos: CFG.adultos,
       menores: CFG.ninos.length,
       edades_menores: CFG.ninos,
+      total_viajeros: CFG.adultos + CFG.ninos.length,
+      tipo_grupo: VWIZ.tipo_cliente || '',
       halal: VWIZ.servicios.experiencia_halal || CFG.halal
     },
-    ciudades: ciudades,
-    transporte: VWIZ.servicios.transporte || CFG.transporte,
-    tour_lider: VWIZ.servicios.tour_leader || CFG.tourLider === 'si',
-    ruta: { modo: CFG.ruta, orden: CFG.rutaOrden, km_total: cfgKmTotal() },
-    fecha_inicio: VWIZ.fecha_inicio || document.getElementById('solFechaInicio')?.value || '',
-    fecha_fin: VWIZ.fecha_fin || document.getElementById('solFechaFin')?.value || '',
-    fechas_flexibles: VWIZ.fechas_flexibles,
-    margen_flexibilidad: VWIZ.margen_flexibilidad,
-    duracion_noches: VWIZ.duracion_noches,
-    tipo_cliente: VWIZ.tipo_cliente,
-    servicios: VWIZ.servicios,
-    detalles_servicios: VWIZ.detalles,
-    fecha_aproximada: (VWIZ.fecha_inicio && VWIZ.fecha_fin) ? (VWIZ.fecha_inicio + ' → ' + VWIZ.fecha_fin) : ((document.getElementById('solFechaInicio')?.value || '') + ' → ' + (document.getElementById('solFechaFin')?.value || '')),
-    idioma_cliente: currentLang,
-    nivel: CFG.nivel,
-    origen: 'vivealandalus.com',
-    privacidad_aceptada: true,
-    privacidad_fecha: new Date().toISOString(),
-    ts: new Date().toISOString()
+    fechas: {
+      fecha_inicio: fi,
+      fecha_fin: ff,
+      duracion_dias: durNoches > 0 ? durNoches + 1 : 0,
+      duracion_noches: durNoches,
+      fechas_flexibles: VWIZ.fechas_flexibles,
+      margen_flexibilidad_dias: VWIZ.margen_flexibilidad
+    },
+    llegada_internacional: llegadaIntl,
+    salida_internacional: salidaIntl,
+    ruta: {
+      ciudades_orden: ciudadesArr,
+      ciudad_inicio: ciudadesArr[0] || '',
+      ciudad_final: ciudadesArr[ciudadesArr.length - 1] || '',
+      noches_por_ciudad: nochesPorCiudad,
+      total_noches_ruta: durNoches,
+      detalle_ciudades: ciudades,
+      modo: CFG.ruta,
+      orden: CFG.rutaOrden,
+      km_total: cfgKmTotal()
+    },
+    servicios_vaa: {
+      alojamiento: {
+        incluido: VWIZ.servicios.hotel,
+        categoria_estrellas: parseInt(VWIZ.detalles.alojamiento.categoria) || 3,
+        regimen: VWIZ.detalles.alojamiento.regimen,
+        hab_dobles: VWIZ.detalles.alojamiento.hab_dobles,
+        hab_individuales: VWIZ.detalles.alojamiento.hab_individuales,
+        hab_triples: VWIZ.detalles.alojamiento.hab_triples,
+        accesibilidad_hab: VWIZ.detalles.alojamiento.accesibilidad,
+        servicio_maletas: VWIZ.detalles.alojamiento.maletas
+      },
+      transporte: {
+        incluido: VWIZ.servicios.transporte || CFG.transporte,
+        cobertura: VWIZ.detalles.transporte.cobertura
+      },
+      tour_leader: {
+        incluido: VWIZ.servicios.tour_leader || CFG.tourLider === 'si',
+        cobertura: VWIZ.detalles.tour_leader.cobertura,
+        idioma: VWIZ.detalles.tour_leader.idioma
+      },
+      guia_local: {
+        incluido: VWIZ.servicios.guia_local,
+        ciudades: VWIZ.detalles.guia_local.ciudades,
+        idioma: VWIZ.detalles.guia_local.idioma,
+        duracion: VWIZ.detalles.guia_local.duracion
+      },
+      restauracion: {
+        incluida: VWIZ.servicios.experiencia_culinaria,
+        comidas_incluidas: VWIZ.detalles.restauracion.comidas,
+        tipo_cocina: VWIZ.detalles.restauracion.tipo
+      },
+      halal: {
+        requerido: VWIZ.servicios.experiencia_halal || CFG.halal,
+        opciones: VWIZ.detalles.halal.opciones
+      },
+      llegada_internacional_servicio: {
+        incluido: VWIZ.servicios.llegada_internacional
+      }
+    },
+    privacidad: {
+      aceptada: true,
+      fecha: ts
+    }
   };
 }
 
@@ -9661,7 +9765,7 @@ async function wizSubmit() {
     });
   }
   const payload = buildSolicitudPayload();
-  // Override contact with wizard step 7 values
+  // Override contact with wizard step 6 values
   payload.contacto = {
     nombre: document.getElementById('wizNombre')?.value.trim() || '',
     email: document.getElementById('wizEmail')?.value.trim() || '',
@@ -9669,6 +9773,15 @@ async function wizSubmit() {
     pais: document.getElementById('wizPais')?.value.trim() || '',
     idioma_preferido: document.getElementById('wizIdioma')?.value || '',
     comentarios: document.getElementById('wizObs')?.value.trim() || ''
+  };
+  // Sync wizard contact fields into v1.1 cliente block
+  payload.cliente = {
+    nombre: payload.contacto.nombre,
+    email: payload.contacto.email,
+    telefono_whatsapp: payload.contacto.telefono,
+    pais_residencia: payload.contacto.pais,
+    idioma_comunicacion: payload.contacto.idioma_preferido || payload.idioma_cliente,
+    tipo_cliente: payload.cliente.tipo_cliente
   };
   const submitBtn = document.getElementById('wizSubmitBtn');
   if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando...'; }
