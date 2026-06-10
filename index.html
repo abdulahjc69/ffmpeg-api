@@ -657,6 +657,10 @@ a:hover { color: var(--terra-d); }
 .confianza { background: var(--crema); }
 .confianza .pos-card:hover { background: var(--blanco); }
 
+/* ============ OPINIONES ============ */
+.opiniones { background: var(--blanco); }
+.opiniones .pos-card:hover { background: var(--crema); }
+
 .section-head { text-align: center; max-width: 720px; margin: 0 auto 24px; }
 .section-tag {
   display: inline-block;
@@ -4072,7 +4076,7 @@ img, video, iframe { max-width: 100%; height: auto; }
       <a href="#proceso" data-t="nav.proceso">Cómo funciona</a>
       <a href="#niveles" data-t="nav.experiencia">Tu experiencia</a>
       <a href="#b2b" data-t="nav.b2b">Profesionales</a>
-      <a href="#perfiles" data-t="nav.perfiles">Para ti</a>
+      <a href="#opiniones" data-t="nav.opiniones">Opiniones</a>
       <a href="#ventajas" data-t="nav.ventajas">Ventajas</a>
       <a href="#nosotros" data-t="nav.nosotros">Quiénes somos</a>
       <a href="#contacto" data-t="nav.contacto">Contacto</a>
@@ -5345,7 +5349,7 @@ img, video, iframe { max-width: 100%; height: auto; }
           <li data-t="b2b.l4"><strong>Guías, autónomos, hoteles y proveedores:</strong> colaboración ordenada dentro de una red profesional.</li>
         </ul>
         <p style="font-size:13px;color:rgba(246,238,223,0.65);margin:16px 0 24px;line-height:1.6;" data-t="b2b.sys">Detrás de Vive al Ándalus hay un sistema real: CRM, seguimiento de leads, proveedores verificados, rutas documentadas y un equipo que convierte cada consulta en una propuesta trabajada.</p>
-        <a onclick="abrirWizard()" style="cursor:pointer;" class="btn-primary" data-t="b2b.cta">Contactar con el equipo →</a>
+        <a href="#contacto" class="btn-primary" data-t="b2b.cta">Contactar con el equipo →</a>
       </div>
       <div class="b2b-card">
         <h3 data-t="b2b.ct">Bin Firnas Travel SL</h3>
@@ -5360,69 +5364,34 @@ img, video, iframe { max-width: 100%; height: auto; }
   </div>
 </section>
 
-<!-- ============ PERFILES DE VIAJERO ============ -->
-<section id="perfiles" class="section perfiles">
+<!-- ============ OPINIONES ============ -->
+<section id="opiniones" class="section opiniones">
   <div class="container">
-    <div class="section-head perfiles-intro">
-      <span class="section-tag" data-t="perfiles.tag">Tipos de viajero</span>
-      <h2 data-t="perfiles.title">Diseñamos viajes para cada tipo de viajero</h2>
-      <p data-t="perfiles.sub">Desde una familia que sueña con Granada hasta una universidad, una agencia o una empresa: adaptamos cada circuito al grupo, al idioma, al ritmo y al propósito del viaje.</p>
-      <p style="margin-top:16px;font-size:15px;color:var(--gris);line-height:1.65;">No todos los viajeros buscan lo mismo. Algunos vienen por la historia, otros por la fe, la cultura, la formación, la empresa o la emoción de caminar por ciudades que fueron corazón de Al-Ándalus. Por eso diseñamos circuitos distintos para personas, grupos e instituciones distintas.</p>
+    <div class="section-head">
+      <span class="section-tag" data-t="op.tag">Opiniones</span>
+      <h2 data-t="op.title">Opiniones de viajeros</h2>
+      <p data-t="op.sub">La confianza se construye viaje a viaje. Pronto mostraremos aquí opiniones verificadas de viajeros y grupos que hayan vivido Al-Ándalus con nosotros.</p>
     </div>
-    <div class="perfiles-grid">
-      <div class="perfil-card">
-        <span class="perfil-icon">👨‍👩‍👧‍👦</span>
-        <h3>Particulares y familias</h3>
-        <p>Viajes culturales a medida, adaptados al ritmo familiar y a las edades del grupo.</p>
+    <div class="positioning-grid">
+      <div class="pos-card">
+        <div class="pos-icon">✔</div>
+        <h3 data-t="op.c1t">Reseñas verificadas</h3>
+        <p data-t="op.c1p">Solo publicaremos opiniones reales de clientes que hayan viajado con Vive al Ándalus.</p>
       </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">🤝</span>
-        <h3>Grupos privados</h3>
-        <p>Amigos, comunidades o colectivos que quieren vivir Al-Ándalus juntos con un programa propio.</p>
+      <div class="pos-card">
+        <div class="pos-icon">🔗</div>
+        <h3 data-t="op.c2t">Google Reviews</h3>
+        <p data-t="op.c2p">Estamos preparando el enlace directo para que los viajeros puedan dejar su valoración.</p>
       </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">🕌</span>
-        <h3>Asociaciones culturales</h3>
-        <p>Programas culturales e históricos diseñados para asociaciones, centros islámicos y colectivos.</p>
-      </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">🎒</span>
-        <h3>Colegios e institutos</h3>
-        <p>Rutas educativas adaptadas al currículo, con guías pedagógicos y gestión completa del grupo.</p>
-      </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">🎓</span>
-        <h3>Universidades</h3>
-        <p>Circuitos académicos, viajes de estudios y programas de inmersión histórica para estudiantes.</p>
-      </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">💼</span>
-        <h3>Empresas</h3>
-        <p>Viajes de incentivos, team building cultural y experiencias corporativas con identidad andalusí.</p>
-      </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">✈️</span>
-        <h3>Agencias y tour operadores</h3>
-        <p>Actuamos como DMC en Al-Ándalus. Diseño de circuitos, servicios en destino y apoyo operativo.</p>
-      </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">🗺️</span>
-        <h3>Profesionales del turismo</h3>
-        <p>Guías independientes, gestores culturales y profesionales que necesitan colaboración estructurada.</p>
-      </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">🧭</span>
-        <h3>Guías colaboradores</h3>
-        <p>Red de guías locales y acompañantes que pueden integrarse en nuestros circuitos operativos.</p>
-      </div>
-      <div class="perfil-card">
-        <span class="perfil-icon">🏨</span>
-        <h3>Hoteles y proveedores</h3>
-        <p>Establecimientos y proveedores locales que quieran colaborar dentro de nuestra red de servicios.</p>
+      <div class="pos-card">
+        <div class="pos-icon">🔄</div>
+        <h3 data-t="op.c3t">Mejora continua</h3>
+        <p data-t="op.c3p">Cada comentario nos ayuda a mejorar rutas, hoteles, guías, restaurantes y atención al viajero.</p>
       </div>
     </div>
     <div style="text-align:center;margin-top:40px;">
-      <a onclick="abrirWizard()" style="cursor:pointer;display:inline-block;text-decoration:none;padding:14px 32px;border-radius:30px;font-size:15px;font-weight:700;" class="btn-cta">Cuéntanos tu viaje →</a>
+      <!-- Botón desactivado hasta activar perfil Google Reviews -->
+      <button type="button" class="btn-primary" aria-disabled="true" disabled style="opacity:0.5;cursor:not-allowed;" data-t="op.cta">Google Reviews próximamente</button>
     </div>
   </div>
 </section>
@@ -6652,7 +6621,18 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'con.c3t':'Atención en 5 idiomas',
       'con.c3p':'Español, inglés, árabe, francés y portugués. Respondemos en el idioma del viajero.',
       'con.c4t':'Atlas histórico propio',
-      'con.c4p':'8 siglos de Al-Ándalus documentados en 7 ciudades. Cada ruta construida sobre conocimiento real.'
+      'con.c4p':'8 siglos de Al-Ándalus documentados en 7 ciudades. Cada ruta construida sobre conocimiento real.',
+      'nav.opiniones':'Opiniones',
+      'op.tag':'Opiniones de viajeros',
+      'op.title':'Opiniones de viajeros',
+      'op.sub':'La confianza se construye viaje a viaje. Pronto mostraremos aquí opiniones verificadas de viajeros y grupos que hayan vivido Al-Ándalus con nosotros.',
+      'op.c1t':'Reseñas verificadas',
+      'op.c1p':'Solo publicaremos opiniones reales de clientes que hayan viajado con Vive al Ándalus.',
+      'op.c2t':'Google Reviews',
+      'op.c2p':'Estamos preparando el enlace directo para que los viajeros puedan dejar su valoración.',
+      'op.c3t':'Mejora continua',
+      'op.c3p':'Cada comentario nos ayuda a mejorar rutas, hoteles, guías, restaurantes y atención al viajero.',
+      'op.cta':'Valorar en Google'
     },
     en: {
       'niv.tag':'Your experience','niv.title':'3 ways to live the experience',
@@ -6699,7 +6679,18 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'con.c3t':'Support in 5 languages',
       'con.c3p':'Spanish, English, Arabic, French and Portuguese. We respond in the traveller\'s own language.',
       'con.c4t':'Our own historical atlas',
-      'con.c4p':'8 centuries of Al-Andalus documented across 7 cities. Every route built on real knowledge.'
+      'con.c4p':'8 centuries of Al-Andalus documented across 7 cities. Every route built on real knowledge.',
+      'nav.opiniones':'Reviews',
+      'op.tag':'Traveller reviews',
+      'op.title':'Traveller reviews',
+      'op.sub':'Trust is built journey by journey. We will soon share verified reviews from travellers and groups who have experienced Al-Andalus with us.',
+      'op.c1t':'Verified reviews',
+      'op.c1p':'We will only publish genuine opinions from clients who have travelled with Vive al Ándalus.',
+      'op.c2t':'Google Reviews',
+      'op.c2p':'We are preparing the direct link so that travellers can leave their review.',
+      'op.c3t':'Continuous improvement',
+      'op.c3p':'Every comment helps us improve routes, hotels, guides, restaurants and traveller support.',
+      'op.cta':'Review on Google'
     },
     fr: {
       'niv.tag':'Votre expérience','niv.title':'3 façons de vivre l\'expérience',
@@ -6746,7 +6737,18 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'con.c3t':'Assistance en 5 langues',
       'con.c3p':'Espagnol, anglais, arabe, français et portugais. Nous répondons dans la langue du voyageur.',
       'con.c4t':'Atlas historique propre',
-      'con.c4p':'8 siècles d\'Al-Andalus documentés dans 7 villes. Chaque itinéraire construit sur de vraies connaissances.'
+      'con.c4p':'8 siècles d\'Al-Andalus documentés dans 7 villes. Chaque itinéraire construit sur de vraies connaissances.',
+      'nav.opiniones':'Avis',
+      'op.tag':'Avis de voyageurs',
+      'op.title':'Avis de voyageurs',
+      'op.sub':'La confiance se construit voyage après voyage. Nous partagerons bientôt ici des avis vérifiés de voyageurs et groupes ayant vécu Al-Andalus avec nous.',
+      'op.c1t':'Avis vérifiés',
+      'op.c1p':'Nous ne publierons que des avis authentiques de clients ayant voyagé avec Vive al Ándalus.',
+      'op.c2t':'Google Reviews',
+      'op.c2p':'Nous préparons le lien direct pour que les voyageurs puissent laisser leur avis.',
+      'op.c3t':'Amélioration continue',
+      'op.c3p':'Chaque commentaire nous aide à améliorer les itinéraires, hôtels, guides, restaurants et l\'accueil.',
+      'op.cta':'Laisser un avis sur Google'
     },
     pt: {
       'niv.tag':'A sua experiência','niv.title':'3 formas de viver a experiência',
@@ -6793,7 +6795,18 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'con.c3t':'Atendimento em 5 idiomas',
       'con.c3p':'Espanhol, inglês, árabe, francês e português. Respondemos no idioma do viajante.',
       'con.c4t':'Atlas histórico próprio',
-      'con.c4p':'8 séculos de Al-Ândalus documentados em 7 cidades. Cada rota construída sobre conhecimento real.'
+      'con.c4p':'8 séculos de Al-Ândalus documentados em 7 cidades. Cada rota construída sobre conhecimento real.',
+      'nav.opiniones':'Avaliações',
+      'op.tag':'Avaliações de viajantes',
+      'op.title':'Avaliações de viajantes',
+      'op.sub':'A confiança constrói-se viagem a viagem. Em breve partilharemos aqui avaliações verificadas de viajantes e grupos que viveram Al-Ândalus connosco.',
+      'op.c1t':'Avaliações verificadas',
+      'op.c1p':'Só publicaremos opiniões reais de clientes que tenham viajado com a Vive al Ándalus.',
+      'op.c2t':'Google Reviews',
+      'op.c2p':'Estamos a preparar o link direto para que os viajantes possam deixar a sua avaliação.',
+      'op.c3t':'Melhoria contínua',
+      'op.c3p':'Cada comentário ajuda-nos a melhorar rotas, hotéis, guias, restaurantes e atendimento ao viajante.',
+      'op.cta':'Avaliar no Google'
     },
     ar: {
       'niv.tag':'تجربتك','niv.title':'٣ طرق لعيش التجربة',
@@ -6840,7 +6853,18 @@ const I18N = {"es":{"nav.inicio":"Inicio","nav.contacto":"Contacto","nav.ventaja
       'con.c3t':'خدمة بـ٥ لغات',
       'con.c3p':'الإسبانية والإنجليزية والعربية والفرنسية والبرتغالية. نجيب بلغة المسافر.',
       'con.c4t':'أطلس تاريخي خاص',
-      'con.c4p':'٨ قرون من الأندلس موثقة في ٧ مدن. كل مسار مبني على معرفة حقيقية.'
+      'con.c4p':'٨ قرون من الأندلس موثقة في ٧ مدن. كل مسار مبني على معرفة حقيقية.',
+      'nav.opiniones':'آراء',
+      'op.tag':'آراء المسافرين',
+      'op.title':'آراء المسافرين',
+      'op.sub':'الثقة تُبنى رحلة بعد رحلة. قريباً سنعرض هنا آراءً موثقة من مسافرين ومجموعات عاشوا تجربة الأندلس معنا.',
+      'op.c1t':'آراء موثقة',
+      'op.c1p':'لن ننشر إلا تقييمات حقيقية من عملاء سافروا فعلاً مع Vive al Ándalus.',
+      'op.c2t':'Google Reviews',
+      'op.c2p':'نُعدّ حالياً الرابط المباشر حتى يتمكن المسافرون من إضافة تقييماتهم.',
+      'op.c3t':'التحسين المستمر',
+      'op.c3p':'كل تعليق يساعدنا على تحسين المسارات والفنادق والمرشدين والمطاعم وخدمة المسافر.',
+      'op.cta':'تقييم على Google'
     }
   };
   Object.keys(patches).forEach(function(lang) {
