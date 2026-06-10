@@ -1,11 +1,13 @@
 {
   "_meta": {
-    "version": "1.2",
+    "version": "1.3",
     "empresa": "Bin Firnas Travel SL",
     "marca": "Vive al Ándalus",
     "documento": "Expediente Maestro VAA",
     "fecha_creacion": "2026-06-10",
     "fecha_actualizacion": "2026-06-10",
+    "version_anterior": "1.2",
+    "cambios_v1_3": "Añadido Bloque 12 — Ciclo Comercial: propuestas[], id_reserva, estado_comercial_resumen, reglas de integridad I-1 a I-7.",
     "nota": "Este JSON define la estructura oficial de todos los expedientes VAA. Los campos marcados con _interno:true NUNCA se envían al cliente."
   },
 
@@ -370,6 +372,82 @@
       "Posible extensión a 2 noches en Ronda — consultar antes del cierre.",
       "Menores (7 y 12 años): edades registradas. Documentar acompañante legal en rooming list."
     ]
+  },
+
+  "ciclo_comercial": {
+    "_interno": true,
+    "_advertencia": "ESTE BLOQUE NUNCA SE ENVÍA AL CLIENTE. Solo para uso interno de Bin Firnas Travel SL.",
+    "_version_bloque": "1.0",
+
+    "_reglas_integridad": {
+      "I-1": "Un expediente solo puede tener un id_reserva activo simultáneamente. Reserva cancelada → documentar en id_reserva_anterior.",
+      "I-2": "Toda propuesta generada se añade a propuestas[]. Nunca se elimina una entrada. Las sustituidas cambian estado a sustituida.",
+      "I-3": "es_version_activa = true solo puede existir en una versión simultáneamente. Al crear nueva versión, la anterior pierde el flag.",
+      "I-4": "La reserva solo puede nacer desde propuesta con estado = aceptada y aprobacion_humana.aprobada = true.",
+      "I-5": "El estado del expediente debe sincronizarse con el estado de la reserva en cada transición relevante.",
+      "I-6": "propuestas[n].precio_total_eur es un snapshot histórico inmutable. No se actualiza nunca.",
+      "I-7": "La reserva referencia la versión de propuesta que el cliente aceptó, aunque existan versiones posteriores."
+    },
+
+    "_campos_no_duplicar": [
+      "condiciones_cancelacion_completas → vive en propuesta_comercial_v1",
+      "estado_financiero_detallado → vive en reserva_comercial_v1",
+      "estado_proveedores → vive en reserva_comercial_v1",
+      "pagos PAG-AAAA-NNNN → viven en reserva_comercial_v1",
+      "alertas_activas_reserva → viven en reserva_comercial_v1",
+      "historial_completo_reserva → vive en reserva_comercial_v1",
+      "responsable_actual → vive en reserva_comercial_v1"
+    ],
+
+    "propuestas": [
+      {
+        "_comentario": "Ejemplo — V1 sustituida por cambio de precio",
+        "id_propuesta": "PRO-2026-0087-V1",
+        "version": "V1",
+        "estado": "sustituida",
+        "fecha_creacion": "2026-05-15",
+        "fecha_emision": "2026-05-16",
+        "precio_total_eur": 7800.00,
+        "es_version_activa": false,
+        "motivo_nueva_version": null
+      },
+      {
+        "_comentario": "Ejemplo — V2 aceptada por el cliente, origen de la reserva activa",
+        "id_propuesta": "PRO-2026-0087-V2",
+        "version": "V2",
+        "estado": "aceptada",
+        "fecha_creacion": "2026-05-20",
+        "fecha_emision": "2026-05-21",
+        "precio_total_eur": 8500.00,
+        "es_version_activa": true,
+        "motivo_nueva_version": "cambio_precio — Cliente negoció ajuste de servicios. Se reformuló propuesta con precio revisado."
+      }
+    ],
+
+    "estados_propuesta_posibles": [
+      "borrador", "pendiente_aprobacion", "aprobada", "enviada",
+      "pendiente_respuesta", "aceptada", "rechazada", "caducada",
+      "sustituida", "cancelada"
+    ],
+
+    "id_reserva": "RES-2026-0001",
+    "id_propuesta_origen_reserva": "PRO-2026-0087-V2",
+    "fecha_reserva_creada": "2026-06-10",
+    "reserva_cancelada": false,
+    "id_reserva_anterior": null,
+
+    "estado_comercial_resumen": "reserva_activa",
+    "estado_comercial_resumen_posibles": [
+      "sin_propuesta",
+      "propuesta_en_borrador",
+      "propuesta_enviada",
+      "propuesta_aceptada",
+      "reserva_activa",
+      "reserva_completada",
+      "cancelado"
+    ],
+
+    "notas_ciclo_comercial": "V1 enviada el 2026-05-16 a 7.800 EUR. Cliente negoció ajuste de itinerario. V2 emitida el 2026-05-21 a 8.500 EUR con guía local ampliado. Cliente aceptó V2 el 2026-06-09. Reserva RES-2026-0001 abierta el 2026-06-10."
   },
 
   "comunicaciones": {

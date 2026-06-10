@@ -1,5 +1,5 @@
 # EXPEDIENTE MAESTRO — VIVE AL ÁNDALUS
-**Versión:** 1.2 | **Empresa:** Bin Firnas Travel SL | **Marca:** Vive al Ándalus
+**Versión:** 1.3 | **Empresa:** Bin Firnas Travel SL | **Marca:** Vive al Ándalus
 
 ---
 
@@ -490,6 +490,112 @@ El expediente interno incluye todos los bloques: 1 a 10 completos, incluyendo:
 - Alhambra: reservar entradas con 60 días de antelación mínimo.
 - Posible extensión a 2 noches en Ronda — consultar antes del cierre.
 - Menores (7 y 12 años): edades registradas. Viajan con padre/madre — documentar en rooming list.
+
+---
+
+### BLOQUE 12 — CICLO COMERCIAL ⚠️ INTERNO — NUNCA VISIBLE AL CLIENTE
+
+> Este bloque registra la trazabilidad completa del ciclo comercial: propuestas generadas, versiones, reserva activa y estado consolidado. Es el puente entre el expediente, `propuesta_comercial_v1` y `reserva_comercial_v1`.
+
+#### Principio de arquitectura
+
+El expediente solo guarda **referencias e IDs**. Los datos completos (servicios, condiciones, pagos, historial) viven en sus documentos propios. El precio de cada versión de propuesta se guarda como snapshot histórico inmutable en `propuestas[n].precio_total_eur`.
+
+#### 12.1 — Propuestas
+
+Array de todas las propuestas generadas para este expediente. **Nunca se elimina una entrada.**
+
+| Campo | Tipo | Obligatorio | Descripción |
+|-------|------|:-----------:|-------------|
+| `id_propuesta` | string | ✅ | `PRO-AAAA-NNNN-Vn` |
+| `version` | string | ✅ | `V1`, `V2`, `V3`... |
+| `estado` | enum | ✅ | Estado en el momento del snapshot |
+| `fecha_creacion` | date | ✅ | Cuándo se creó esta versión |
+| `fecha_emision` | date | Condicional | Cuándo se envió al cliente. `null` si no se ha enviado. |
+| `precio_total_eur` | decimal | ✅ | Precio total de esa versión (snapshot histórico inmutable) |
+| `es_version_activa` | bool | ✅ | `true` solo para la versión más reciente no sustituida. Solo una puede ser `true` simultáneamente. |
+| `motivo_nueva_version` | string | Condicional | Obligatorio desde V2. Por qué se generó esta versión. |
+
+**Regla de `es_version_activa`:** Al crear una nueva versión, la versión anterior pierde `es_version_activa = true`. El cambio es atómico: nunca pueden coexistir dos versiones activas.
+
+**Estados posibles de propuesta en este bloque:**
+`borrador` / `pendiente_aprobacion` / `aprobada` / `enviada` / `pendiente_respuesta` / `aceptada` / `rechazada` / `caducada` / `sustituida` / `cancelada`
+
+#### 12.2 — Reserva
+
+| Campo | Tipo | Obligatorio | Descripción |
+|-------|------|:-----------:|-------------|
+| `id_reserva` | string | Condicional | `RES-AAAA-NNNN`. `null` hasta que existe reserva. Solo una reserva activa simultáneamente. |
+| `id_propuesta_origen_reserva` | string | Condicional | Qué versión de propuesta originó la reserva. Solo se rellena cuando existe reserva. |
+| `fecha_reserva_creada` | date | Condicional | Cuándo se abrió la reserva. `null` hasta que existe. |
+| `reserva_cancelada` | bool | ✅ | `false` por defecto. `true` si la reserva fue cancelada. |
+| `id_reserva_anterior` | string | Condicional | Si hubo una reserva cancelada previa y se abrió una nueva. |
+
+**Regla de reserva cancelada:** Si una reserva se cancela y se genera una nueva, `id_reserva` apunta a la nueva. La reserva cancelada se documenta en `id_reserva_anterior` y en `notas_ciclo_comercial`.
+
+#### 12.3 — Estado consolidado
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `estado_comercial_resumen` | enum | Estado consolidado del ciclo. Ver tabla. |
+| `notas_ciclo_comercial` | string | Observaciones sobre el ciclo: cambios de precio entre versiones, motivos de cancelación, renegociaciones. |
+
+**Tabla de `estado_comercial_resumen`:**
+
+| Valor | Condición |
+|-------|-----------|
+| `sin_propuesta` | No hay ninguna propuesta generada |
+| `propuesta_en_borrador` | Hay propuesta pero no enviada |
+| `propuesta_enviada` | Al menos una propuesta activa enviada al cliente |
+| `propuesta_aceptada` | Cliente ha aceptado, pendiente primer pago |
+| `reserva_activa` | Primer pago recibido, reserva en curso |
+| `reserva_completada` | Viaje cerrado |
+| `cancelado` | Expediente o reserva cancelados |
+
+#### 12.4 — Reglas de integridad
+
+**Regla I-1 — Un expediente, una reserva activa**
+Solo puede haber un `id_reserva` activo simultáneamente. Si existe reserva cancelada, se documenta en `id_reserva_anterior`.
+
+**Regla I-2 — Toda propuesta vive en `propuestas[]`**
+Cada nueva versión añade una entrada al array. Nunca se elimina. Las versiones sustituidas cambian su `estado` a `sustituida`.
+
+**Regla I-3 — `es_version_activa` solo `true` en una versión a la vez**
+Al crear V2, V1 pierde `es_version_activa`. El cambio es atómico.
+
+**Regla I-4 — La reserva solo puede nacer desde propuesta aceptada**
+Antes de registrar `id_reserva`: la propuesta de origen debe tener `estado = aceptada` y `aprobacion_humana.aprobada = true`.
+
+**Regla I-5 — Sincronización de estado del expediente**
+
+| Estado del expediente | Condición de transición |
+|----------------------|------------------------|
+| `propuesta_enviada` | Al enviar C02 → propuesta pasa a `enviada` |
+| `negociacion` | Manual por Abdu |
+| `aceptado_cliente` | Manual por Abdu al recibir aceptación del cliente |
+| `pendiente_pago_30` | Al crear la reserva (`reserva.estado = primer_pago_pendiente`) |
+| `venta_cerrada` | Al confirmar primer pago (`reserva.estado = primer_pago_confirmado`) |
+| `en_operacion` | Al confirmar proveedores (`reserva.estado = proveedores_confirmados`) |
+| `finalizado` | Al cerrar la reserva (`reserva.estado = cerrada`) |
+| `cancelado` | Si reserva es cancelada o expediente abandonado |
+
+**Regla I-6 — Precios en el expediente son snapshots históricos**
+`propuestas[n].precio_total_eur` es inmutable. Refleja el precio de esa versión en el momento de creación. Si V1 = 7.800 EUR y V2 = 8.500 EUR, ambos quedan registrados.
+
+**Regla I-7 — Reserva nace desde la versión aceptada, no necesariamente la activa**
+Si existen V1 (sustituida), V2 (aceptada) y V3 (aprobada pero no aceptada), la reserva referencia V2. El precio vigente de la reserva es el de V2, no el de V3.
+
+**Campos que NUNCA se duplican en este bloque:**
+
+| Dato | Dónde vive |
+|------|-----------|
+| Condiciones de cancelación completas | `propuesta_comercial_v1` |
+| Estado financiero detallado | `reserva_comercial_v1` |
+| Lista de proveedores confirmados | `reserva_comercial_v1` |
+| Pagos detallados (`PAG-AAAA-NNNN`) | `reserva_comercial_v1` |
+| Alertas activas de la reserva | `reserva_comercial_v1` |
+| Historial completo de la reserva | `reserva_comercial_v1` |
+| Bloque `responsable_actual` | `reserva_comercial_v1` |
 
 ---
 
