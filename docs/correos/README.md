@@ -81,6 +81,7 @@ Generado automáticamente por Sistema Vive al Ándalus
 |--------|---------|--------------|---------|--------|----------------|
 | C02 | comercial/02_cliente_propuesta.md | Cliente | `propuesta.aprobacion_humana.aprobada = true` | Idioma cliente | reservas@vivealandalus.com |
 | C03 | comercial/03_cliente_confirmacion_reserva.md | Cliente | Pago 30% confirmado + reserva activa | Idioma cliente | reservas@vivealandalus.com |
+| C04 | comercial/04_cliente_documentacion_final.md | Cliente | `programa_definitivo_cerrado = true` + pago 100% + todos los proveedores con localizador | Idioma cliente | reservas@vivealandalus.com |
 
 ### Reglas específicas de la fase comercial
 
