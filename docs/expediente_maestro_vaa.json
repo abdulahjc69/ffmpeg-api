@@ -1,10 +1,11 @@
 {
   "_meta": {
-    "version": "1.0",
+    "version": "1.1",
     "empresa": "Bin Firnas Travel SL",
     "marca": "Vive al Ándalus",
     "documento": "Expediente Maestro VAA",
     "fecha_creacion": "2026-06-10",
+    "fecha_actualizacion": "2026-06-10",
     "nota": "Este JSON define la estructura oficial de todos los expedientes VAA. Los campos marcados con _interno:true NUNCA se envían al cliente."
   },
 
@@ -12,7 +13,20 @@
     "referencia": "VAA-2026-0087",
     "fecha_solicitud": "2026-07-15T10:32:00",
     "estado": "nuevo",
-    "estados_posibles": ["nuevo","en_cotizacion","propuesta_enviada","negociacion","confirmado","en_operacion","finalizado","cancelado"],
+    "estados_posibles": [
+      "nuevo",
+      "en_cotizacion",
+      "propuesta_enviada",
+      "negociacion",
+      "aceptado_cliente",
+      "pendiente_pago_30",
+      "venta_cerrada",
+      "documentacion_pendiente",
+      "en_operacion",
+      "finalizado",
+      "cancelado"
+    ],
+    "regla_venta_cerrada": "El estado venta_cerrada solo se activa tras confirmar la recepción del 30% de reserva. Sin pago no hay confirmación.",
     "urgencia": "normal",
     "urgencia_posibles": ["normal","alta","muy_alta"],
     "canal_entrada": "wizard_web",
@@ -29,7 +43,22 @@
     "idioma_comunicacion": "ar",
     "idiomas_posibles": ["ar","en","es","fr","pt"],
     "tipo_cliente": "familia",
-    "tipos_posibles": ["familia","pareja","grupo_amigos","empresa","luna_de_miel","grupo_organizado"]
+    "tipos_posibles": [
+      "familia",
+      "pareja",
+      "grupo_amigos",
+      "empresa",
+      "asociacion",
+      "colegio",
+      "instituto",
+      "universidad",
+      "universidad_mayores",
+      "agencia_viajes",
+      "tour_operador",
+      "grupo_organizado",
+      "profesional_turistico",
+      "otro"
+    ]
   },
 
   "grupo": {
@@ -38,7 +67,8 @@
     "edades_menores": [7, 12],
     "total_viajeros": 6,
     "tipo_grupo": "familia",
-    "necesidades_accesibilidad": false
+    "necesidades_accesibilidad": false,
+    "regla_menores": "Todo menor debe tener edad registrada. Todo menor debe viajar acompañado de padre, madre o tutor legal. Se documentará en rooming list en fase de documentacion_pendiente."
   },
 
   "fechas": {
@@ -54,7 +84,9 @@
 
   "llegada_internacional": {
     "medio": "avion",
-    "medios_posibles": ["avion","tren","autobus","vehiculo_propio","barco"],
+    "medios_posibles": ["avion","tren","autobus","vehiculo_propio","barco","ferry"],
+    "alerta_revision_manual": true,
+    "alerta_nota": "Solicitud incluye vuelo internacional. Requiere revisión manual por Abdu antes de confirmar al cliente.",
     "aeropuerto_ciudad": "Aeropuerto Adolfo Suárez Madrid-Barajas (MAD)",
     "terminal": "T4",
     "fecha": "2026-09-10",
@@ -66,6 +98,8 @@
 
   "salida_internacional": {
     "medio": "avion",
+    "alerta_revision_manual": true,
+    "alerta_nota": "Solicitud incluye vuelo internacional. Requiere revisión manual por Abdu antes de confirmar al cliente.",
     "aeropuerto_ciudad": "Aeropuerto de Málaga-Costa del Sol (AGP)",
     "terminal": "T3",
     "fecha": "2026-09-25",
@@ -195,20 +229,24 @@
       "hab_cliente_triples": 1,
       "hab_cliente_familiares": 0,
       "hab_cliente_subtotal": 3,
-      "hab_staff_conductor": 1,
-      "hab_staff_tour_leader": 1,
-      "hab_staff_subtotal": 2,
-      "total_hab_a_solicitar": 5,
-      "nota": "Siempre solicitar hab. individuales de staff al hotel. No facturar al cliente."
+      "hab_staff_cantidad": 1,
+      "hab_staff_nota": "Conductor y tour leader comparten 1 habitación operativa con camas separadas. Solo se solicitan 2 habitaciones de staff si Abdu lo autoriza expresamente como excepción.",
+      "hab_staff_excepcion_autorizada": false,
+      "total_hab_a_solicitar": 4,
+      "regla": "Si conductor o tour leader con pernocta → +1 hab. operativa. Si ambos → comparten esa 1 hab. Solo 2 hab. staff por excepción autorizada por Abdu. Nunca visible al cliente."
     },
 
     "financiero": {
-      "margen_objetivo_pct": 25,
-      "margen_recomendado_pct": 30,
+      "margen_estandar_pct": 25,
+      "precio_venta_minimo_formula": "coste_base * 1.25",
+      "descuentos": {
+        "aplica_solo_si_pax_mayor_que": 25,
+        "descuento_maximo_puntos": 10,
+        "nota": "Nunca aplicar descuentos automáticos. La decisión económica final corresponde exclusivamente a Abdu."
+      },
       "coste_estimado_base": null,
       "precio_venta_objetivo": null,
-      "precio_venta_final": null,
-      "formula": "precio_venta_minimo = coste_base * 1.25 | precio_venta_objetivo = coste_base * 1.30"
+      "precio_venta_final": null
     },
 
     "proveedores": {
@@ -225,12 +263,21 @@
       "notas": ""
     },
 
+    "alertas": [
+      {
+        "tipo": "revision_manual_vuelos",
+        "activa": true,
+        "motivo": "Solicitud incluye vuelos internacionales (SV136 llegada MAD, SV137 salida AGP). Revisar y validar antes de confirmar al cliente."
+      }
+    ],
+
     "notas_internas": [
       "Familia pide confirmación de certificación halal en todos los restaurantes.",
       "Padre solicita habitación en planta baja (accesibilidad relativa, no estricta).",
       "Preferencia de hoteles con piscina en Sevilla y Málaga para los menores.",
       "Alhambra: reservar entradas con 60 días de antelación mínimo.",
-      "Posible extensión a 2 noches en Ronda — consultar antes del cierre."
+      "Posible extensión a 2 noches en Ronda — consultar antes del cierre.",
+      "Menores (7 y 12 años): edades registradas. Documentar acompañante legal en rooming list."
     ]
   },
 
@@ -251,7 +298,8 @@
         "nombres_proveedores",
         "habitaciones_staff",
         "notas_internas",
-        "comisiones"
+        "comisiones",
+        "alertas_internas"
       ],
       "plantilla_asunto": "Tu viaje a Al-Ándalus — Propuesta VAA-2026-0087",
       "plantilla_apertura": "Estimada Fatima, gracias por confiar en Vive al Ándalus para organizar tu viaje familiar por Al-Ándalus."
