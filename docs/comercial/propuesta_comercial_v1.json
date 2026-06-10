@@ -1,0 +1,691 @@
+{
+  "_meta_esquema": {
+    "version": "1.0",
+    "empresa": "Bin Firnas Travel SL",
+    "marca": "Vive al Ándalus",
+    "documento": "Propuesta Comercial VAA",
+    "fecha_creacion": "2026-06-10",
+
+    "regla_absoluta": "Ninguna propuesta puede enviarse al cliente si aprobacion_humana.aprobada = false. Esta regla no tiene excepciones. Ninguna automatización puede cambiar aprobada = true sin intervención humana documentada.",
+
+    "regla_ia": "La IA puede preparar, calcular, revisar, alertar y recomendar. La IA NO puede aprobar, comprometer precios, confirmar ventas, confirmar pagos ni enviar propuestas. La firma final siempre es humana.",
+
+    "regla_datos_internos": "Los campos marcados con _interno:true o dentro del bloque _datos_internos NUNCA se envían al cliente bajo ninguna circunstancia.",
+
+    "regla_versionado": "Ninguna versión de propuesta se elimina. Una propuesta v2 archiva la v1 en estado sustituida. Toda nueva versión requiere nueva firma humana.",
+
+    "moneda_operativa": "EUR"
+  },
+
+  "estados_posibles": [
+    "borrador",
+    "pendiente_aprobacion",
+    "aprobada",
+    "enviada",
+    "pendiente_respuesta",
+    "aceptada",
+    "rechazada",
+    "caducada",
+    "sustituida",
+    "cancelada"
+  ],
+
+  "idiomas_posibles": ["ar", "es", "en", "fr", "pt"],
+
+  "roles_aprobador_posibles": ["abdu", "socio_autorizado", "delegado_autorizado"],
+
+  "motivos_nueva_version_posibles": [
+    "cambio_precio",
+    "cambio_servicio",
+    "cambio_fechas",
+    "correccion_error",
+    "negociacion_cliente",
+    "cambio_proveedor",
+    "actualizacion_condiciones",
+    "otro"
+  ],
+
+  "propuesta_plantilla": {
+
+    "_meta": {
+      "id_propuesta": "PRO-AAAA-NNNN-Vn",
+      "_id_formato": "PRO-{año}-{secuencial}-V{version}. Ejemplo: PRO-2026-0001-V1",
+      "id_expediente": "",
+      "version": "V1",
+      "fecha_creacion": null,
+      "fecha_emision": null,
+      "_fecha_emision_nota": "null hasta que se envíe al cliente. Solo se rellena cuando aprobada = true y el envío se produce.",
+      "fecha_validez": null,
+      "_fecha_validez_nota": "OBLIGATORIO. Temporada alta: 7 días. Temporada media/baja: 14 días. Mínimo absoluto: 5 días.",
+      "estado": "borrador",
+      "estado_posibles": ["borrador","pendiente_aprobacion","aprobada","enviada","pendiente_respuesta","aceptada","rechazada","caducada","sustituida","cancelada"],
+      "idioma": "",
+      "_idioma_nota": "Debe coincidir con expediente.cliente.idioma_comunicacion. Fallback a 'en' si idioma no soportado.",
+      "creada_por": "",
+      "enviada_por": null,
+      "_enviada_por_nota": "null hasta envío real. Solo un aprobador humano puede enviar.",
+      "version_esquema": "1.0",
+      "motivo_nueva_version": "",
+      "_motivo_nota": "Obligatorio desde V2 en adelante.",
+      "cambios_respecto_version_anterior": ""
+    },
+
+    "referencias": {
+      "id_expediente": "",
+      "ids_selecciones_activas": [],
+      "_ids_selecciones_nota": "IDs de SEL-AAAA-NNNN que sustentan esta propuesta. Solo selecciones activas o confirmado_deposito.",
+      "historial_versiones": [],
+      "_historial_versiones_ejemplo": [
+        {
+          "version": "V1",
+          "id_propuesta": "PRO-2026-0001-V1",
+          "fecha_emision": "2026-06-15T10:00:00",
+          "fecha_validez": "2026-06-29",
+          "precio_total": 12500.00,
+          "estado": "sustituida",
+          "motivo_sustitucion": "Actualización tarifa alojamiento Sevilla temporada alta.",
+          "sustituida_por": "PRO-2026-0001-V2",
+          "aprobada_por": "Abdulah Jiménez Contreras"
+        }
+      ]
+    },
+
+    "cabecera_cliente": {
+      "_visible_cliente": true,
+      "nombre_cliente": "",
+      "email_cliente": "",
+      "pais_cliente": "",
+      "adultos": null,
+      "menores": null,
+      "edades_menores": [],
+      "total_viajeros": null,
+      "mensaje_personalizado": "",
+      "_mensaje_nota": "Opcional. Texto especial de Abdu al cliente."
+    },
+
+    "itinerario": {
+      "_visible_cliente": true,
+      "fecha_inicio": null,
+      "fecha_fin": null,
+      "duracion_noches": null,
+      "duracion_dias": null,
+      "ciudad_inicio": "",
+      "ciudad_final": "",
+      "ciudades_ruta": [],
+      "detalle_ciudades": [],
+      "_detalle_ciudades_ejemplo": [
+        {
+          "ciudad": "Madrid",
+          "noches": 3,
+          "fechas": "10–13 septiembre",
+          "nota_cliente": "Llegada y transfer desde aeropuerto. Inicio de la aventura andalusí."
+        }
+      ],
+      "llegada_aeropuerto": "",
+      "salida_aeropuerto": "",
+      "notas_especiales": [],
+      "_notas_especiales_ejemplos": [
+        "La visita a la Alhambra requiere gestión anticipada de entradas. Confirmada su reserva.",
+        "Se recomienda llevar ropa cómoda para las visitas a pie."
+      ]
+    },
+
+    "servicios_incluidos": {
+      "_visible_cliente": true,
+      "_nota": "Array de strings redactados en el idioma del cliente. Nunca incluir nombres de proveedores.",
+      "items": [],
+      "_items_ejemplo_es": [
+        "Alojamiento 4 estrellas con desayuno en todas las ciudades",
+        "Transporte privado exclusivo para el grupo durante toda la ruta",
+        "Tour leader en árabe acompañando al grupo desde llegada hasta salida",
+        "Guía local en árabe en Córdoba, Sevilla y Granada (medio día por ciudad)",
+        "Almuerzos en restaurantes con certificación halal (10 días)",
+        "Transfer privado aeropuerto de llegada y salida",
+        "Entradas a monumentos principales (Mezquita de Córdoba, Real Alcázar de Sevilla, Alhambra)"
+      ],
+      "_items_ejemplo_ar": [
+        "إقامة في فنادق 4 نجوم مع الإفطار في جميع المدن",
+        "مواصلات خاصة للمجموعة طوال الرحلة",
+        "مرشد سياحي ناطق بالعربية مرافق للمجموعة من الوصول حتى المغادرة",
+        "مرشد محلي ناطق بالعربية في قرطبة وإشبيلية وغرناطة",
+        "وجبات غداء في مطاعم حلال معتمدة (10 أيام)",
+        "انتقالات خاصة من وإلى المطار",
+        "تذاكر المعالم الرئيسية (مسجد قرطبة، قصر الريال ألكازار، قصر الحمراء)"
+      ]
+    },
+
+    "servicios_no_incluidos": {
+      "_visible_cliente": true,
+      "_nota": "Array de strings. Evita reclamaciones posteriores.",
+      "items": [],
+      "_items_ejemplo": [
+        "Vuelos internacionales",
+        "Seguro de viaje",
+        "Gastos personales y propinas",
+        "Cenas (salvo las indicadas en el itinerario)",
+        "Actividades opcionales no indicadas en la propuesta"
+      ]
+    },
+
+    "precio_cliente": {
+      "_visible_cliente": true,
+      "_nota": "Solo importes finales. Sin costes de proveedores ni márgenes.",
+      "moneda": "EUR",
+      "precio_venta_final": null,
+      "_precio_venta_nota": "El precio que paga el cliente. Aprobado por Abdu.",
+      "importe_reserva_30": null,
+      "_importe_30_nota": "precio_venta_final × 0.30",
+      "importe_restante_70": null,
+      "_importe_70_nota": "precio_venta_final × 0.70",
+      "precio_por_persona": null,
+      "_precio_persona_nota": "Opcional. precio_venta_final / total_viajeros",
+      "precio_por_adulto": null,
+      "precio_por_menor": null,
+      "iva_nota": "Precio con todos los impuestos aplicables incluidos.",
+      "nota_precio": ""
+    },
+
+    "condiciones": {
+      "_visible_cliente": true,
+      "fecha_limite_reserva": null,
+      "_fecha_limite_nota": "Fecha límite para que el cliente confirme y pague el depósito del 30%.",
+      "condiciones_cancelacion": "",
+      "_cancelacion_referencia": {
+        "_nota": "Referencia orientativa. Abdu debe validar según condiciones reales de proveedores.",
+        "mas_60_dias": "Cancelación gratuita menos gastos de gestión",
+        "30_60_dias": "Retención del 30% del importe total",
+        "15_30_dias": "Retención del 50% del importe total",
+        "menos_15_dias": "Retención del 100% del importe total"
+      },
+      "politica_noshow": "En caso de no presentación sin cancelación previa: retención del 100% del importe total.",
+      "condiciones_generales_url": "www.vivealandalus.com",
+      "nota_legal": "Al confirmar esta propuesta, el cliente declara haber leído y aceptado las Condiciones Generales de Contratación de Bin Firnas Travel SL disponibles en www.vivealandalus.com.",
+      "validez_oferta_texto": "Esta propuesta es válida hasta [fecha_validez]. Pasada esa fecha, los precios y disponibilidad están sujetos a revisión."
+    },
+
+    "documentacion_requerida": {
+      "_visible_cliente": true,
+      "items": [],
+      "_items_ejemplo": [
+        "Copia de pasaportes de todos los viajeros (adultos y menores)",
+        "Información completa de cada menor: nombre, fecha de nacimiento, número de pasaporte",
+        "Datos del seguro de viaje contratado",
+        "Número de vuelo de llegada y salida si difiere del indicado en la propuesta"
+      ]
+    },
+
+    "proximos_pasos": {
+      "_visible_cliente": true,
+      "pasos": [],
+      "_pasos_ejemplo_es": [
+        "Confirme la aceptación de esta propuesta respondiendo a este correo.",
+        "Realice el pago del depósito de reserva (30%) por transferencia bancaria.",
+        "Envíe la documentación requerida (pasaportes) en los próximos 7 días.",
+        "Para cualquier consulta: reservas@vivealandalus.com o WhatsApp +34 633 30 59 09"
+      ]
+    },
+
+    "pie_corporativo": {
+      "_visible_cliente": true,
+      "nombre_marca": "Vive al Ándalus",
+      "razon_social": "BIN FIRNAS TRAVEL SL",
+      "responsable": "Abdulah Jiménez Contreras",
+      "telefono": "633 30 59 09",
+      "email": "reservas@vivealandalus.com",
+      "web": "www.vivealandalus.com",
+      "nota_legal": "Condiciones generales, aviso legal y política de privacidad: www.vivealandalus.com"
+    },
+
+    "aprobacion_humana": {
+      "_visible_cliente": false,
+      "_interno": true,
+      "_regla_absoluta": "aprobada = false → propuesta NO puede enviarse al cliente. Sin excepciones. Sin automatización que lo supere.",
+
+      "estado_aprobacion": {
+        "aprobada": false,
+        "_aprobada_nota": "false por defecto. Solo true con firma humana documentada en este bloque.",
+        "aprobada_por": null,
+        "_aprobada_por_nota": "Nombre completo. Obligatorio si aprobada = true.",
+        "rol_aprobador": null,
+        "rol_posibles": ["abdu", "socio_autorizado", "delegado_autorizado"],
+        "fecha_aprobacion": null,
+        "motivo_aprobacion": ""
+      },
+
+      "aprobacion_abdu": {
+        "aprobada_por_abdu": false,
+        "fecha_aprobacion_abdu": null,
+        "notas_abdu": ""
+      },
+
+      "aprobacion_delegado": {
+        "aprobada_por_delegado": false,
+        "delegado_nombre": "",
+        "delegado_rol": "",
+        "autorizado_desde": null,
+        "autorizado_hasta": null,
+        "limite_importe_autorizado": null,
+        "_limite_nota": "Importe máximo EUR que este delegado puede aprobar. Fijado por Abdu al crear la delegación.",
+        "margen_minimo_obligatorio": null,
+        "_margen_nota": "Porcentaje mínimo de margen que el delegado debe respetar. Fijado por Abdu.",
+        "requiere_revision_abdu": true,
+        "_revision_nota": "true por defecto en todas las delegaciones. Si true: el delegado puede aprobar y enviar, pero Abdu revisa a posteriori cuando vuelve.",
+        "condiciones_cumplidas_para_aprobar": {
+          "_nota": "El delegado puede aprobar SOLO si todas las condiciones son true simultáneamente.",
+          "modo_ausencia_activo": false,
+          "dentro_del_periodo_autorizado": false,
+          "precio_dentro_del_limite": false,
+          "margen_sobre_minimo": false
+        }
+      },
+
+      "modo_ausencia": {
+        "modo_ausencia_abdu": false,
+        "_activacion_nota": "Solo Abdulah Jiménez Contreras puede activar modo_ausencia_abdu = true. Nadie más.",
+        "ausencia_desde": null,
+        "ausencia_hasta": null,
+        "motivo_ausencia": "",
+        "activado_por": "",
+        "_activado_por_regla": "Debe ser siempre 'Abdulah Jiménez Contreras'. Si este campo contiene otro nombre, la activación no es válida."
+      },
+
+      "recomendacion_ia": {
+        "_ia_regla": "La IA puede completar este bloque. La IA nunca puede modificar estado_aprobacion.aprobada.",
+        "generada_por_ia": false,
+        "fecha_generacion_ia": null,
+        "precio_calculado_ia": null,
+        "_precio_ia_nota": "Referencia. El aprobador puede modificar el precio final.",
+        "margen_calculado_ia_pct": null,
+        "recomendacion_texto": "",
+        "alertas_ia": [],
+        "_alertas_ia_tipos": [
+          "margen_bajo",
+          "proveedor_en_observacion",
+          "proveedor_bloqueado",
+          "halal_sin_certificar",
+          "halal_incumplimiento_previo",
+          "alhambra_sin_confirmar",
+          "validez_corta",
+          "deadline_ajustado",
+          "seleccion_incompleta",
+          "datos_internos_en_zona_cliente"
+        ],
+        "_alertas_ejemplo": [
+          {
+            "tipo": "margen_bajo",
+            "mensaje": "El margen calculado (18.3%) está por debajo del estándar VAA (25%). Revisar costes o ajustar precio.",
+            "severidad": "alta"
+          },
+          {
+            "tipo": "proveedor_en_observacion",
+            "mensaje": "Hotel seleccionado para Sevilla (PRV-2026-0001) está en estado en_observacion por incumplimiento halal. Revisar antes de confirmar.",
+            "severidad": "alta"
+          },
+          {
+            "tipo": "alhambra_sin_confirmar",
+            "mensaje": "No hay entrada de Alhambra en selecciones activas. El itinerario incluye visita a Granada.",
+            "severidad": "alta"
+          }
+        ]
+      },
+
+      "historial_aprobacion": [],
+      "_historial_nota": "Inmutable. Solo se añaden entradas. Nunca se modifican ni borran.",
+      "_historial_ejemplo": [
+        {
+          "fecha": "2026-06-14T09:00:00",
+          "accion": "preparada_ia",
+          "realizado_por": "Sistema VAA",
+          "rol": "sistema",
+          "precio_en_ese_momento": 12500.00,
+          "notas": "Propuesta preparada con asistencia de IA. Pendiente revisión y firma de Abdu."
+        },
+        {
+          "fecha": "2026-06-15T11:30:00",
+          "accion": "aprobada",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "rol": "abdu",
+          "precio_en_ese_momento": 13200.00,
+          "notas": "Ajustado precio +700 EUR por actualización tarifa alojamiento Sevilla. Margen final 27.8%."
+        }
+      ]
+    },
+
+    "_datos_internos": {
+      "_visible_cliente": false,
+      "_interno": true,
+      "_advertencia": "ESTE BLOQUE NUNCA SE ENVÍA AL CLIENTE. Solo para uso interno de Bin Firnas Travel SL.",
+
+      "calculo_economico": {
+        "coste_total_proveedores": null,
+        "_coste_total_nota": "Suma de coste_confirmado de todas las SEL activas del expediente.",
+        "coste_desglose": {
+          "alojamiento": null,
+          "transporte_ruta": null,
+          "transfers": null,
+          "restauracion": null,
+          "guias_locales": null,
+          "tour_leader": null,
+          "entradas_monumentos": null,
+          "actividades": null,
+          "seguros": null,
+          "otros": null
+        },
+        "margen_vaa_pct_objetivo": 25,
+        "precio_base_calculado": null,
+        "_precio_base_formula": "coste_total_proveedores / (1 - margen_vaa_pct_objetivo / 100)",
+        "precio_venta_objetivo": null,
+        "_precio_objetivo_nota": "precio_base_calculado redondeado al alza al múltiplo de 50 EUR siguiente.",
+        "precio_venta_final": null,
+        "_precio_final_nota": "Decisión de Abdu. Puede diferir del objetivo.",
+        "margen_vaa_eur": null,
+        "_margen_eur_formula": "precio_venta_final - coste_total_proveedores",
+        "margen_vaa_pct_real": null,
+        "_margen_pct_formula": "margen_vaa_eur / precio_venta_final × 100",
+        "historial_precios": [],
+        "_historial_precios_ejemplo": [
+          {
+            "version": "V1",
+            "precio": 12500.00,
+            "margen_pct": 25.2,
+            "motivo_cambio": null
+          },
+          {
+            "version": "V2",
+            "precio": 13200.00,
+            "margen_pct": 27.8,
+            "motivo_cambio": "Actualización tarifa hotel Sevilla temporada alta."
+          }
+        ]
+      },
+
+      "campos_nunca_al_cliente": [
+        "coste_total_proveedores",
+        "coste_desglose",
+        "margen_vaa_pct_objetivo",
+        "margen_vaa_pct_real",
+        "margen_vaa_eur",
+        "precio_base_calculado",
+        "precio_venta_objetivo",
+        "nombres_proveedores",
+        "ids_proveedores",
+        "ids_selecciones",
+        "scoring_proveedores",
+        "incidencias_proveedores",
+        "negociaciones_proveedores",
+        "precios_rechazados",
+        "alternativas_descartadas",
+        "alertas_internas",
+        "notas_internas_expediente",
+        "habitaciones_staff",
+        "comisiones",
+        "historial_precios",
+        "recomendacion_ia",
+        "aprobacion_humana_completo"
+      ],
+
+      "notas_internas": ""
+    }
+  },
+
+  "ejemplo_completo": {
+    "_comentario": "Propuesta V2 aprobada por Abdu para expediente VAA-2026-0087. Familia Al-Rashidi. Idioma árabe.",
+
+    "_meta": {
+      "id_propuesta": "PRO-2026-0001-V2",
+      "id_expediente": "VAA-2026-0087",
+      "version": "V2",
+      "fecha_creacion": "2026-06-20T09:00:00",
+      "fecha_emision": "2026-06-20T12:00:00",
+      "fecha_validez": "2026-06-27",
+      "estado": "enviada",
+      "idioma": "ar",
+      "creada_por": "Sistema VAA (IA)",
+      "enviada_por": "Abdulah Jiménez Contreras",
+      "version_esquema": "1.0",
+      "motivo_nueva_version": "cambio_precio",
+      "cambios_respecto_version_anterior": "Actualización tarifa alojamiento Sevilla temporada alta. Precio ajustado de 12.500 EUR a 13.200 EUR."
+    },
+
+    "referencias": {
+      "id_expediente": "VAA-2026-0087",
+      "ids_selecciones_activas": ["SEL-2026-0001","SEL-2026-0002","SEL-2026-0005","SEL-2026-0006","SEL-2026-0007"],
+      "historial_versiones": [
+        {
+          "version": "V1",
+          "id_propuesta": "PRO-2026-0001-V1",
+          "fecha_emision": "2026-06-15T10:00:00",
+          "fecha_validez": "2026-06-29",
+          "precio_total": 12500.00,
+          "estado": "sustituida",
+          "motivo_sustitucion": "Actualización tarifa alojamiento Sevilla temporada alta.",
+          "sustituida_por": "PRO-2026-0001-V2",
+          "aprobada_por": "Abdulah Jiménez Contreras"
+        }
+      ]
+    },
+
+    "cabecera_cliente": {
+      "_visible_cliente": true,
+      "nombre_cliente": "Fatima Al-Rashidi Al-Otaibi",
+      "email_cliente": "fatima@example.com",
+      "pais_cliente": "Arabia Saudí",
+      "adultos": 4,
+      "menores": 2,
+      "edades_menores": [7, 12],
+      "total_viajeros": 6,
+      "mensaje_personalizado": "عزيزتي فاطمة، يسعدنا تقديم هذا العرض المحدث لرحلتكم العائلية إلى الأندلس."
+    },
+
+    "itinerario": {
+      "_visible_cliente": true,
+      "fecha_inicio": "2026-09-10",
+      "fecha_fin": "2026-09-25",
+      "duracion_noches": 15,
+      "duracion_dias": 16,
+      "ciudad_inicio": "Madrid",
+      "ciudad_final": "Málaga",
+      "ciudades_ruta": ["Madrid","Toledo","Córdoba","Sevilla","Granada","Málaga"],
+      "detalle_ciudades": [
+        { "ciudad": "Madrid", "noches": 3, "fechas": "10–13 sep", "nota_cliente": "Llegada y bienvenida. Transfer desde aeropuerto Barajas incluido." },
+        { "ciudad": "Toledo", "noches": 1, "fechas": "13–14 sep", "nota_cliente": "Ciudad medieval. Excursión desde Madrid." },
+        { "ciudad": "Córdoba", "noches": 2, "fechas": "14–16 sep", "nota_cliente": "La Gran Mezquita. Guía local en árabe incluido." },
+        { "ciudad": "Sevilla", "noches": 4, "fechas": "16–20 sep", "nota_cliente": "Corazón de Al-Ándalus. Guía local en árabe incluido." },
+        { "ciudad": "Granada", "noches": 3, "fechas": "20–23 sep", "nota_cliente": "La Alhambra. Guía local en árabe incluido. Entradas confirmadas." },
+        { "ciudad": "Málaga", "noches": 2, "fechas": "23–25 sep", "nota_cliente": "Costa del Sol. Transfer al aeropuerto incluido el día de salida." }
+      ],
+      "llegada_aeropuerto": "Aeropuerto Adolfo Suárez Madrid-Barajas (MAD) — T4 — Vuelo SV136 — 09:45",
+      "salida_aeropuerto": "Aeropuerto de Málaga-Costa del Sol (AGP) — T3 — Vuelo SV137 — 18:20",
+      "notas_especiales": [
+        "Las entradas a la Alhambra están confirmadas con reserva anticipada.",
+        "Todos los restaurantes incluidos tienen certificación halal verificada."
+      ]
+    },
+
+    "servicios_incluidos": {
+      "_visible_cliente": true,
+      "items": [
+        "إقامة في فنادق 4 نجوم مع الإفطار في جميع المدن",
+        "مواصلات خاصة للمجموعة (ميني باص) طوال الرحلة مع سائق",
+        "مرشد سياحي ناطق بالعربية مرافق للمجموعة من الوصول حتى المغادرة",
+        "مرشد محلي ناطق بالعربية نصف يوم في قرطبة وإشبيلية وغرناطة",
+        "وجبات غداء في مطاعم حلال معتمدة (10 أيام)",
+        "انتقال خاص من مطار مدريد عند الوصول",
+        "انتقال خاص إلى مطار مالقة عند المغادرة",
+        "تذاكر مسجد قرطبة الكبير وقصر الريال ألكازار وقصر الحمراء",
+        "خدمة نقل الحقائب في جميع الفنادق"
+      ]
+    },
+
+    "servicios_no_incluidos": {
+      "_visible_cliente": true,
+      "items": [
+        "الرحلات الجوية الدولية",
+        "تأمين السفر",
+        "المصروفات الشخصية والبقشيش",
+        "وجبات العشاء (ما لم يُذكر في البرنامج)",
+        "الأنشطة الاختيارية غير المذكورة في العرض"
+      ]
+    },
+
+    "precio_cliente": {
+      "_visible_cliente": true,
+      "moneda": "EUR",
+      "precio_venta_final": 13200.00,
+      "importe_reserva_30": 3960.00,
+      "importe_restante_70": 9240.00,
+      "precio_por_persona": 2200.00,
+      "precio_por_adulto": null,
+      "precio_por_menor": null,
+      "iva_nota": "Precio con todos los impuestos aplicables incluidos.",
+      "nota_precio": ""
+    },
+
+    "condiciones": {
+      "_visible_cliente": true,
+      "fecha_limite_reserva": "2026-06-27",
+      "condiciones_cancelacion": "Cancelación gratuita hasta 60 días antes del inicio del viaje. Entre 30 y 60 días: retención del 30%. Entre 15 y 30 días: retención del 50%. Con menos de 15 días: retención del 100%.",
+      "politica_noshow": "En caso de no presentación sin cancelación previa: retención del 100% del importe total.",
+      "condiciones_generales_url": "www.vivealandalus.com",
+      "nota_legal": "Al confirmar esta propuesta, el cliente declara haber leído y aceptado las Condiciones Generales de Contratación de Bin Firnas Travel SL disponibles en www.vivealandalus.com.",
+      "validez_oferta_texto": "هذا العرض صالح حتى 27 يونيو 2026. بعد هذا التاريخ، قد تتغير الأسعار والتوافر."
+    },
+
+    "documentacion_requerida": {
+      "_visible_cliente": true,
+      "items": [
+        "نسخة من جوازات سفر جميع المسافرين (البالغين والأطفال)",
+        "بيانات كاملة لكل طفل: الاسم الكامل، تاريخ الميلاد، رقم جواز السفر",
+        "بيانات تأمين السفر المبرم",
+        "تأكيد أرقام رحلات الوصول والمغادرة إذا تغيرت"
+      ]
+    },
+
+    "proximos_pasos": {
+      "_visible_cliente": true,
+      "pasos": [
+        "قومي بتأكيد قبول هذا العرض بالرد على هذا البريد الإلكتروني.",
+        "قومي بسداد دفعة الحجز (30%) وهي 3.960 يورو عبر التحويل البنكي.",
+        "أرسلي الوثائق المطلوبة (جوازات السفر) خلال الأيام السبعة القادمة.",
+        "للاستفسارات: reservas@vivealandalus.com أو واتساب +34 633 30 59 09"
+      ]
+    },
+
+    "pie_corporativo": {
+      "_visible_cliente": true,
+      "nombre_marca": "Vive al Ándalus",
+      "razon_social": "BIN FIRNAS TRAVEL SL",
+      "responsable": "Abdulah Jiménez Contreras",
+      "telefono": "633 30 59 09",
+      "email": "reservas@vivealandalus.com",
+      "web": "www.vivealandalus.com",
+      "nota_legal": "Condiciones generales, aviso legal y política de privacidad: www.vivealandalus.com"
+    },
+
+    "aprobacion_humana": {
+      "_visible_cliente": false,
+      "_interno": true,
+
+      "estado_aprobacion": {
+        "aprobada": true,
+        "aprobada_por": "Abdulah Jiménez Contreras",
+        "rol_aprobador": "abdu",
+        "fecha_aprobacion": "2026-06-20T11:45:00",
+        "motivo_aprobacion": "Propuesta V2 revisada. Precio ajustado a 13.200 EUR. Margen 27.8%. Todos los servicios halal verificados. Aprobada para envío."
+      },
+
+      "aprobacion_abdu": {
+        "aprobada_por_abdu": true,
+        "fecha_aprobacion_abdu": "2026-06-20T11:45:00",
+        "notas_abdu": "V2 corregida con tarifa Sevilla actualizada. Margen correcto. Enviar."
+      },
+
+      "aprobacion_delegado": {
+        "aprobada_por_delegado": false,
+        "delegado_nombre": "",
+        "delegado_rol": "",
+        "autorizado_desde": null,
+        "autorizado_hasta": null,
+        "limite_importe_autorizado": null,
+        "margen_minimo_obligatorio": null,
+        "requiere_revision_abdu": true,
+        "condiciones_cumplidas_para_aprobar": {
+          "modo_ausencia_activo": false,
+          "dentro_del_periodo_autorizado": false,
+          "precio_dentro_del_limite": false,
+          "margen_sobre_minimo": false
+        }
+      },
+
+      "modo_ausencia": {
+        "modo_ausencia_abdu": false,
+        "ausencia_desde": null,
+        "ausencia_hasta": null,
+        "motivo_ausencia": "",
+        "activado_por": ""
+      },
+
+      "recomendacion_ia": {
+        "generada_por_ia": true,
+        "fecha_generacion_ia": "2026-06-20T09:00:00",
+        "precio_calculado_ia": 12800.00,
+        "margen_calculado_ia_pct": 25.5,
+        "recomendacion_texto": "Propuesta V2 calculada con margen 25.5%. Se recomienda revisar el ajuste de precio final (13.200 EUR) antes de enviar. Todos los servicios halal verificados. Sin alertas críticas.",
+        "alertas_ia": []
+      },
+
+      "historial_aprobacion": [
+        {
+          "fecha": "2026-06-20T09:00:00",
+          "accion": "preparada_ia",
+          "realizado_por": "Sistema VAA",
+          "rol": "sistema",
+          "precio_en_ese_momento": 12800.00,
+          "notas": "Propuesta V2 preparada con asistencia de IA. Pendiente revisión de Abdu."
+        },
+        {
+          "fecha": "2026-06-20T11:45:00",
+          "accion": "aprobada",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "rol": "abdu",
+          "precio_en_ese_momento": 13200.00,
+          "notas": "Precio ajustado a 13.200 EUR. Margen 27.8%. Aprobada y enviada."
+        }
+      ]
+    },
+
+    "_datos_internos": {
+      "_visible_cliente": false,
+      "_interno": true,
+      "_advertencia": "NUNCA ENVIAR AL CLIENTE.",
+
+      "calculo_economico": {
+        "coste_total_proveedores": 9554.00,
+        "coste_desglose": {
+          "alojamiento": 5200.00,
+          "transporte_ruta": 4200.00,
+          "transfers": 0,
+          "restauracion": 1800.00,
+          "guias_locales": 900.00,
+          "tour_leader": 1200.00,
+          "entradas_monumentos": 354.00,
+          "actividades": 0,
+          "seguros": 0,
+          "otros": 0
+        },
+        "margen_vaa_pct_objetivo": 25,
+        "precio_base_calculado": 12738.67,
+        "precio_venta_objetivo": 12750.00,
+        "precio_venta_final": 13200.00,
+        "margen_vaa_eur": 3646.00,
+        "margen_vaa_pct_real": 27.62,
+        "historial_precios": [
+          { "version": "V1", "precio": 12500.00, "margen_pct": 23.6, "motivo_cambio": null },
+          { "version": "V2", "precio": 13200.00, "margen_pct": 27.62, "motivo_cambio": "Actualización tarifa hotel Sevilla temporada alta." }
+        ]
+      },
+
+      "notas_internas": "V1 tenía margen bajo (23.6%) por error en cálculo hotel Sevilla. V2 corregida. Coste Sevilla subió de 2.800 a 3.500 EUR (tarifa septiembre temporada alta confirmada por hotel el 19/06)."
+    }
+  }
+}
