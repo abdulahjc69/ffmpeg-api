@@ -9347,6 +9347,7 @@ function wizValidateStep(n) {
   if (n === 1) {
     if (!VWIZ.fecha_inicio) return 'Selecciona la fecha de inicio';
     if (!VWIZ.fecha_fin) return 'Selecciona la fecha de fin';
+    if (VWIZ.fecha_inicio < window._wizMinFecha) return 'La fecha de inicio debe ser posterior a la disponible';
     if (VWIZ.fecha_fin <= VWIZ.fecha_inicio) return 'La fecha de fin debe ser posterior a la de inicio';
     return null;
   }
@@ -9697,6 +9698,23 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('wizAdultosP')?.addEventListener('click', () => { VWIZ.adultos = Math.min(99, VWIZ.adultos + 1); document.getElementById('wizAdultos').textContent = VWIZ.adultos; });
   document.getElementById('wizMenoresM')?.addEventListener('click', () => { if (VWIZ.menores.length > 0) { VWIZ.menores.pop(); document.getElementById('wizMenores').textContent = VWIZ.menores.length; wizUpdateMenores(); } });
   document.getElementById('wizMenoresP')?.addEventListener('click', () => { if (VWIZ.menores.length < 20) { VWIZ.menores.push(0); document.getElementById('wizMenores').textContent = VWIZ.menores.length; wizUpdateMenores(); } });
+
+  // Bloqueo dinámico de fechas: mínimo = hoy + 20 días (calculado en cada carga)
+  // Chatbot: si preguntan por fechas cercanas → "En estos momentos las fechas más próximas presentan
+  // una elevada ocupación y disponibilidad limitada. Le recomendamos seleccionar fechas posteriores
+  // para poder ofrecerle la mejor propuesta posible."
+  (function() {
+    const d = new Date();
+    d.setDate(d.getDate() + 20);
+    const minFecha = d.toISOString().slice(0, 10);
+    window._wizMinFecha = minFecha;
+    ['solFechaInicio','solFechaFin','wizFechaInicio','wizFechaFin',
+     'wizTransLlegFecha','wizTransSalFecha','wizLlegFecha','wizSalFecha'
+    ].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) el.min = minFecha;
+    });
+  })();
 });
 
 </script>
