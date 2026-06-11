@@ -5873,13 +5873,13 @@ img, video, iframe { max-width: 100%; height: auto; }
 .wiz-ruta-stop { display:flex; align-items:center; gap:10px; padding:10px 12px; background:#fff; border-radius:10px; margin-bottom:8px; border:1px solid #e8dfd0; font-family:'Inter',sans-serif; }
 .wiz-ruta-num { width:24px; height:24px; background:var(--terra,#BB4422); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
 .wiz-ruta-city { flex:1; font-size:14px; font-weight:600; color:#1A1A1A; }
-.wiz-ruta-noches { display:flex; align-items:center; gap:6px; font-size:13px; color:#555; flex-shrink:0; }
-.wiz-ruta-noches button { width:26px; height:26px; border-radius:50%; border:1.5px solid var(--terra,#BB4422); background:#fff; color:var(--terra,#BB4422); cursor:pointer; font-size:1rem; line-height:1; font-family:inherit; transition:all .15s; }
+.wiz-ruta-noches { display:flex; align-items:center; gap:8px; font-size:13px; color:#555; flex-shrink:0; }
+.wiz-ruta-noches button { width:36px; height:36px; border-radius:50%; border:1.5px solid var(--terra,#BB4422); background:#fff; color:var(--terra,#BB4422); cursor:pointer; font-size:1.1rem; line-height:1; font-family:inherit; transition:all .15s; touch-action:manipulation; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
 .wiz-ruta-noches button:hover { background:var(--terra,#BB4422); color:#fff; }
-.wiz-ruta-noches-val { font-weight:700; min-width:18px; text-align:center; color:#1A1A1A; font-size:14px; }
+.wiz-ruta-noches-val { font-weight:700; min-width:22px; text-align:center; color:#1A1A1A; font-size:15px; }
 .wiz-ruta-noches-lbl { font-size:12px; color:#888; }
-.wiz-ruta-actions { display:flex; gap:4px; flex-shrink:0; }
-.wiz-ruta-actions button { width:26px; height:26px; background:none; border:1px solid #ddd; border-radius:5px; cursor:pointer; font-size:12px; color:#666; transition:all .15s; font-family:inherit; }
+.wiz-ruta-actions { display:flex; gap:6px; flex-shrink:0; }
+.wiz-ruta-actions button { width:36px; height:36px; background:none; border:1px solid #ddd; border-radius:7px; cursor:pointer; font-size:13px; color:#666; transition:all .15s; font-family:inherit; touch-action:manipulation; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
 .wiz-ruta-actions button:hover { background:var(--terra,#BB4422); color:#fff; border-color:var(--terra,#BB4422); }
 .wiz-ruta-del:hover { background:#c0392b !important; border-color:#c0392b !important; }
 .wiz-ruta-total-bar { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:var(--crema,#F6EEDF); border-radius:8px; margin-top:4px; font-family:'Inter',sans-serif; font-size:13px; }
@@ -5891,7 +5891,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 .wiz-city-card-badge { position:absolute; top:5px; right:5px; background:var(--terra,#BB4422); color:#fff; border-radius:50%; width:18px; height:18px; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; }
 .wiz-city-card-badge.vis { display:flex; }
 .wiz-city-card.in-ruta { border-color:var(--terra,#BB4422); background:#fef6f3; }
-@media (max-width:460px) { .wiz-ruta-stop { flex-wrap:wrap; } .wiz-ruta-city { width:100%; } }
+@media (max-width:460px) { .wiz-ruta-stop { flex-wrap:wrap; row-gap:6px; } .wiz-ruta-city { width:100%; } .wiz-ruta-num { align-self:flex-start; margin-top:2px; } }
 .wiz-tab-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; }
 .wiz-tab {
   padding: 7px 14px;
@@ -9710,6 +9710,12 @@ function wizParadaAdd(city) {
   wizRenderRuta();
 }
 
+function wizParadaDelConfirm(idx, cityName) {
+  if (confirm('¿Eliminar ' + cityName + ' de la ruta?')) {
+    wizParadaDel(idx);
+  }
+}
+
 function wizParadaDel(idx) {
   VWIZ.ruta_ordenada.splice(idx, 1);
   wizRenderRuta();
@@ -9757,9 +9763,9 @@ function wizRenderRuta() {
         '<button type="button" onclick="wizParadaNochesDelta(' + idx + ',1)" aria-label="Más noches">+</button>' +
       '</div>' +
       '<div class="wiz-ruta-actions">' +
-        (idx > 0 ? '<button type="button" onclick="wizParadaMove(' + idx + ',-1)" title="Subir">▲</button>' : '<button type="button" style="visibility:hidden">▲</button>') +
-        (idx < ruta.length - 1 ? '<button type="button" onclick="wizParadaMove(' + idx + ',1)" title="Bajar">▼</button>' : '<button type="button" style="visibility:hidden">▼</button>') +
-        '<button type="button" class="wiz-ruta-del" onclick="wizParadaDel(' + idx + ')" title="Eliminar parada">✕</button>' +
+        (idx > 0 ? '<button type="button" onclick="wizParadaMove(' + idx + ',-1)" title="Subir">▲</button>' : '<button type="button" style="visibility:hidden" aria-hidden="true">▲</button>') +
+        (idx < ruta.length - 1 ? '<button type="button" onclick="wizParadaMove(' + idx + ',1)" title="Bajar">▼</button>' : '<button type="button" style="visibility:hidden" aria-hidden="true">▼</button>') +
+        '<button type="button" class="wiz-ruta-del" onclick="wizParadaDelConfirm(' + idx + ',\'' + parada.ciudad.replace(/'/g, "\\'") + '\')" title="Eliminar parada">✕</button>' +
       '</div>';
     list.appendChild(div);
   });
