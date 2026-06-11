@@ -5869,6 +5869,29 @@ img, video, iframe { max-width: 100%; height: auto; }
   transition: background 0.15s;
 }
 .wiz-order-btns button:hover { background: var(--terra, #BB4422); color: #fff; border-color: var(--terra); }
+/* === Wizard: ruta ordenada con noches por parada === */
+.wiz-ruta-stop { display:flex; align-items:center; gap:10px; padding:10px 12px; background:#fff; border-radius:10px; margin-bottom:8px; border:1px solid #e8dfd0; font-family:'Inter',sans-serif; }
+.wiz-ruta-num { width:24px; height:24px; background:var(--terra,#BB4422); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.wiz-ruta-city { flex:1; font-size:14px; font-weight:600; color:#1A1A1A; }
+.wiz-ruta-noches { display:flex; align-items:center; gap:6px; font-size:13px; color:#555; flex-shrink:0; }
+.wiz-ruta-noches button { width:26px; height:26px; border-radius:50%; border:1.5px solid var(--terra,#BB4422); background:#fff; color:var(--terra,#BB4422); cursor:pointer; font-size:1rem; line-height:1; font-family:inherit; transition:all .15s; }
+.wiz-ruta-noches button:hover { background:var(--terra,#BB4422); color:#fff; }
+.wiz-ruta-noches-val { font-weight:700; min-width:18px; text-align:center; color:#1A1A1A; font-size:14px; }
+.wiz-ruta-noches-lbl { font-size:12px; color:#888; }
+.wiz-ruta-actions { display:flex; gap:4px; flex-shrink:0; }
+.wiz-ruta-actions button { width:26px; height:26px; background:none; border:1px solid #ddd; border-radius:5px; cursor:pointer; font-size:12px; color:#666; transition:all .15s; font-family:inherit; }
+.wiz-ruta-actions button:hover { background:var(--terra,#BB4422); color:#fff; border-color:var(--terra,#BB4422); }
+.wiz-ruta-del:hover { background:#c0392b !important; border-color:#c0392b !important; }
+.wiz-ruta-total-bar { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:var(--crema,#F6EEDF); border-radius:8px; margin-top:4px; font-family:'Inter',sans-serif; font-size:13px; }
+.wiz-ruta-total-bar strong { font-size:16px; color:var(--terra,#BB4422); }
+.wiz-ruta-val { margin-top:8px; padding:9px 12px; border-radius:8px; font-size:13px; font-family:'Inter',sans-serif; display:none; }
+.wiz-ruta-val.ok { display:block; background:#eef7f2; border:1px solid #6aaa85; color:#1f6f54; }
+.wiz-ruta-val.warn { display:block; background:#fff8ec; border:1px solid #e0a020; color:#7a5000; }
+.wiz-ruta-val.err { display:block; background:#fef0ec; border:1px solid var(--terra,#BB4422); color:var(--terra,#BB4422); }
+.wiz-city-card-badge { position:absolute; top:5px; right:5px; background:var(--terra,#BB4422); color:#fff; border-radius:50%; width:18px; height:18px; font-size:0.7rem; display:none; align-items:center; justify-content:center; font-weight:700; }
+.wiz-city-card-badge.vis { display:flex; }
+.wiz-city-card.in-ruta { border-color:var(--terra,#BB4422); background:#fef6f3; }
+@media (max-width:460px) { .wiz-ruta-stop { flex-wrap:wrap; } .wiz-ruta-city { width:100%; } }
 .wiz-tab-bar { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; }
 .wiz-tab {
   padding: 7px 14px;
@@ -6133,49 +6156,51 @@ img, video, iframe { max-width: 100%; height: auto; }
         </div>
       </div>
 
-      <!-- PASO 2: Ruta -->
+      <!-- PASO 2: Ruta con paradas ordenadas y noches -->
       <div id="wizPanel2" class="wiz-panel">
         <h3 class="wiz-step-title">🗺️ Paso 2 · Tu ruta</h3>
-        <p class="wiz-ruta-hint-desktop" style="font-size:0.85rem;color:#888;margin:0 0 14px;font-family:'Inter',sans-serif;">Selecciona las ciudades y ordénalas a tu gusto</p>
-        <div class="wiz-ruta-hint-mobile">
-          <p class="wiz-ruta-hint-mobile__title">📅 Diseña tu recorrido</p>
-          <p class="wiz-ruta-hint-mobile__line">¿Dónde empieza vuestra experiencia? <span class="wiz-ruta-hint-mobile__ex">1️⃣ Selecciona la primera ciudad</span></p>
-          <p class="wiz-ruta-hint-mobile__line">¿Dónde termina? <span class="wiz-ruta-hint-mobile__ex">2️⃣ Luego el resto</span></p>
-          <p class="wiz-ruta-hint-mobile__tip">Puedes cambiar el orden usando las flechas ▲▼</p>
-        </div>
+        <p style="font-size:0.85rem;color:#888;margin:0 0 14px;font-family:'Inter',sans-serif;">Pulsa una ciudad para añadirla a la ruta. Puedes añadirla varias veces y ajustar las noches en cada parada.</p>
         <div class="wiz-city-grid" id="wizCityGrid">
-          <div class="wiz-city-card" data-city="Madrid" onclick="wizCityToggle('Madrid')">
+          <div class="wiz-city-card" data-city="Madrid" onclick="wizParadaAdd('Madrid')" style="cursor:pointer;">
             <span class="city-emoji">🏛️</span>
             <span class="city-name">Madrid</span>
-            <span class="city-badge">✓</span>
+            <span class="wiz-city-card-badge" data-badge-city="Madrid">1</span>
           </div>
-          <div class="wiz-city-card" data-city="Toledo" onclick="wizCityToggle('Toledo')">
+          <div class="wiz-city-card" data-city="Toledo" onclick="wizParadaAdd('Toledo')" style="cursor:pointer;">
             <span class="city-emoji">⚔️</span>
             <span class="city-name">Toledo</span>
-            <span class="city-badge">✓</span>
+            <span class="wiz-city-card-badge" data-badge-city="Toledo">1</span>
           </div>
-          <div class="wiz-city-card" data-city="Córdoba" onclick="wizCityToggle('Córdoba')">
+          <div class="wiz-city-card" data-city="Córdoba" onclick="wizParadaAdd('Córdoba')" style="cursor:pointer;">
             <span class="city-emoji">🕌</span>
             <span class="city-name">Córdoba</span>
-            <span class="city-badge">✓</span>
+            <span class="wiz-city-card-badge" data-badge-city="Córdoba">1</span>
           </div>
-          <div class="wiz-city-card" data-city="Sevilla" onclick="wizCityToggle('Sevilla')">
+          <div class="wiz-city-card" data-city="Sevilla" onclick="wizParadaAdd('Sevilla')" style="cursor:pointer;">
             <span class="city-emoji">💃</span>
             <span class="city-name">Sevilla</span>
-            <span class="city-badge">✓</span>
+            <span class="wiz-city-card-badge" data-badge-city="Sevilla">1</span>
           </div>
-          <div class="wiz-city-card" data-city="Málaga" onclick="wizCityToggle('Málaga')">
+          <div class="wiz-city-card" data-city="Málaga" onclick="wizParadaAdd('Málaga')" style="cursor:pointer;">
             <span class="city-emoji">☀️</span>
             <span class="city-name">Málaga</span>
-            <span class="city-badge">✓</span>
+            <span class="wiz-city-card-badge" data-badge-city="Málaga">1</span>
           </div>
-          <div class="wiz-city-card" data-city="Granada" onclick="wizCityToggle('Granada')">
+          <div class="wiz-city-card" data-city="Granada" onclick="wizParadaAdd('Granada')" style="cursor:pointer;">
             <span class="city-emoji">🌹</span>
             <span class="city-name">Granada</span>
-            <span class="city-badge">✓</span>
+            <span class="wiz-city-card-badge" data-badge-city="Granada">1</span>
           </div>
         </div>
-        <ol class="wiz-order-list" id="wizCityOrder"></ol>
+        <div id="wizRutaWrap" style="margin-top:16px;display:none;">
+          <p style="font-size:0.82rem;font-weight:700;color:#5b4a2e;text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px;font-family:'Inter',sans-serif;">Orden de tu ruta</p>
+          <div id="wizRutaList"></div>
+          <div class="wiz-ruta-total-bar">
+            <span>Paradas: <strong id="wizRutaParadas">0</strong></span>
+            <span>Total noches: <strong id="wizRutaNochesTotal">0</strong></span>
+          </div>
+          <div class="wiz-ruta-val" id="wizRutaValidacion"></div>
+        </div>
       </div>
 
       <!-- PASO 3: Viajeros -->
@@ -7715,7 +7740,7 @@ function buildCityMarkers() {
       '</div>';
     const marker = L.marker(c.c, { icon }).addTo(mapInstance).bindPopup(popupHtml, { minWidth: 220 });
     marker.on('popupopen', () => {
-      document.querySelectorAll('.popup-btn-add').forEach(b => { b.onclick = () => { const city = b.getAttribute('data-city'); if(mapInstance) mapInstance.closePopup(); abrirWizard(); if(!VWIZ.ciudades_orden.includes(city)){ VWIZ.ciudades_orden.push(city); } wizGoToStep(2); wizRenderCityCards(); wizRenderCityOrder(); }; });
+      document.querySelectorAll('.popup-btn-add').forEach(b => { b.onclick = () => { const city = b.getAttribute('data-city'); if(mapInstance) mapInstance.closePopup(); abrirWizard(); wizParadaAdd(city); wizGoToStep(2); }; });
       document.querySelectorAll('.popup-btn-zoom').forEach(b => { b.onclick = () => { zoomToCity(b.getAttribute('data-city')); }; });
     });
     cityMarkers[c.n] = marker;
@@ -9334,11 +9359,15 @@ function buildSolicitudPayload() {
       ciudad_inicio: ciudadesArr[0] || '',
       ciudad_final: ciudadesArr[ciudadesArr.length - 1] || '',
       noches_por_ciudad: nochesPorCiudad,
-      total_noches_ruta: durNoches,
+      total_noches_ruta: VWIZ.ruta_ordenada.length > 0 ? VWIZ.ruta_ordenada.reduce((s,p)=>s+p.noches,0) : durNoches,
       detalle_ciudades: ciudades,
       modo: CFG.ruta,
       orden: CFG.rutaOrden,
-      km_total: cfgKmTotal()
+      km_total: cfgKmTotal(),
+      ruta_ordenada: VWIZ.ruta_ordenada.map((p, i) => ({ orden: i + 1, ciudad: p.ciudad, noches: p.noches })),
+      ciudades_resumen: VWIZ.ruta_ordenada.map(p => p.ciudad),
+      total_noches_fechas: durNoches,
+      validacion_noches_ok: VWIZ.ruta_ordenada.length > 0 ? (VWIZ.ruta_ordenada.reduce((s,p)=>s+p.noches,0) === durNoches) : null
     },
     servicios_vaa: {
       alojamiento: {
@@ -9474,7 +9503,8 @@ const VWIZ = {
   adultos: 2,
   menores: [],
   tipo_cliente: '',
-  ciudades_orden: [],
+  ciudades_orden: [],   // alias derivado de ruta_ordenada (compat)
+  ruta_ordenada: [],    // [{orden:1, ciudad:"Madrid", noches:1}, ...]
   servicios: {
     hotel: true,
     transporte: false,
@@ -9505,6 +9535,8 @@ function abrirWizard() {
   const ov = document.getElementById('wizardOverlay');
   if (!ov) return;
   VWIZ.step = 1;
+  VWIZ.ruta_ordenada = [];
+  VWIZ.ciudades_orden = [];
   ov.classList.add('open');
   document.body.style.overflow = 'hidden';
   wizGoToStep(1);
@@ -9547,7 +9579,11 @@ function wizValidateStep(n) {
     return null;
   }
   if (n === 2) {
-    if (VWIZ.ciudades_orden.length === 0) return 'Selecciona al menos una ciudad';
+    if (VWIZ.ruta_ordenada.length === 0) return 'Añade al menos una parada a tu ruta';
+    if (VWIZ.duracion_noches > 0) {
+      const totalRuta = VWIZ.ruta_ordenada.reduce((s, p) => s + p.noches, 0);
+      if (totalRuta !== VWIZ.duracion_noches) return 'La suma de noches por ciudad (' + totalRuta + ') debe coincidir con la duración total del viaje (' + VWIZ.duracion_noches + ' noches).';
+    }
     return null;
   }
   if (n === 3) {
@@ -9620,8 +9656,13 @@ function wizUpdateNights() {
   if (nd && fi && ff) {
     const d1 = new Date(fi), d2 = new Date(ff);
     const nights = Math.round((d2 - d1) / 86400000);
+    VWIZ.duracion_noches = Math.max(0, nights);
     nd.textContent = nights > 0 ? nights + (nights === 1 ? ' noche' : ' noches') : '';
-  } else if (nd) nd.textContent = '';
+  } else if (nd) {
+    VWIZ.duracion_noches = 0;
+    nd.textContent = '';
+  }
+  wizRutaValidar();
 }
 
 function wizToggleMargen() {
@@ -9647,65 +9688,134 @@ function wizUpdateMenores() {
   }
 }
 
-function wizCityToggle(city) {
-  const idx = VWIZ.ciudades_orden.indexOf(city);
-  if (idx === -1) {
-    VWIZ.ciudades_orden.push(city);
-  } else {
-    VWIZ.ciudades_orden.splice(idx, 1);
-  }
-  wizRenderCityCards();
-  wizRenderCityOrder();
+// ── WIZARD RUTA ORDENADA CON NOCHES ────────────────────────────────────────
+
+function wizParadaAdd(city) {
+  VWIZ.ruta_ordenada.push({ ciudad: city, noches: 1 });
+  wizRenderRuta();
 }
 
-function wizRenderCityCards() {
-  const grid = document.getElementById('wizCityGrid');
-  if (!grid) return;
-  grid.querySelectorAll('.wiz-city-card').forEach(card => {
-    const city = card.dataset.city;
-    card.classList.toggle('selected', VWIZ.ciudades_orden.includes(city));
-  });
+function wizParadaDel(idx) {
+  VWIZ.ruta_ordenada.splice(idx, 1);
+  wizRenderRuta();
 }
 
-function wizRenderCityOrder() {
-  const ol = document.getElementById('wizCityOrder');
-  if (!ol) return;
-  ol.innerHTML = '';
-  VWIZ.ciudades_orden.forEach((city, idx) => {
-    const li = document.createElement('li');
-    li.className = 'wiz-order-item';
-    li.innerHTML = WIZ_CITY_EMOJIS[city] + ' ' + city +
-      '<span class="wiz-order-btns">' +
-      (idx > 0 ? '<button onclick="wizCityMove(' + idx + ',-1)">▲</button>' : '') +
-      (idx < VWIZ.ciudades_orden.length - 1 ? '<button onclick="wizCityMove(' + idx + ',1)">▼</button>' : '') +
-      '</span>';
-    ol.appendChild(li);
-  });
-}
-
-function wizCityMove(idx, dir) {
-  const arr = VWIZ.ciudades_orden;
+function wizParadaMove(idx, dir) {
+  const arr = VWIZ.ruta_ordenada;
   const ni = idx + dir;
   if (ni < 0 || ni >= arr.length) return;
   [arr[idx], arr[ni]] = [arr[ni], arr[idx]];
-  wizRenderCityOrder();
+  wizRenderRuta();
 }
+
+function wizParadaNochesDelta(idx, delta) {
+  if (!VWIZ.ruta_ordenada[idx]) return;
+  VWIZ.ruta_ordenada[idx].noches = Math.max(1, VWIZ.ruta_ordenada[idx].noches + delta);
+  const el = document.getElementById('wizParadaNoches_' + idx);
+  if (el) el.textContent = VWIZ.ruta_ordenada[idx].noches;
+  wizRutaValidar();
+}
+
+function wizRenderRuta() {
+  const ruta = VWIZ.ruta_ordenada;
+  const wrap = document.getElementById('wizRutaWrap');
+  const list = document.getElementById('wizRutaList');
+  if (!list) return;
+
+  // Sync ciudades_orden alias
+  VWIZ.ciudades_orden = ruta.map(p => p.ciudad);
+
+  if (wrap) wrap.style.display = ruta.length > 0 ? 'block' : 'none';
+
+  list.innerHTML = '';
+  ruta.forEach((parada, idx) => {
+    const emoji = WIZ_CITY_EMOJIS[parada.ciudad] || '📍';
+    const div = document.createElement('div');
+    div.className = 'wiz-ruta-stop';
+    div.innerHTML =
+      '<span class="wiz-ruta-num">' + (idx + 1) + '</span>' +
+      '<span class="wiz-ruta-city">' + emoji + ' ' + parada.ciudad + '</span>' +
+      '<div class="wiz-ruta-noches">' +
+        '<button type="button" onclick="wizParadaNochesDelta(' + idx + ',-1)" aria-label="Menos noches">−</button>' +
+        '<span class="wiz-ruta-noches-val" id="wizParadaNoches_' + idx + '">' + parada.noches + '</span>' +
+        '<span class="wiz-ruta-noches-lbl">noche' + (parada.noches !== 1 ? 's' : '') + '</span>' +
+        '<button type="button" onclick="wizParadaNochesDelta(' + idx + ',1)" aria-label="Más noches">+</button>' +
+      '</div>' +
+      '<div class="wiz-ruta-actions">' +
+        (idx > 0 ? '<button type="button" onclick="wizParadaMove(' + idx + ',-1)" title="Subir">▲</button>' : '<button type="button" style="visibility:hidden">▲</button>') +
+        (idx < ruta.length - 1 ? '<button type="button" onclick="wizParadaMove(' + idx + ',1)" title="Bajar">▼</button>' : '<button type="button" style="visibility:hidden">▼</button>') +
+        '<button type="button" class="wiz-ruta-del" onclick="wizParadaDel(' + idx + ')" title="Eliminar parada">✕</button>' +
+      '</div>';
+    list.appendChild(div);
+  });
+
+  // Update totals
+  const totalNoches = ruta.reduce((s, p) => s + p.noches, 0);
+  const elParadas = document.getElementById('wizRutaParadas');
+  const elNoches = document.getElementById('wizRutaNochesTotal');
+  if (elParadas) elParadas.textContent = ruta.length;
+  if (elNoches) elNoches.textContent = totalNoches;
+
+  // Update city card badges
+  const counts = {};
+  ruta.forEach(p => { counts[p.ciudad] = (counts[p.ciudad] || 0) + 1; });
+  document.querySelectorAll('#wizCityGrid .wiz-city-card').forEach(card => {
+    const city = card.dataset.city;
+    const n = counts[city] || 0;
+    const badge = card.querySelector('.wiz-city-card-badge');
+    if (badge) {
+      badge.textContent = n;
+      badge.classList.toggle('vis', n > 0);
+    }
+    card.classList.toggle('in-ruta', n > 0);
+  });
+
+  wizRutaValidar();
+}
+
+function wizRutaValidar() {
+  const el = document.getElementById('wizRutaValidacion');
+  if (!el) return;
+  const ruta = VWIZ.ruta_ordenada;
+  if (ruta.length === 0) { el.className = 'wiz-ruta-val'; return; }
+  const totalRuta = ruta.reduce((s, p) => s + p.noches, 0);
+  const totalFechas = VWIZ.duracion_noches;
+  if (!totalFechas) {
+    el.className = 'wiz-ruta-val warn';
+    el.textContent = '⚠️ Define fechas para validar el total de noches.';
+    return;
+  }
+  if (totalRuta === totalFechas) {
+    el.className = 'wiz-ruta-val ok';
+    el.textContent = '✓ La suma de noches coincide con la duración del viaje (' + totalFechas + ' noches).';
+  } else {
+    el.className = 'wiz-ruta-val err';
+    el.textContent = '⚠ La suma de noches por ciudad (' + totalRuta + ') debe coincidir con la duración total del viaje (' + totalFechas + ' noches).';
+  }
+}
+
+// ── Compat: estas funciones siguen siendo llamadas desde el mapa. Redirigen a la nueva lógica. ──
+function wizCityToggle(city) {
+  const idx = VWIZ.ruta_ordenada.findIndex(p => p.ciudad === city);
+  if (idx === -1) wizParadaAdd(city);
+  else wizParadaDel(idx);
+}
+function wizRenderCityCards() { wizRenderRuta(); }
+function wizRenderCityOrder() { wizRenderRuta(); }
+function wizCityMove(idx, dir) { wizParadaMove(idx, dir); }
 
 function wizTogglePoi(city, poi, checked) {
   if (!window._wizCityState) window._wizCityState = {};
   if (!window._wizCityState[city]) window._wizCityState[city] = { noches: 1, pois: [] };
   const arr = window._wizCityState[city].pois;
-  const idx = arr.indexOf(poi);
-  if (checked && idx === -1) arr.push(poi);
-  if (!checked && idx !== -1) arr.splice(idx, 1);
+  const i = arr.indexOf(poi);
+  if (checked && i === -1) arr.push(poi);
+  if (!checked && i !== -1) arr.splice(i, 1);
 }
 
 function wizCityNochesDelta(city, delta) {
-  if (!window._wizCityState) window._wizCityState = {};
-  if (!window._wizCityState[city]) window._wizCityState[city] = { noches: 1, pois: [] };
-  window._wizCityState[city].noches = Math.max(1, window._wizCityState[city].noches + delta);
-  const el = document.getElementById('wizNoches_' + city);
-  if (el) el.textContent = window._wizCityState[city].noches;
+  const idx = VWIZ.ruta_ordenada.findLastIndex ? VWIZ.ruta_ordenada.findLastIndex(p => p.ciudad === city) : VWIZ.ruta_ordenada.map(p=>p.ciudad).lastIndexOf(city);
+  if (idx !== -1) wizParadaNochesDelta(idx, delta);
 }
 
 function wizToggleServicio(key) {
@@ -9826,8 +9936,8 @@ function wizRenderStep5() {
   if (!srvHTML) srvHTML = '<span style="font-size:0.82rem;color:#888;">Ningún servicio seleccionado</span>';
   cont.innerHTML = '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>📅 Fechas</strong><a href="#" onclick="wizGoToStep(1);return false;">Editar</a></div>' +
     '<p>' + (VWIZ.fecha_inicio || '—') + ' → ' + (VWIZ.fecha_fin || '—') + ' · ' + noches + ' noches' + flexTxt + '</p></div>' +
-    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🗺️ Ciudades</strong><a href="#" onclick="wizGoToStep(2);return false;">Editar</a></div>' +
-    '<p>' + (VWIZ.ciudades_orden.length > 0 ? VWIZ.ciudades_orden.map((c,i) => (i+1)+'. '+c).join(' → ') : '—') + '</p></div>' +
+    '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🗺️ Ruta</strong><a href="#" onclick="wizGoToStep(2);return false;">Editar</a></div>' +
+    '<p>' + (VWIZ.ruta_ordenada.length > 0 ? VWIZ.ruta_ordenada.map((p,i) => (i+1)+'. '+p.ciudad+' ('+p.noches+'n)').join(' → ') : '—') + '</p></div>' +
     '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>👥 Viajeros</strong><a href="#" onclick="wizGoToStep(3);return false;">Editar</a></div>' +
     '<p>' + VWIZ.adultos + ' adulto(s)' + menoresTxt + (VWIZ.tipo_cliente ? ' · ' + VWIZ.tipo_cliente : '') + '</p></div>' +
     '<div class="wiz-summary-block"><div class="wiz-summary-header"><strong>🛎️ Servicios</strong><a href="#" onclick="wizGoToStep(4);return false;">Editar</a></div>' +
@@ -9841,18 +9951,15 @@ async function wizSubmit() {
   // Sync VWIZ → CFG
   CFG.adultos = VWIZ.adultos;
   CFG.ninos = VWIZ.menores.slice();
-  if (VWIZ.ciudades_orden.length > 0) {
+  if (VWIZ.ruta_ordenada.length > 0) {
+    VWIZ.ciudades_orden = VWIZ.ruta_ordenada.map(p => p.ciudad);
     CFG.rutaOrden = VWIZ.ciudades_orden.slice();
     CFG.ruta = 'cliente';
-    VWIZ.ciudades_orden.forEach(cn => {
+    VWIZ.ruta_ordenada.forEach(parada => {
+      const cn = parada.ciudad;
       if (!ciudadesSeleccionadas.has(cn)) ciudadesSeleccionadas.add(cn);
       if (!CIU[cn]) CIU[cn] = ciuDefault(cn);
-    });
-  }
-  // Noches por ciudad — reservado para Fase A. _wizCityState siempre undefined hasta que se implemente el contador de noches en Paso 2.
-  if (window._wizCityState) {
-    Object.entries(window._wizCityState).forEach(([cn, state]) => {
-      if (CIU[cn]) CIU[cn].noches = state.noches;
+      CIU[cn].noches = parada.noches;
     });
   }
   const payload = buildSolicitudPayload();
