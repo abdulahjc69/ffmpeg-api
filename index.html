@@ -9803,15 +9803,20 @@ function wizRutaValidar() {
   const totalFechas = VWIZ.duracion_noches;
   if (!totalFechas) {
     el.className = 'wiz-ruta-val warn';
-    el.textContent = '⚠️ Define fechas para validar el total de noches.';
+    el.textContent = '📅 Define primero las fechas para validar las noches del viaje.';
     return;
   }
   if (totalRuta === totalFechas) {
     el.className = 'wiz-ruta-val ok';
-    el.textContent = '✓ La suma de noches coincide con la duración del viaje (' + totalFechas + ' noches).';
-  } else {
+    el.textContent = '✓ Perfecto. Las noches de la ruta coinciden con tu viaje.';
+  } else if (totalRuta < totalFechas) {
+    const faltan = totalFechas - totalRuta;
     el.className = 'wiz-ruta-val err';
-    el.textContent = '⚠ La suma de noches por ciudad (' + totalRuta + ') debe coincidir con la duración total del viaje (' + totalFechas + ' noches).';
+    el.textContent = '⚠ Te falt' + (faltan === 1 ? 'a 1 noche' : 'an ' + faltan + ' noches') + ' por repartir entre las ciudades.';
+  } else {
+    const sobran = totalRuta - totalFechas;
+    el.className = 'wiz-ruta-val err';
+    el.textContent = '⚠ Has asignado ' + (sobran === 1 ? '1 noche de más' : sobran + ' noches de más') + '. Reduce noches en alguna ciudad.';
   }
 }
 
