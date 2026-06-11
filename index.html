@@ -5721,6 +5721,15 @@ img, video, iframe { max-width: 100%; height: auto; }
   transition: width 0.3s ease;
   width: 0%;
 }
+.wiz-step-counter {
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.65);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
 .wiz-dots {
   display: flex;
   gap: 8px;
@@ -6116,6 +6125,7 @@ img, video, iframe { max-width: 100%; height: auto; }
         <button class="wiz-close" onclick="cerrarWizard()" aria-label="Cerrar">×</button>
       </div>
       <div class="wiz-progress-track"><div class="wiz-progress-fill" id="wizProgressBar"></div></div>
+      <div class="wiz-step-counter" id="wizStepIndicator">Paso 1 de 6</div>
       <div class="wiz-dots">
         <button class="wiz-dot" data-step="1" onclick="wizGoToStep(1)" aria-label="Paso 1: Fechas"></button>
         <button class="wiz-dot" data-step="2" onclick="wizGoToStep(2)" aria-label="Paso 2: Ruta"></button>
@@ -9563,6 +9573,8 @@ function wizGoToStep(n) {
 function wizUpdateProgress() {
   const bar = document.getElementById('wizProgressBar');
   if (bar) bar.style.width = (((VWIZ.step - 1) / 5) * 100) + '%';
+  const counter = document.getElementById('wizStepIndicator');
+  if (counter) counter.textContent = 'Paso ' + VWIZ.step + ' de 6';
   document.querySelectorAll('.wiz-dot').forEach(d => {
     const s = parseInt(d.dataset.step);
     d.classList.toggle('done', s < VWIZ.step);
