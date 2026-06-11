@@ -9575,7 +9575,7 @@ function wizValidateStep(n) {
     if (!VWIZ.fecha_inicio) return 'Selecciona la fecha de inicio';
     if (!VWIZ.fecha_fin) return 'Selecciona la fecha de fin';
     if (VWIZ.fecha_inicio < window._wizMinFecha) return 'La fecha de inicio debe ser posterior a la disponible';
-    if (VWIZ.fecha_fin <= VWIZ.fecha_inicio) return 'La fecha de fin debe ser posterior a la de inicio';
+    if (VWIZ.fecha_fin <= VWIZ.fecha_inicio) return 'La fecha de salida debe ser posterior a la fecha de entrada.';
     return null;
   }
   if (n === 2) {
@@ -9653,13 +9653,28 @@ function wizUpdateNights() {
   const fi = document.getElementById('wizFechaInicio')?.value;
   const ff = document.getElementById('wizFechaFin')?.value;
   const nd = document.getElementById('wizNightsDisplay');
+  const elFin = document.getElementById('wizFechaFin');
+  // Set minimum selectable end date to the day after start date
+  if (fi && elFin) {
+    const nextDay = new Date(fi);
+    nextDay.setDate(nextDay.getDate() + 1);
+    elFin.min = nextDay.toISOString().split('T')[0];
+  }
   if (nd && fi && ff) {
     const d1 = new Date(fi), d2 = new Date(ff);
     const nights = Math.round((d2 - d1) / 86400000);
-    VWIZ.duracion_noches = Math.max(0, nights);
-    nd.textContent = nights > 0 ? nights + (nights === 1 ? ' noche' : ' noches') : '';
+    if (nights <= 0) {
+      VWIZ.duracion_noches = 0;
+      nd.style.color = 'var(--terra, #BB4422)';
+      nd.textContent = 'La fecha de salida debe ser posterior a la fecha de entrada.';
+    } else {
+      VWIZ.duracion_noches = nights;
+      nd.style.color = '';
+      nd.textContent = nights + (nights === 1 ? ' noche' : ' noches');
+    }
   } else if (nd) {
     VWIZ.duracion_noches = 0;
+    nd.style.color = '';
     nd.textContent = '';
   }
   wizRutaValidar();
