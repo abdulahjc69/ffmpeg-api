@@ -4383,6 +4383,25 @@ img, video, iframe { max-width: 100%; height: auto; }
   .vaexp-trip{position:static;order:2;}
   .vaexp-cards{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
 }
+/* ── Ficha: flex para que el botón nunca quede cortado ── */
+.vaexp-ficha{display:flex;flex-direction:column;padding:18px;}
+.vaexp-ficha-content{flex:1;overflow-y:auto;}
+.vaexp-ficha .vaexp-add{flex-shrink:0;width:100%;margin-top:14px;}
+/* Panel: altura segura en móvil */
+@media(max-width:860px){
+  #vaexpPanel{max-height:calc(100vh - 220px);overflow-y:auto;}
+  .vaexp-ficha{max-height:none;}
+}
+/* Imagen en la ficha */
+.vaexp-ficha-img{width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:12px;display:block;background:#f0ece3;}
+.vaexp-ficha-img-bar{width:100%;height:5px;background:linear-gradient(90deg,#0E7C86,#8C5A2B);border-radius:3px;margin-bottom:14px;}
+/* Galería de imágenes: hasta 5 miniaturas */
+.vaexp-ficha-gallery{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
+.vaexp-ficha-gallery img{height:72px;width:96px;object-fit:cover;border-radius:7px;flex-shrink:0;cursor:pointer;transition:opacity .15s;}
+.vaexp-ficha-gallery img:hover{opacity:.85;}
+/* Atlas popup: estado añadido y sin imagen fea */
+.atlas-pop-add.added{background:#2E7D32;cursor:default;}
+.atlas-pop-img{width:100%;height:110px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block;}
 </style>
 
   <div class="container">
@@ -4674,12 +4693,30 @@ img, video, iframe { max-width: 100%; height: auto; }
     if(e.visita) rows+='<span class="vaexp-ficha-tag '+(e.requiere_entrada?'pay':'ok')+'">'+esc(e.visita)+'</span>';
     if(e.imprescindible) rows+='<span class="vaexp-ficha-tag">'+esc(e.imprescindible)+'</span>';
     var added=inTrip('el:'+e.id_notion);
-    f.innerHTML='<h3>'+esc(e.nombre)+'</h3>'+
-      '<div class="vaexp-ficha-sub">'+esc(e.nombre_enclave||'')+(e.provincia?' · '+esc(e.provincia):'')+'</div>'+
-      '<div class="vaexp-chips">'+chips+'</div>'+
-      '<div class="vaexp-ficha-row">'+rows+'</div>'+
-      (e.que_es?'<p class="vaexp-ficha-desc">'+esc(e.que_es)+'</p>':'')+
-      '<button class="vaexp-add'+(added?' added':'')+'" id="vaexpFichaAdd">'+(added?'✓ En Mi Viaje':'Quiero visitar esto · Añadir a Mi Viaje')+'</button>';
+    // Imagen principal — URL de Atlas Visual / Cloudinary si existe, fallback barra de color
+    var imgSrc = e.imagen_url || (Array.isArray(e.imagenes) && e.imagenes[0]) || '';
+    var imgHtml = imgSrc
+      ? '<img class="vaexp-ficha-img" src="'+esc(imgSrc)+'" alt="'+esc(e.nombre)+'" onerror="this.style.display=\'none\'">'
+      : '<div class="vaexp-ficha-img-bar"></div>';
+    // Galería (hasta 5 imágenes adicionales)
+    var galeria = '';
+    if(Array.isArray(e.imagenes) && e.imagenes.length > 1){
+      var imgs = e.imagenes.slice(0,5);
+      galeria = '<div class="vaexp-ficha-gallery">';
+      imgs.forEach(function(src){ galeria += '<img src="'+esc(src)+'" alt="'+esc(e.nombre)+'" onerror="this.parentNode.removeChild(this)">'; });
+      galeria += '</div>';
+    }
+    f.innerHTML=
+      imgHtml+
+      galeria+
+      '<div class="vaexp-ficha-content">'+
+        '<h3>'+esc(e.nombre)+'</h3>'+
+        '<div class="vaexp-ficha-sub">'+esc(e.nombre_enclave||'')+(e.provincia?' · '+esc(e.provincia):'')+'</div>'+
+        '<div class="vaexp-chips">'+chips+'</div>'+
+        '<div class="vaexp-ficha-row">'+rows+'</div>'+
+        (e.que_es?'<p class="vaexp-ficha-desc">'+esc(e.que_es)+'</p>':'')+
+      '</div>'+
+      '<button class="vaexp-add'+(added?' added':'')+'" id="vaexpFichaAdd">'+(added?'✓ En Mi Viaje':'+ Añadir a Mi Viaje')+'</button>';
     setPanel(f);
     var btn=$('vaexpFichaAdd');
     if(btn) btn.onclick=function(){ addTrip({key:'el:'+e.id_notion,kind:'Monumento',nombre:e.nombre,meta:(e.nombre_enclave||e.provincia||''),provincia:(e.provincia||''),poblacion:(e.nombre_enclave||''),id_notion:e.id_notion}); renderFicha(elId); };
@@ -5204,7 +5241,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     return true;
   }
 
-  window.VAExp={ load:function(d){ window.__atlasV2=d; load(d); }, addCityByName:addCityByName, loadFallback:tryLoadFallback };
+  window.VAExp={ load:function(d){ window.__atlasV2=d; load(d); }, addCityByName:addCityByName, loadFallback:tryLoadFallback, inTrip:inTrip };
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 })();
 </script>
@@ -6364,7 +6401,15 @@ function atlasMonIcon() {
 function atlasEnclavePopup(e) {
   const chips = atlasArr(e.epoca).map(x => '<span class="atlas-chip">' + atlasEsc(x) + '</span>').join('');
   const tipos = atlasArr(e.tipo).join(' · ');
+  // Comprobar si ya está en el viaje (misma lógica que addCityByName)
+  const cityKey = e.id_notion ? ('pob:' + e.id_notion) : ('city:' + e.nombre);
+  const alreadyAdded = !!(window.VAExp && window.VAExp.inTrip && window.VAExp.inTrip(cityKey));
+  const addLabel = alreadyAdded ? '✓ Añadido a mi viaje' : t('map.popup.add', '+ Añadir a mi viaje');
+  const addClass = alreadyAdded ? 'atlas-pop-add added' : 'atlas-pop-add';
+  // Imagen: URL de Atlas Visual / Cloudinary si existe
+  const imgSrc = e.imagen_url || (Array.isArray(e.imagenes) && e.imagenes[0]) || '';
   let h = '<div class="atlas-pop">';
+  if (imgSrc) h += '<img class="atlas-pop-img" src="' + atlasEsc(imgSrc) + '" alt="' + atlasEsc(e.nombre) + '" onerror="this.style.display=\'none\'">';
   h += '<div class="atlas-pop-lvl">' + atlasNivelLabel(e.nivel) + (e.estado ? ' · ' + atlasEsc(e.estado) : '') + '</div>';
   h += '<strong class="atlas-pop-name">' + atlasEsc(e.nombre) + '</strong>';
   if (e.arabe) h += '<div class="atlas-pop-ar">' + atlasEsc(e.arabe) + '</div>';
@@ -6373,7 +6418,7 @@ function atlasEnclavePopup(e) {
   if (e.conserva) h += '<p class="atlas-pop-meta"><b>' + t('atlas.conserva', 'Qué conserva') + ':</b> ' + atlasEsc(e.conserva) + '</p>';
   const loc = [e.provincia, e.cora].filter(Boolean).map(atlasEsc).join(' · ');
   if (tipos || loc) h += '<div class="atlas-pop-foot">' + atlasEsc(tipos) + (loc ? (' — ' + loc) : '') + '</div>';
-  h += '<button class="atlas-pop-add" data-city="' + atlasEsc(e.nombre) + '">' + t('map.popup.add', '+ Añadir a mi viaje') + '</button>';
+  h += '<button class="' + addClass + '" data-city="' + atlasEsc(e.nombre) + '">' + addLabel + '</button>';
   h += '<a class="atlas-pop-link" href="https://www.google.com/maps/search/?api=1&query=' + e.lat + ',' + e.lng + '" target="_blank" rel="noopener">' + t('atlas.maps', 'Ver en el mapa →') + '</a>';
   return h + '</div>';
 }
@@ -6397,7 +6442,16 @@ function atlasMonPopup(m) {
 }
 function atlasBindPopup() {
   document.querySelectorAll('.atlas-pop-add').forEach(b => {
-    b.onclick = () => { if(window.VAExp&&window.VAExp.addCityByName){ window.VAExp.addCityByName(b.getAttribute('data-city')); } else { toggleCiudad(b.getAttribute('data-city')); } if (mapInstance) mapInstance.closePopup(); };
+    if (b.classList.contains('added')) return; // ya añadido, nada que hacer
+    b.onclick = () => {
+      const city = b.getAttribute('data-city');
+      if(window.VAExp&&window.VAExp.addCityByName){ window.VAExp.addCityByName(city); }
+      else { toggleCiudad(city); }
+      // Actualizar botón sin cerrar el popup
+      b.textContent = '✓ Añadido a mi viaje';
+      b.classList.add('added');
+      b.onclick = null; // evitar doble click
+    };
   });
 }
 
