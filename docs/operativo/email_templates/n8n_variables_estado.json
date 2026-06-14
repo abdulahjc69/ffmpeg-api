@@ -1,0 +1,112 @@
+{
+  "_comentario": "Estructura de variables para campañas de proveedores en n8n — Vive al Ándalus",
+  "_uso": "Cada fila del nodo 'Set' de n8n debe mapear estas variables desde la hoja de proveedores (Google Sheets o Notion)",
+
+  "variables_plantilla": {
+    "nombre_proveedor": {
+      "tipo": "string",
+      "ejemplo": "Hotel Palacio de Córdoba",
+      "descripcion": "Nombre comercial del proveedor"
+    },
+    "tipo_proveedor": {
+      "tipo": "string",
+      "valores": ["Hotel", "Transporte", "Restaurante", "Agencia"],
+      "descripcion": "Determina qué plantilla HTML usar"
+    },
+    "ciudad": {
+      "tipo": "string",
+      "valores": ["Madrid", "Toledo", "Córdoba", "Sevilla", "Granada"],
+      "descripcion": "Ciudad del proveedor"
+    },
+    "persona_contacto": {
+      "tipo": "string",
+      "ejemplo": "Sra. García",
+      "descripcion": "Nombre de la persona a quien va dirigido el email"
+    },
+    "email_destino": {
+      "tipo": "string",
+      "ejemplo": "reservas@hotelpalacio.com",
+      "descripcion": "Email de destino real. En modo prueba: reservas@vivealandalus.com"
+    },
+    "telefono_proveedor": {
+      "tipo": "string",
+      "ejemplo": "+34 957 47 36 35",
+      "descripcion": "Teléfono del proveedor (para campo CC o seguimiento)"
+    },
+    "fecha_envio": {
+      "tipo": "string",
+      "formato": "DD de MMMM de YYYY",
+      "ejemplo": "14 de junio de 2026",
+      "descripcion": "Fecha de envío del email — generar dinámicamente en n8n con: {{ $now.toFormat('dd de MMMM de yyyy') }}"
+    },
+    "referencia_contacto": {
+      "tipo": "string",
+      "formato": "VAA-PROVEEDOR-YYYYMMDD-NNN",
+      "ejemplo": "VAA-HOT-20260614-001",
+      "descripcion": "Referencia única del contacto. Prefijo: HOT/TRP/RST/AGN según tipo"
+    }
+  },
+
+  "campos_estado_seguimiento": {
+    "estado_envio": {
+      "tipo": "select",
+      "valores": [
+        "pendiente",
+        "enviado",
+        "respondio",
+        "seguimiento_1",
+        "seguimiento_2",
+        "descartado",
+        "activo"
+      ],
+      "default": "pendiente",
+      "descripcion": "Estado del ciclo de contacto con este proveedor"
+    },
+    "fecha_ultimo_contacto": {
+      "tipo": "date",
+      "formato": "YYYY-MM-DD",
+      "descripcion": "Última vez que se envió un email o se realizó un seguimiento"
+    },
+    "proximo_seguimiento": {
+      "tipo": "date",
+      "formato": "YYYY-MM-DD",
+      "descripcion": "Fecha programada para el siguiente contacto si no hay respuesta. Regla: +7 días desde envío"
+    },
+    "notas_respuesta": {
+      "tipo": "text",
+      "descripcion": "Texto libre para registrar lo que respondió el proveedor o resultado de la llamada"
+    },
+    "canal_respuesta": {
+      "tipo": "select",
+      "valores": ["email", "telefono", "whatsapp", "sin_respuesta"],
+      "descripcion": "Cómo respondió el proveedor"
+    }
+  },
+
+  "prefijos_referencia": {
+    "Hotel": "HOT",
+    "Transporte": "TRP",
+    "Restaurante": "RST",
+    "Agencia": "AGN"
+  },
+
+  "selector_plantilla": {
+    "descripcion": "En n8n usar nodo Switch con condición sobre tipo_proveedor",
+    "Hotel": "email_hoteles.html",
+    "Transporte": "email_transporte.html",
+    "Restaurante": "email_restaurantes_halal.html",
+    "Agencia": "email_agencias.html"
+  },
+
+  "modo_prueba": {
+    "activo": true,
+    "email_prueba": "reservas@vivealandalus.com",
+    "descripcion": "Mientras modo_prueba=true, todos los emails van a email_prueba. Cambiar a false solo cuando Abdu apruebe envío real."
+  },
+
+  "remitente": {
+    "nombre": "Abdulah Jiménez Contreras — Vive al Ándalus",
+    "email": "reservas@vivealandalus.com",
+    "reply_to": "reservas@vivealandalus.com"
+  }
+}
