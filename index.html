@@ -4554,7 +4554,7 @@ img, video, iframe { max-width: 100%; height: auto; }
   // === Configuración de envío (MODO SEGURO) ===
   // 'preview' = NO envía a producción; solo prepara y muestra el payload.
   // 'live'    = haría POST real al webhook de leads (no activar sin confirmar).
-  var VAEXP_CFG = { SUBMIT_MODE:'preview', WEBHOOK:'https://n8n-production-3cc5.up.railway.app/webhook/vivealandalus-lead' };
+  var VAEXP_CFG = { SUBMIT_MODE:'live', WEBHOOK:'https://n8n-production-3cc5.up.railway.app/webhook/vivealandalus-lead' };
 
   var S = { data:null, pobById:{}, elById:{}, regions:[], nivel:'paises', pais:null, services:[],
             serviceDetails:{}, region:null, poblacion:null, elemento:null, trip:[],
