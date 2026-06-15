@@ -4382,6 +4382,95 @@ img, video, iframe { max-width: 100%; height: auto; }
 /* Texto secundario */
 .wiz-panel-sub, .wiz-srv-desc { color: var(--texto-sec); }
 </style>
+<style>
+/* ============================================================
+   ORDEN 072-B1 — Ajuste controlado de paleta
+   Terracota solo convierte. Teal explora. Carbón informa.
+   NO toca: footer, tokens globales, CTA monetarios, JS, ORDEN 068/069
+   ============================================================ */
+
+:root {
+  --vaa-carbon-warm: #1C1814;
+  --vaa-teal:        #0E7C86;
+  --vaa-teal-d:      #0A5A61;
+  --vaa-teal-soft:   rgba(14,124,134,0.10);
+  --vaa-gold-strong: #B8872E;
+}
+
+/* — B2B: autoridad corporativa, no promoción roja — */
+.b2b {
+  background: linear-gradient(135deg, #1C1814 0%, #2A221B 100%) !important;
+}
+.b2b-content h2 { color: var(--crema); }
+.b2b-content p,
+.b2b-perks li  { color: rgba(246,238,223,0.88); }
+.b2b-card {
+  background:   rgba(0,0,0,0.24);
+  border-color: rgba(231,183,101,0.28);
+}
+.b2b-card h3 { color: var(--oro-l); }
+
+/* — Chat: ayuda, no CTA monetario — */
+.chat-header {
+  background: #1C1814 !important;
+  color: var(--crema);
+}
+.chat-msg.user {
+  background: #0E7C86 !important;
+  color: #fff;
+}
+.chat-send {
+  background: #0E7C86 !important;
+  color: #fff;
+}
+.chat-send:hover { background: #0A5A61 !important; }
+.chat-input-area textarea:focus {
+  border-color: #0E7C86 !important;
+  box-shadow: 0 0 0 3px rgba(14,124,134,0.10);
+}
+
+/* — Títulos no comerciales: informar, no convertir — */
+.pos-card h3,
+.ciudad-body h3,
+.ciu-section h5 { color: #1C1814 !important; }
+
+/* — Hero secundario "Explora Al-Ándalus": exploración = teal — */
+/* Selector directo + !important para superar inline styles */
+.btn-hero-secondary,
+.hero-text .btn-secondary {
+  color:        #0E7C86 !important;
+  border-color: #0E7C86 !important;
+  background:   transparent !important;
+}
+.btn-hero-secondary:hover,
+.hero-text .btn-secondary:hover {
+  background: #0E7C86 !important;
+  color: #fff !important;
+  border-color: #0E7C86 !important;
+}
+
+/* — Navegación: hover no monetario — */
+.nav a:hover,
+.nav a.active {
+  color:      #0E7C86 !important;
+  background: rgba(14,124,134,0.08) !important;
+}
+.nav a::after {
+  background: linear-gradient(90deg, #0E7C86 0%, var(--oro) 100%) !important;
+}
+
+/* — Controles mapa: exploración = teal — */
+.mapa-controls-overlay .mc-zoom .mc-btn:hover,
+.mapa-controls-overlay .mc-layer:hover {
+  background: rgba(14,124,134,0.10) !important;
+  color:      #0E7C86 !important;
+}
+.mapa-controls-overlay .mc-layer.active {
+  background:  rgba(14,124,134,0.14) !important;
+  color:       #0A5A61 !important;
+  font-weight: 700;
+}
+/* ============================================================ */
 </head>
 <body>
 
