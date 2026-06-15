@@ -1941,22 +1941,96 @@ input[type=range].timeline-slider::-moz-range-thumb {
 .event-marker.media { background: rgba(194,149,74,0.55); width: 10px; height: 10px; top: 22px; }
 
 /* ===== EFECTO GOTA / PULSO HISTÓRICO DEL MAPA ===== */
-@keyframes tlRipple {
-  0%   { transform: translate(-50%,-50%) scale(0.05); opacity: 0.85; }
-  100% { transform: translate(-50%,-50%) scale(1);    opacity: 0; }
+/* ORDEN 070 — Sistema visual histórico elegante: pines + halo + línea + etiqueta */
+
+/* Halo pulsante del pin principal */
+@keyframes tlHaloPulse {
+  0%   { transform: translate(-50%,-50%) scale(0.6); opacity: 0.7; }
+  70%  { transform: translate(-50%,-50%) scale(1.6); opacity: 0; }
+  100% { transform: translate(-50%,-50%) scale(1.6); opacity: 0; }
 }
-.tl-ripple-wrap { position: relative; width: 0; height: 0; pointer-events: none; }
-.tl-ripple {
+
+/* Pin principal — círculo dorado elegante */
+.tl-history-pin {
   position: absolute;
-  width: 88px; height: 88px;
   border-radius: 50%;
-  border: 2px solid rgba(194,149,74,0.85);
-  animation: tlRipple 2s ease-out 3;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+.tl-history-pin.primary {
+  width: 14px; height: 14px;
+  background: radial-gradient(circle, #e7b765 30%, #C2954A 100%);
+  box-shadow: 0 0 0 3px rgba(194,149,74,0.35), 0 2px 8px rgba(0,0,0,0.45);
+  z-index: 10;
+}
+.tl-history-pin.primary::after {
+  content: '';
+  position: absolute;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(194,149,74,0.55);
+  top: 50%; left: 50%;
+  animation: tlHaloPulse 2.4s ease-out infinite;
   pointer-events: none;
 }
-.tl-ripple.r2 { width: 56px; height: 56px; animation-delay: 0.55s; border-color: rgba(194,149,74,0.5); }
-.tl-ripple.r3 { width: 120px; height: 120px; animation-delay: 1.1s; border-color: rgba(189,69,35,0.35); }
-.tl-ripple-sec { width: 48px; height: 48px; border-color: rgba(194,149,74,0.38); animation-duration: 1.6s; animation-iteration-count: 2; }
+.tl-history-pin.secondary {
+  width: 7px; height: 7px;
+  background: rgba(194,149,74,0.65);
+  box-shadow: 0 0 0 2px rgba(194,149,74,0.2), 0 1px 4px rgba(0,0,0,0.35);
+  z-index: 8;
+}
+
+/* Etiqueta flotante de año + título sobre el mapa */
+.tl-map-caption {
+  position: absolute;
+  top: 12px; left: 12px;
+  z-index: 420;
+  background: rgba(18,15,12,0.82);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(194,149,74,0.3);
+  border-radius: 6px;
+  padding: 6px 10px 5px;
+  pointer-events: none;
+  max-width: 220px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.tl-map-caption.visible { opacity: 1; }
+.tl-map-caption-year {
+  font-family: 'El Messiri','Amiri',serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--oro);
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 2px;
+}
+.tl-map-caption-title {
+  font-family: 'El Messiri','Amiri',serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(246,238,223,0.9);
+  line-height: 1.3;
+  display: block;
+}
+.tl-map-caption-cities {
+  font-family: Arial,sans-serif;
+  font-size: 10px;
+  color: rgba(194,149,74,0.75);
+  margin-top: 3px;
+  display: block;
+}
+
+/* Línea histórica (SVG polyline vía Leaflet polyline) — se controla por CSS de Leaflet */
+/* No se puede poner animación SVG directa fácilmente, el efecto se hace con JS */
+
+@media only screen and (max-width: 900px) {
+  .tl-map-caption { max-width: 160px; top: 8px; left: 8px; padding: 4px 8px; }
+  .tl-map-caption-year { font-size: 10px; }
+  .tl-map-caption-title { font-size: 11px; }
+  .tl-history-pin.primary { width: 11px; height: 11px; }
+  .tl-history-pin.secondary { width: 5px; height: 5px; }
+}
 
 /* ===== PANEL NARRATIVO DEL TIMELINE ===== */
 .tl-narrative {
@@ -4439,6 +4513,12 @@ img, video, iframe { max-width: 100%; height: auto; }
       <div class="mapa-layout">
         <div class="mapa-wrapper">
           <div id="mapa"></div>
+          <!-- Etiqueta narrativa del hito activo sobre el mapa -->
+          <div id="tlMapCaption" class="tl-map-caption" aria-hidden="true">
+            <span class="tl-map-caption-year" id="tlMapCaptionYear"></span>
+            <span class="tl-map-caption-title" id="tlMapCaptionTitle"></span>
+            <span class="tl-map-caption-cities" id="tlMapCaptionCities"></span>
+          </div>
           <!-- Overlay de controles: zoom + capas (HTML estático, no Leaflet) -->
           <div class="mapa-controls-overlay" id="mapaControlsOverlay">
             <div class="mc-group mc-zoom">
@@ -8065,27 +8145,74 @@ const TL_CITY_COORDS = {
   alpujarra:[36.9396, -3.3617]
 };
 let _tlEffectMarkers = [];
+let _tlPolyLine = null;
 
 function clearTimelineMapEffects() {
   _tlEffectMarkers.forEach(m => { try { if (mapInstance) mapInstance.removeLayer(m); } catch(e) {} });
   _tlEffectMarkers = [];
+  if (_tlPolyLine) { try { if (mapInstance) mapInstance.removeLayer(_tlPolyLine); } catch(e) {} _tlPolyLine = null; }
+  // Ocultar etiqueta
+  const cap = document.getElementById('tlMapCaption');
+  if (cap) cap.classList.remove('visible');
 }
 
+/* ORDEN 070 — Mapa histórico vivo: pines elegantes + línea narrativa + etiqueta */
 function applyTimelineMapEffect(ev) {
   if (!mapInstance || typeof L === 'undefined') return;
   clearTimelineMapEffects();
-  const cities = (ev && ev.cities) ? ev.cities : [];
-  cities.forEach((cityId, idx) => {
-    const coords = TL_CITY_COORDS[cityId];
-    if (!coords) return;
+  if (!ev) return;
+
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'es';
+  const get  = (f) => (f && typeof f === 'object') ? (f[lang] || f.es || '') : (f || '');
+
+  // Resolver ciudades: preferir mapAction.highlightCities, si no ev.cities
+  const cityIds = (ev.mapAction && ev.mapAction.highlightCities && ev.mapAction.highlightCities.length)
+    ? ev.mapAction.highlightCities
+    : (ev.cities || []);
+
+  const validCities = cityIds.map(id => ({ id, coords: TL_CITY_COORDS[id] })).filter(c => c.coords);
+  if (!validCities.length) return;
+
+  // Línea narrativa entre ciudades (si hay más de una)
+  if (validCities.length > 1) {
+    const latlngs = validCities.map(c => c.coords);
+    _tlPolyLine = L.polyline(latlngs, {
+      color: '#C2954A',
+      weight: 1.5,
+      opacity: 0.55,
+      dashArray: '5 8',
+      lineCap: 'round',
+      interactive: false,
+      smoothFactor: 1
+    }).addTo(mapInstance);
+    _tlPolyLine.bringToFront();
+  }
+
+  // Pines de ciudad
+  validCities.forEach((city, idx) => {
     const isPrimary = idx === 0;
-    const html = isPrimary
-      ? '<div class="tl-ripple-wrap"><div class="tl-ripple"></div><div class="tl-ripple r2"></div><div class="tl-ripple r3"></div></div>'
-      : '<div class="tl-ripple-wrap"><div class="tl-ripple tl-ripple-sec"></div></div>';
+    const cls = isPrimary ? 'tl-history-pin primary' : 'tl-history-pin secondary';
+    const html = '<div class="' + cls + '"></div>';
     const icon = L.divIcon({ className: '', html, iconSize: [0, 0], iconAnchor: [0, 0] });
-    const m = L.marker(coords, { icon, interactive: false, zIndexOffset: 200 }).addTo(mapInstance);
+    const m = L.marker(city.coords, { icon, interactive: false, zIndexOffset: isPrimary ? 300 : 200 }).addTo(mapInstance);
     _tlEffectMarkers.push(m);
   });
+
+  // Etiqueta flotante sobre el mapa
+  const cap   = document.getElementById('tlMapCaption');
+  const capY  = document.getElementById('tlMapCaptionYear');
+  const capT  = document.getElementById('tlMapCaptionTitle');
+  const capC  = document.getElementById('tlMapCaptionCities');
+  if (cap && capY && capT && capC) {
+    const titleTxt = get(ev.title) || '';
+    const shortTitle = titleTxt.length > 52 ? titleTxt.slice(0, 50) + '…' : titleTxt;
+    const citiesTxt = validCities.map(c => CITY_DISPLAY_NAMES[c.id] || c.id).join(' · ');
+    capY.textContent = ev.year + ' d.C.';
+    capT.textContent = shortTitle;
+    capC.textContent = citiesTxt;
+    // Mostrar con transición
+    requestAnimationFrame(() => { cap.classList.add('visible'); });
+  }
 }
 
 // Actualiza el panel narrativo con el hito activo para el año dado
@@ -8130,9 +8257,13 @@ function updateEpoca(year) {
     currentEpocaIdx = idx;
     if (polygonLayer) mapInstance.removeLayer(polygonLayer);
     polygonLayer = L.polygon(ep.polygon, {
-      stroke: false,
-      fillColor: '#C2954A',
-      fillOpacity: 0.07,
+      stroke: true,
+      color: ep.color || '#C2954A',
+      weight: 1,
+      opacity: 0.18,
+      dashArray: '6 8',
+      fillColor: ep.color || '#C2954A',
+      fillOpacity: 0.018,
       smoothFactor: 2,
       interactive: false
     }).addTo(mapInstance);
