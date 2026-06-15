@@ -15,9 +15,9 @@
     @media only screen and (max-width: 620px) {
       .container { width: 100% !important; }
       .block-pad { padding: 20px 16px !important; }
-      .header-pad { padding: 32px 20px 24px !important; }
+      .header-pad { padding: 28px 20px 20px !important; }
       .hide-mobile { display: none !important; }
-      .btn-full { width: 100% !important; text-align: center !important; }
+      .btn-td { width: 100% !important; display: block !important; padding-bottom: 8px !important; }
     }
   </style>
 </head>
@@ -35,172 +35,48 @@
               <tr>
                 <td>
                   <p style="margin:0 0 6px 0;font-family:Georgia,serif;font-size:11px;color:#e7b765;letter-spacing:3px;text-transform:uppercase;">Solicitud de colaboración</p>
-                  <h1 style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#ffffff;line-height:1.2;">Menú halal para grupos</h1>
+                  <h1 style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#ffffff;line-height:1.2;">Menú halal para grupos organizados</h1>
                   <p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:#F6EEDF;opacity:0.85;">Circuito Al-Ándalus · Grupos organizados · {{ciudad}}</p>
                 </td>
-                <td width="80" align="right" valign="top" class="hide-mobile">
-                  <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.12);border:2px solid rgba(231,183,101,0.6);display:inline-block;line-height:56px;text-align:center;">
-                    <span style="font-size:24px;">🍽️</span>
-                  </div>
+                <td width="72" align="right" valign="top" class="hide-mobile">
+                  <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.12);border:2px solid rgba(231,183,101,0.5);display:inline-block;line-height:52px;text-align:center;font-size:22px;">🍽️</div>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
 
-        <!-- FRANJA -->
+        <!-- FRANJA REF -->
         <tr>
-          <td style="background-color:#C2954A;padding:10px 40px;" class="block-pad">
+          <td style="background-color:#C2954A;padding:9px 40px;" class="block-pad">
             <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#ffffff;letter-spacing:1px;">
               REF: <strong>{{referencia_contacto}}</strong> &nbsp;·&nbsp; {{fecha_envio}} &nbsp;·&nbsp; {{ciudad}}
             </p>
           </td>
         </tr>
 
-        <!-- SALUDO -->
+        <!-- SALUDO + PRESENTACIÓN -->
         <tr>
-          <td style="padding:36px 40px 0;" class="block-pad">
-            <p style="margin:0 0 16px 0;font-family:Georgia,serif;font-size:17px;color:#1A1A1A;line-height:1.5;">
-              Estimado/a <strong>{{persona_contacto}}</strong>,
-            </p>
+          <td style="padding:32px 40px 0;" class="block-pad">
+            <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:17px;color:#1A1A1A;line-height:1.5;">Estimado/a <strong>{{persona_contacto}}</strong>,</p>
             <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#3a3a3a;line-height:1.7;">
-              Me pongo en contacto desde <strong>Vive al Ándalus</strong>, agencia especializada en circuitos culturales por Al-Ándalus para grupos organizados procedentes de países de habla árabe y comunidades islámicas. La alimentación halal es un requisito fundamental para todos nuestros grupos, no una opción.
+              Me pongo en contacto desde <strong>Vive al Ándalus</strong>, agencia especializada en circuitos culturales para grupos procedentes de países de habla árabe y comunidades islámicas. La alimentación halal es requisito previo en todos nuestros circuitos, y hemos identificado <strong>{{nombre_proveedor}}</strong> como candidato en {{ciudad}}.
             </p>
           </td>
         </tr>
 
-        <!-- BLOQUE HALAL -->
+        <!-- QUÉ BUSCAMOS -->
         <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
+          <td style="padding:20px 40px 0;" class="block-pad">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F6EEDF;border-radius:6px;border-left:4px solid #C2954A;">
               <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 8px 0;font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#5a3e1b;text-transform:uppercase;letter-spacing:1px;">Por qué la certificación halal es esencial</p>
-                  <p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;line-height:1.6;">
-                    Nuestros clientes son familias y grupos de comunidades musulmanas. La garantía halal es el requisito previo a cualquier colaboración. Buscamos establecimientos con <strong>certificación formal o verificación directa documentable</strong>. Sin este requisito no podemos incluir el restaurante en ningún circuito.
-                  </p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- BLOQUE CORPORATIVO -->
-        <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1A1A1A;border-radius:6px;">
-              <tr>
-                <td style="padding:22px 24px;">
-                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Expansión y tecnología — Temporada actual y futura</p>
-                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Vive al Ándalus, marca operada por Bin Firnas Travel SL, se encuentra actualmente <strong style="color:#ffffff;">ampliando y consolidando su red de colaboradores estratégicos</strong> para la planificación de la temporada actual y futura. Nuestro objetivo es construir una red sólida de establecimientos halal, hoteles, guías y colaboradores que nos permita ofrecer experiencias gastronómicas y culturales de alta calidad en toda España.
-                  </p>
-                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Estamos desarrollando <strong style="color:#e7b765;">herramientas tecnológicas, sistemas de automatización y procesos de coordinación</strong> que nos permitirán agilizar la gestión de reservas de grupos, comunicar cambios con antelación y mantener una coordinación operativa más eficiente y transparente con los establecimientos de nuestra red.
-                  </p>
-                  <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Combinamos el conocimiento turístico con <strong style="color:#ffffff;">inteligencia artificial y plataformas propias de gestión</strong> para construir una red gastronómica halal conectada, eficiente y preparada para el turismo del futuro.
-                  </p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- FINALIDAD DEL CONTACTO -->
-        <tr>
-          <td style="padding:16px 40px 0;" class="block-pad">
-            <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#666666;line-height:1.7;font-style:italic;">
-              Este contacto tiene como finalidad conocer condiciones comerciales, disponibilidades, procedimientos operativos y tarifas orientativas para los próximos meses, permitiéndonos planificar futuras colaboraciones de forma organizada y beneficiosa para todas las partes.
-            </p>
-          </td>
-        </tr>
-
-        <!-- INFORMACIÓN SOLICITADA -->
-        <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
-            <p style="margin:0 0 16px 0;font-family:Georgia,serif;font-size:16px;color:#1A1A1A;font-weight:bold;">Información que necesitamos</p>
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Certificación halal</strong> — organismo certificador, número de certificado y vigencia. Si no existe certificación formal, indicar método de verificación.
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Cartas y menús disponibles para grupos</strong> — desayunos, comidas y cenas. Menú cerrado con 2-3 opciones (entrante + principal + postre + bebida)
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Opciones vegetarianas y gestión de alergias</strong> — qué alternativas ofrecen para viajeros con restricciones adicionales dentro del grupo
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Precio por persona</strong> — para menú cerrado de grupo de 20–50 personas, desglosado por servicio (desayuno / almuerzo / cena)
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Capacidad máxima</strong> de aforo para grupos sentados en sala
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Antelación mínima para reserva de grupo</strong> y política de cancelación
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Condiciones para agencias</strong> — forma de facturación y descuento aplicable si procede
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#C2954A;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.6;">
-                  <strong>Persona responsable</strong> — nombre, email y teléfono directo para coordinar reservas de grupo
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- TABLA TEMPORADAS -->
-        <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #e0d5c5;border-radius:6px;">
-              <tr>
-                <td style="padding:14px 20px;background-color:#fdfaf5;border-bottom:1px solid #e0d5c5;">
-                  <p style="margin:0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#5a3e1b;text-transform:uppercase;letter-spacing:1px;">Volumen estimado por temporada</p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:16px 20px;">
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#5a3e1b;text-transform:uppercase;letter-spacing:1px;">Qué buscamos</p>
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;width:40%;padding-bottom:8px;"><strong>Grupos/año estimados:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">4 – 8 circuitos</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:8px;"><strong>Comensales por grupo:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">15 – 50 personas</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:8px;"><strong>Servicios por visita:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">Desayuno · Almuerzo · Cena (según circuito)</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:0;"><strong>Temporada alta:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:0;">Primavera · Otoño · Ramadán</td>
-                    </tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;"><strong>Certificación halal formal</strong> o verificación directa documentable — requisito imprescindible</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;">Capacidad para <strong>grupos sentados de 20 a 50 personas</strong></td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;"><strong>Menú cerrado para grupos</strong> disponible — almuerzo, cena y/o desayuno</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.5;">Disposición para <strong>trabajar con agencias</strong> de forma estable y organizada</td></tr>
                   </table>
                 </td>
               </tr>
@@ -208,18 +84,55 @@
           </td>
         </tr>
 
-        <!-- CTA -->
+        <!-- QUÉ NECESITAMOS CONOCER -->
         <tr>
-          <td style="padding:32px 40px;" class="block-pad">
-            <p style="margin:0 0 20px 0;font-family:Arial,sans-serif;font-size:15px;color:#3a3a3a;line-height:1.7;">
-              Si su establecimiento cumple los requisitos halal y tiene capacidad para grupos organizados, estaré encantado de recibir su propuesta de menú, carta y tarifa para agencias.
-            </p>
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <td style="padding:24px 40px 0;" class="block-pad">
+            <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#1A1A1A;">Qué necesitamos conocer</p>
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr><td width="22" valign="top" style="color:#C2954A;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Certificación halal</strong> — organismo certificador, número y vigencia del certificado</td></tr>
+              <tr><td width="22" valign="top" style="color:#C2954A;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Menús disponibles para grupos</strong> — 2-3 opciones con entrada, principal, postre y bebida</td></tr>
+              <tr><td width="22" valign="top" style="color:#C2954A;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Precio por persona</strong> — desglosado por servicio (desayuno / almuerzo / cena)</td></tr>
+              <tr><td width="22" valign="top" style="color:#C2954A;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Opciones vegetarianas</strong> y gestión de alergias dentro del grupo</td></tr>
+              <tr><td width="22" valign="top" style="color:#C2954A;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Aforo máximo para grupos</strong> y antelación mínima de reserva</td></tr>
+              <tr><td width="22" valign="top" style="color:#C2954A;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.6;"><strong>Condiciones para agencias</strong>, política de cancelación y persona de contacto</td></tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- CÓMO TRABAJAMOS -->
+        <tr>
+          <td style="padding:24px 40px 0;" class="block-pad">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1A1A1A;border-radius:6px;">
               <tr>
-                <td style="border-radius:5px;background:linear-gradient(135deg,#BD4523,#C2954A);">
-                  <a href="mailto:reservas@vivealandalus.com?subject=Re: Menú halal grupos {{referencia_contacto}}" style="display:inline-block;padding:14px 32px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;border-radius:5px;letter-spacing:0.5px;" class="btn-full">
-                    Responder a esta propuesta
-                  </a>
+                <td style="padding:20px 24px;">
+                  <p style="margin:0 0 8px 0;font-family:Georgia,serif;font-size:12px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Cómo trabajamos</p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.6;">Vive al Ándalus, marca operada por BIN FIRNAS TRAVEL SL, está consolidando una red de colaboradores estratégicos para circuitos culturales, históricos y turísticos por España. Combinamos experiencia turística, coordinación operativa y herramientas digitales para trabajar de forma más ágil, organizada y transparente con nuestros proveedores.</p>
+                  <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.5;font-style:italic;">Este primer contacto busca conocer condiciones comerciales, disponibilidad y tarifas orientativas para planificar posibles colaboraciones durante los próximos meses.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- 4 BOTONES -->
+        <tr>
+          <td style="padding:28px 40px;" class="block-pad">
+            <p style="margin:0 0 16px 0;font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;">Estamos disponibles por cualquier canal que le resulte más cómodo:</p>
+            <table role="presentation" border="0" cellpadding="0" cellspacing="6" width="100%">
+              <tr>
+                <td class="btn-td" width="50%" style="padding-bottom:6px;">
+                  <a href="https://vivealandalus.com" style="display:block;padding:12px 16px;background-color:#BD4523;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">🌐 Visitar nuestra web</a>
+                </td>
+                <td class="btn-td" width="50%" style="padding-bottom:6px;">
+                  <a href="mailto:reservas@vivealandalus.com?subject=Re: Menú halal grupos {{referencia_contacto}}" style="display:block;padding:12px 16px;background-color:#1A1A1A;color:#e7b765;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">📧 Responder por email</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="btn-td" width="50%">
+                  <a href="https://wa.me/34633305906" style="display:block;padding:12px 16px;background-color:#25D366;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">💬 WhatsApp</a>
+                </td>
+                <td class="btn-td" width="50%">
+                  <a href="tel:+34633305906" style="display:block;padding:12px 16px;background-color:#C2954A;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">📞 Llamar ahora</a>
                 </td>
               </tr>
             </table>
@@ -228,19 +141,19 @@
 
         <!-- FIRMA -->
         <tr>
-          <td style="padding:0 40px 32px;" class="block-pad">
+          <td style="padding:0 40px 28px;" class="block-pad">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #e0d5c5;">
               <tr>
-                <td style="padding-top:24px;">
-                  <p style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:15px;color:#1A1A1A;font-weight:bold;">Abdulah Jiménez Contreras</p>
-                  <p style="margin:0 0 12px 0;font-family:Arial,sans-serif;font-size:13px;color:#BD4523;">Director · Vive al Ándalus</p>
+                <td style="padding-top:20px;">
+                  <p style="margin:0 0 3px 0;font-family:Georgia,serif;font-size:15px;color:#1A1A1A;font-weight:bold;">Abdulah Jiménez Contreras</p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#BD4523;">Director · Vive al Ándalus</p>
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555555;padding-right:20px;">📞 <a href="tel:+34633305906" style="color:#555;text-decoration:none;">+34 633 30 59 06</a></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555555;">📧 <a href="mailto:reservas@vivealandalus.com" style="color:#BD4523;text-decoration:none;">reservas@vivealandalus.com</a></td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-right:20px;">📞 <a href="tel:+34633305906" style="color:#555;text-decoration:none;">+34 633 30 59 06</a></td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;">📧 <a href="mailto:reservas@vivealandalus.com" style="color:#BD4523;text-decoration:none;">reservas@vivealandalus.com</a></td>
                     </tr>
-                    <tr><td colspan="2" style="height:6px;"></td></tr>
-                    <tr><td colspan="2" style="font-family:Arial,sans-serif;font-size:13px;color:#555555;">🌐 <a href="https://vivealandalus.com" style="color:#C2954A;text-decoration:none;">vivealandalus.com</a></td></tr>
+                    <tr><td colspan="2" style="height:5px;"></td></tr>
+                    <tr><td colspan="2" style="font-family:Arial,sans-serif;font-size:13px;color:#555;">🌐 <a href="https://vivealandalus.com" style="color:#C2954A;text-decoration:none;">vivealandalus.com</a></td></tr>
                   </table>
                 </td>
               </tr>
@@ -250,10 +163,10 @@
 
         <!-- FOOTER LEGAL -->
         <tr>
-          <td style="background-color:#1A1A1A;padding:20px 40px;" class="block-pad">
-            <p style="margin:0 0 6px 0;font-family:Arial,sans-serif;font-size:11px;color:#888888;"><strong style="color:#C2954A;">Bin Firnas Travel SL</strong> · CIF B56080765 · Licencia turística CIAN-147996-3</p>
-            <p style="margin:0 0 6px 0;font-family:Arial,sans-serif;font-size:10px;color:#666666;line-height:1.5;">Este correo y sus archivos adjuntos son confidenciales. Los datos del destinatario han sido obtenidos de fuentes públicas y se tratan conforme al RGPD (UE) 2016/679, con base en el interés legítimo para establecer relaciones comerciales B2B. Puede ejercer sus derechos enviando un correo a reservas@vivealandalus.com.</p>
-            <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#555555;">Para no recibir más comunicaciones de Vive al Ándalus, responda a este correo con el asunto "BAJA".</p>
+          <td style="background-color:#1A1A1A;padding:18px 40px;" class="block-pad">
+            <p style="margin:0 0 5px 0;font-family:Arial,sans-serif;font-size:11px;color:#888;"><strong style="color:#C2954A;">Bin Firnas Travel SL</strong> · CIF B56080765 · Licencia turística CIAN-147996-3</p>
+            <p style="margin:0 0 5px 0;font-family:Arial,sans-serif;font-size:10px;color:#666;line-height:1.5;">Datos obtenidos de fuentes públicas. Tratamiento conforme al RGPD (UE) 2016/679, base: interés legítimo B2B. Derechos: reservas@vivealandalus.com.</p>
+            <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#555;">Para darse de baja, responda con el asunto "BAJA".</p>
           </td>
         </tr>
 

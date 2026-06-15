@@ -15,9 +15,9 @@
     @media only screen and (max-width: 620px) {
       .container { width: 100% !important; }
       .block-pad { padding: 20px 16px !important; }
-      .header-pad { padding: 32px 20px 24px !important; }
+      .header-pad { padding: 28px 20px 20px !important; }
       .hide-mobile { display: none !important; }
-      .btn-full { width: 100% !important; text-align: center !important; }
+      .btn-td { width: 100% !important; display: block !important; padding-bottom: 8px !important; }
     }
   </style>
 </head>
@@ -38,56 +38,71 @@
                   <h1 style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#ffffff;line-height:1.2;">Transporte para circuitos culturales</h1>
                   <p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:#F6EEDF;opacity:0.85;">Autocar · Minibús · VTC privado · Grupos 15–50 pax · Base: {{ciudad}}</p>
                 </td>
-                <td width="80" align="right" valign="top" class="hide-mobile">
-                  <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.12);border:2px solid rgba(231,183,101,0.6);display:inline-block;line-height:56px;text-align:center;">
-                    <span style="font-size:24px;">🚌</span>
-                  </div>
+                <td width="72" align="right" valign="top" class="hide-mobile">
+                  <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.12);border:2px solid rgba(231,183,101,0.5);display:inline-block;line-height:52px;text-align:center;font-size:22px;">🚌</div>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
 
-        <!-- FRANJA -->
+        <!-- FRANJA REF -->
         <tr>
-          <td style="background-color:#C2954A;padding:10px 40px;" class="block-pad">
+          <td style="background-color:#C2954A;padding:9px 40px;" class="block-pad">
             <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#ffffff;letter-spacing:1px;">
               REF: <strong>{{referencia_contacto}}</strong> &nbsp;·&nbsp; {{fecha_envio}} &nbsp;·&nbsp; Base: {{ciudad}}
             </p>
           </td>
         </tr>
 
-        <!-- SALUDO -->
+        <!-- SALUDO + PRESENTACIÓN -->
         <tr>
-          <td style="padding:36px 40px 0;" class="block-pad">
-            <p style="margin:0 0 16px 0;font-family:Georgia,serif;font-size:17px;color:#1A1A1A;line-height:1.5;">
-              Estimado/a <strong>{{persona_contacto}}</strong>,
-            </p>
+          <td style="padding:32px 40px 0;" class="block-pad">
+            <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:17px;color:#1A1A1A;line-height:1.5;">Estimado/a <strong>{{persona_contacto}}</strong>,</p>
             <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#3a3a3a;line-height:1.7;">
-              Soy Abdulah de <strong>Vive al Ándalus</strong> (Bin Firnas Travel SL). Estamos construyendo la red logística de transporte para nuestros circuitos culturales por Al-Ándalus con grupos organizados procedentes de países de habla árabe y comunidades islámicas en Europa. Necesitamos conocer las condiciones, disponibilidad y precios orientativos de <strong>{{nombre_proveedor}}</strong>.
+              Soy Abdulah de <strong>Vive al Ándalus</strong> (Bin Firnas Travel SL). Estamos seleccionando empresas de transporte de referencia para nuestros circuitos culturales con grupos organizados. Nos gustaría conocer las condiciones de <strong>{{nombre_proveedor}}</strong> para una posible colaboración estable.
             </p>
           </td>
         </tr>
 
-        <!-- TIPOS DE VEHÍCULO -->
+        <!-- QUÉ BUSCAMOS -->
         <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
+          <td style="padding:20px 40px 0;" class="block-pad">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F6EEDF;border-radius:6px;border-left:4px solid #BD4523;">
               <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#BD4523;text-transform:uppercase;letter-spacing:1px;">Tipos de vehículo que nos interesan</p>
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#BD4523;text-transform:uppercase;letter-spacing:1px;">Qué buscamos</p>
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;"><strong>Autocar 45–55 pax</strong> con conductor para circuito multiciudad de 7 días</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;"><strong>Minibús 16–28 pax</strong> para grupos medianos o traslados urbanos</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;"><strong>Furgoneta o VTC</strong> para grupos pequeños (8–15 pax) y transfers</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.5;">Experiencia en turismo de grupos y disponibilidad de <strong>conductor bilingüe</strong> (árabe/inglés valorado)</td></tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- RUTAS -->
+        <tr>
+          <td style="padding:20px 40px 0;" class="block-pad">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1A1A1A;border-radius:6px;">
+              <tr>
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 12px 0;font-family:Georgia,serif;font-size:12px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Rutas de referencia para cotizar</p>
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:6px;line-height:1.5;"><strong>Autocar grande</strong> (45–55 pax) con conductor para circuito completo multiciudad</td>
+                      <td style="font-family:Arial,sans-serif;font-size:12px;color:#e7b765;width:22px;vertical-align:top;padding-top:2px;">A</td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:9px;line-height:1.4;"><strong style="color:#fff;">Circuito 7 días —</strong> Madrid → Toledo → Córdoba → Sevilla → Málaga → Granada <span style="color:#666;font-size:11px;">(~1.500 km)</span></td>
                     </tr>
                     <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:6px;line-height:1.5;"><strong>Minibús</strong> (16–28 pax) para grupos medianos o traslados urbanos</td>
+                      <td style="font-family:Arial,sans-serif;font-size:12px;color:#e7b765;vertical-align:top;padding-top:2px;">B</td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:9px;line-height:1.4;"><strong style="color:#fff;">Excursión día —</strong> Córdoba → Medina Azahara → Sevilla → Córdoba <span style="color:#666;font-size:11px;">(~280 km)</span></td>
                     </tr>
                     <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:0;line-height:1.5;"><strong>Furgoneta con conductor o VTC privado</strong> para grupos pequeños (8–15 pax) o transfers</td>
+                      <td style="font-family:Arial,sans-serif;font-size:12px;color:#e7b765;vertical-align:top;padding-top:2px;">C</td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:0;line-height:1.4;"><strong style="color:#fff;">Ruta sur —</strong> Granada → Alpujarras → Málaga <span style="color:#666;font-size:11px;">(~180 km)</span></td>
                     </tr>
                   </table>
                 </td>
@@ -96,177 +111,55 @@
           </td>
         </tr>
 
-        <!-- BLOQUE CORPORATIVO -->
+        <!-- QUÉ NECESITAMOS CONOCER -->
         <tr>
           <td style="padding:24px 40px 0;" class="block-pad">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#2d2d2d;border-radius:6px;border-left:4px solid #C2954A;">
-              <tr>
-                <td style="padding:22px 24px;">
-                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Expansión y tecnología — Temporada actual y futura</p>
-                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Vive al Ándalus, marca operada por Bin Firnas Travel SL, se encuentra actualmente <strong style="color:#ffffff;">ampliando y consolidando su red de colaboradores estratégicos</strong> para la planificación de la temporada actual y futura. Nuestro objetivo es construir una red sólida de hoteles, empresas de transporte, restaurantes, guías y colaboradores que nos permita ofrecer experiencias culturales e históricas de alta calidad en toda España.
-                  </p>
-                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Estamos desarrollando <strong style="color:#e7b765;">herramientas tecnológicas, sistemas de automatización y procesos de coordinación operativa</strong> que nos permitirán mejorar la comunicación con nuestros proveedores de transporte, gestionar circuitos con mayor eficiencia y crear relaciones comerciales más transparentes y sostenibles.
-                  </p>
-                  <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Combinamos conocimiento turístico con <strong style="color:#ffffff;">inteligencia artificial y plataformas propias de gestión</strong> para preparar una red logística sólida de cara al turismo del futuro.
-                  </p>
-                </td>
-              </tr>
+            <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#1A1A1A;">Qué necesitamos conocer</p>
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr><td width="22" valign="top" style="color:#BD4523;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Precio orientativo por ruta</strong> (A, B y C) — tarifa por vehículo y día con conductor</td></tr>
+              <tr><td width="22" valign="top" style="color:#BD4523;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Flota disponible</strong> — tipos de vehículo, capacidades y características</td></tr>
+              <tr><td width="22" valign="top" style="color:#BD4523;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Dietas, peajes y parking</strong> — ¿incluidos en tarifa o se facturan aparte?</td></tr>
+              <tr><td width="22" valign="top" style="color:#BD4523;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Antelación mínima</strong> para confirmar servicio y condiciones de reserva</td></tr>
+              <tr><td width="22" valign="top" style="color:#BD4523;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Condiciones para agencias</strong> y política de cancelación</td></tr>
+              <tr><td width="22" valign="top" style="color:#BD4523;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.6;"><strong>Persona comercial de contacto</strong> — nombre, email y teléfono directo</td></tr>
             </table>
           </td>
         </tr>
 
-        <!-- FINALIDAD DEL CONTACTO -->
-        <tr>
-          <td style="padding:16px 40px 0;" class="block-pad">
-            <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#666666;line-height:1.7;font-style:italic;">
-              Este contacto tiene como finalidad conocer condiciones comerciales, disponibilidades, procedimientos operativos y tarifas orientativas para los próximos meses, permitiéndonos planificar futuras colaboraciones de forma organizada y beneficiosa para todas las partes.
-            </p>
-          </td>
-        </tr>
-
-        <!-- RUTAS EJEMPLO -->
+        <!-- CÓMO TRABAJAMOS -->
         <tr>
           <td style="padding:24px 40px 0;" class="block-pad">
-            <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:16px;color:#1A1A1A;font-weight:bold;">Rutas ejemplo para cotizar</p>
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1A1A1A;border-radius:6px;">
               <tr>
                 <td style="padding:20px 24px;">
-                  <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:12px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Solicitud de precio orientativo por ruta</p>
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:12px;color:#e7b765;padding-bottom:4px;width:28px;vertical-align:top;">A</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:10px;line-height:1.5;">
-                        <strong style="color:#ffffff;">Circuito 7 días</strong><br>
-                        Madrid → Toledo → Córdoba → Sevilla → Málaga → Granada<br>
-                        <span style="color:#888;font-size:12px;">~1.500 km · Autopistas + accesos centros históricos</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:12px;color:#e7b765;padding-bottom:4px;vertical-align:top;">B</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:10px;line-height:1.5;">
-                        <strong style="color:#ffffff;">Excursión día completo</strong><br>
-                        Córdoba → Medina Azahara → Sevilla → regreso a Córdoba<br>
-                        <span style="color:#888;font-size:12px;">~280 km · Incluye espera en destinos</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:12px;color:#e7b765;vertical-align:top;">C</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:0;line-height:1.5;">
-                        <strong style="color:#ffffff;">Ruta paisajística</strong><br>
-                        Granada → Alpujarras → Málaga<br>
-                        <span style="color:#888;font-size:12px;">~180 km · Carretera de montaña + autopista</span>
-                      </td>
-                    </tr>
-                  </table>
+                  <p style="margin:0 0 8px 0;font-family:Georgia,serif;font-size:12px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Cómo trabajamos</p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.6;">Vive al Ándalus, marca operada por BIN FIRNAS TRAVEL SL, está consolidando una red de colaboradores estratégicos para circuitos culturales, históricos y turísticos por España. Combinamos experiencia turística, coordinación operativa y herramientas digitales para trabajar de forma más ágil, organizada y transparente con nuestros proveedores.</p>
+                  <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.5;font-style:italic;">Este primer contacto busca conocer condiciones comerciales, disponibilidad y tarifas orientativas para planificar posibles colaboraciones durante los próximos meses.</p>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
 
-        <!-- INFORMACIÓN SOLICITADA -->
+        <!-- 4 BOTONES -->
         <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
-            <p style="margin:0 0 16px 0;font-family:Georgia,serif;font-size:16px;color:#1A1A1A;font-weight:bold;">Información que necesitamos</p>
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+          <td style="padding:28px 40px;" class="block-pad">
+            <p style="margin:0 0 16px 0;font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;">Estamos disponibles por cualquier canal que le resulte más cómodo:</p>
+            <table role="presentation" border="0" cellpadding="0" cellspacing="6" width="100%">
               <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Precio orientativo por ruta</strong> — tarifa completa por vehículo y día para cada una de las rutas A, B y C descritas arriba
+                <td class="btn-td" width="50%" style="padding-bottom:6px;">
+                  <a href="https://vivealandalus.com" style="display:block;padding:12px 16px;background-color:#BD4523;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">🌐 Visitar nuestra web</a>
+                </td>
+                <td class="btn-td" width="50%" style="padding-bottom:6px;">
+                  <a href="mailto:reservas@vivealandalus.com?subject=Re: Tarifa transporte {{referencia_contacto}}" style="display:block;padding:12px 16px;background-color:#1A1A1A;color:#e7b765;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">📧 Responder por email</a>
                 </td>
               </tr>
               <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Capacidad de vehículos disponibles</strong> — modelos y número de plazas de su flota
+                <td class="btn-td" width="50%">
+                  <a href="https://wa.me/34633305906" style="display:block;padding:12px 16px;background-color:#25D366;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">💬 WhatsApp</a>
                 </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Cobertura geográfica</strong> — ciudades y comunidades autónomas donde operan habitualmente
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Conductor bilingüe</strong> — disponibilidad de conductor que hable árabe o inglés (muy valorado por nuestros grupos)
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Dietas, peajes, parking y horas extra</strong> — si van incluidos en el precio o se facturan aparte, y bajo qué condiciones
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Antelación mínima para confirmar servicio</strong> y condiciones de reserva
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Condiciones de trabajo con agencias</strong> y política de cancelación
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#BD4523;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.6;">
-                  <strong>Persona comercial de referencia</strong> — nombre, email y teléfono directo
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- PROPUESTA COLABORACIÓN -->
-        <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #e0d5c5;border-radius:6px;">
-              <tr>
-                <td style="padding:14px 20px;background-color:#fdfaf5;border-bottom:1px solid #e0d5c5;">
-                  <p style="margin:0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#1A1A1A;text-transform:uppercase;letter-spacing:1px;">Lo que ofrecemos como agencia</p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:16px 20px;">
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;width:42%;padding-bottom:8px;"><strong>Circuitos/año estimados:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">4 – 8 el primer año, con crecimiento</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:8px;"><strong>Tipo de relación:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">Proveedor de referencia, no contratos puntuales</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:0;"><strong>Pagos:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:0;">En plazos acordados, con ocupación continua</td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- CTA -->
-        <tr>
-          <td style="padding:32px 40px;" class="block-pad">
-            <p style="margin:0 0 20px 0;font-family:Arial,sans-serif;font-size:15px;color:#3a3a3a;line-height:1.7;">
-              ¿Pueden enviarnos una tarifa orientativa para las rutas descritas? Estoy disponible para una breve llamada cuando les venga bien.
-            </p>
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td style="border-radius:5px;background-color:#1A1A1A;">
-                  <a href="mailto:reservas@vivealandalus.com?subject=Re: Tarifa transporte {{referencia_contacto}}" style="display:inline-block;padding:14px 32px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#e7b765;text-decoration:none;border-radius:5px;letter-spacing:0.5px;" class="btn-full">
-                    Responder a esta propuesta
-                  </a>
+                <td class="btn-td" width="50%">
+                  <a href="tel:+34633305906" style="display:block;padding:12px 16px;background-color:#C2954A;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">📞 Llamar ahora</a>
                 </td>
               </tr>
             </table>
@@ -275,19 +168,19 @@
 
         <!-- FIRMA -->
         <tr>
-          <td style="padding:0 40px 32px;" class="block-pad">
+          <td style="padding:0 40px 28px;" class="block-pad">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #e0d5c5;">
               <tr>
-                <td style="padding-top:24px;">
-                  <p style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:15px;color:#1A1A1A;font-weight:bold;">Abdulah Jiménez Contreras</p>
-                  <p style="margin:0 0 12px 0;font-family:Arial,sans-serif;font-size:13px;color:#BD4523;">Director · Vive al Ándalus</p>
+                <td style="padding-top:20px;">
+                  <p style="margin:0 0 3px 0;font-family:Georgia,serif;font-size:15px;color:#1A1A1A;font-weight:bold;">Abdulah Jiménez Contreras</p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#BD4523;">Director · Vive al Ándalus</p>
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555555;padding-right:20px;">📞 <a href="tel:+34633305906" style="color:#555;text-decoration:none;">+34 633 30 59 06</a></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555555;">📧 <a href="mailto:reservas@vivealandalus.com" style="color:#BD4523;text-decoration:none;">reservas@vivealandalus.com</a></td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-right:20px;">📞 <a href="tel:+34633305906" style="color:#555;text-decoration:none;">+34 633 30 59 06</a></td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;">📧 <a href="mailto:reservas@vivealandalus.com" style="color:#BD4523;text-decoration:none;">reservas@vivealandalus.com</a></td>
                     </tr>
-                    <tr><td colspan="2" style="height:6px;"></td></tr>
-                    <tr><td colspan="2" style="font-family:Arial,sans-serif;font-size:13px;color:#555555;">🌐 <a href="https://vivealandalus.com" style="color:#C2954A;text-decoration:none;">vivealandalus.com</a></td></tr>
+                    <tr><td colspan="2" style="height:5px;"></td></tr>
+                    <tr><td colspan="2" style="font-family:Arial,sans-serif;font-size:13px;color:#555;">🌐 <a href="https://vivealandalus.com" style="color:#C2954A;text-decoration:none;">vivealandalus.com</a></td></tr>
                   </table>
                 </td>
               </tr>
@@ -297,10 +190,10 @@
 
         <!-- FOOTER LEGAL -->
         <tr>
-          <td style="background-color:#1A1A1A;padding:20px 40px;" class="block-pad">
-            <p style="margin:0 0 6px 0;font-family:Arial,sans-serif;font-size:11px;color:#888888;"><strong style="color:#C2954A;">Bin Firnas Travel SL</strong> · CIF B56080765 · Licencia turística CIAN-147996-3</p>
-            <p style="margin:0 0 6px 0;font-family:Arial,sans-serif;font-size:10px;color:#666666;line-height:1.5;">Este correo y sus archivos adjuntos son confidenciales. Los datos del destinatario han sido obtenidos de fuentes públicas y se tratan conforme al RGPD (UE) 2016/679, con base en el interés legítimo para establecer relaciones comerciales B2B. Puede ejercer sus derechos enviando un correo a reservas@vivealandalus.com.</p>
-            <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#555555;">Para no recibir más comunicaciones de Vive al Ándalus, responda a este correo con el asunto "BAJA".</p>
+          <td style="background-color:#1A1A1A;padding:18px 40px;" class="block-pad">
+            <p style="margin:0 0 5px 0;font-family:Arial,sans-serif;font-size:11px;color:#888;"><strong style="color:#C2954A;">Bin Firnas Travel SL</strong> · CIF B56080765 · Licencia turística CIAN-147996-3</p>
+            <p style="margin:0 0 5px 0;font-family:Arial,sans-serif;font-size:10px;color:#666;line-height:1.5;">Datos obtenidos de fuentes públicas. Tratamiento conforme al RGPD (UE) 2016/679, base: interés legítimo B2B. Derechos: reservas@vivealandalus.com.</p>
+            <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#555;">Para darse de baja, responda con el asunto "BAJA".</p>
           </td>
         </tr>
 

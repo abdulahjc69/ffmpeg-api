@@ -15,9 +15,9 @@
     @media only screen and (max-width: 620px) {
       .container { width: 100% !important; }
       .block-pad { padding: 20px 16px !important; }
-      .header-pad { padding: 32px 20px 24px !important; }
+      .header-pad { padding: 28px 20px 20px !important; }
       .hide-mobile { display: none !important; }
-      .btn-full { width: 100% !important; text-align: center !important; }
+      .btn-td { width: 100% !important; display: block !important; padding-bottom: 8px !important; }
     }
   </style>
 </head>
@@ -38,221 +38,99 @@
                   <h1 style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:26px;font-weight:bold;color:#ffffff;line-height:1.2;">Apoyo logístico en destino<br>para circuitos por España</h1>
                   <p style="margin:0;font-family:Arial,sans-serif;font-size:14px;color:#F6EEDF;opacity:0.85;">Agencias · Asociaciones · Touroperadores · Grupos culturales</p>
                 </td>
-                <td width="80" align="right" valign="top" class="hide-mobile">
-                  <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,0.12);border:2px solid rgba(231,183,101,0.6);display:inline-block;line-height:56px;text-align:center;">
-                    <span style="font-size:24px;">🤝</span>
-                  </div>
+                <td width="72" align="right" valign="top" class="hide-mobile">
+                  <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.12);border:2px solid rgba(231,183,101,0.5);display:inline-block;line-height:52px;text-align:center;font-size:22px;">🤝</div>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
 
-        <!-- FRANJA -->
+        <!-- FRANJA REF -->
         <tr>
-          <td style="background-color:#C2954A;padding:10px 40px;" class="block-pad">
+          <td style="background-color:#C2954A;padding:9px 40px;" class="block-pad">
             <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#ffffff;letter-spacing:1px;">
               REF: <strong>{{referencia_contacto}}</strong> &nbsp;·&nbsp; {{fecha_envio}} &nbsp;·&nbsp; {{ciudad}}
             </p>
           </td>
         </tr>
 
-        <!-- SALUDO -->
+        <!-- SALUDO + PRESENTACIÓN -->
         <tr>
-          <td style="padding:36px 40px 0;" class="block-pad">
-            <p style="margin:0 0 16px 0;font-family:Georgia,serif;font-size:17px;color:#1A1A1A;line-height:1.5;">
-              Estimado/a <strong>{{persona_contacto}}</strong>,
-            </p>
+          <td style="padding:32px 40px 0;" class="block-pad">
+            <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:17px;color:#1A1A1A;line-height:1.5;">Estimado/a <strong>{{persona_contacto}}</strong>,</p>
             <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#3a3a3a;line-height:1.7;">
-              Me dirijo a <strong>{{nombre_proveedor}}</strong> desde <strong>Vive al Ándalus</strong> (Bin Firnas Travel SL), agencia española especializada en la operación de circuitos culturales por Al-Ándalus. Creemos que podemos ser el socio logístico en destino que su organización necesita para operar en España con grupos organizados.
+              Me dirijo a <strong>{{nombre_proveedor}}</strong> desde <strong>Vive al Ándalus</strong> (Bin Firnas Travel SL), agencia española especializada en circuitos culturales por Al-Ándalus. Ofrecemos apoyo logístico completo en destino para agencias y touroperadores que quieran operar grupos en España sin estructura propia.
             </p>
           </td>
         </tr>
 
         <!-- QUÉ OFRECEMOS -->
         <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
+          <td style="padding:20px 40px 0;" class="block-pad">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F6EEDF;border-radius:6px;border-left:4px solid #C2954A;">
               <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#2C4A2E;text-transform:uppercase;letter-spacing:1px;">Lo que Vive al Ándalus puede hacer por su organización</p>
-                  <p style="margin:0 0 12px 0;font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;line-height:1.6;">
-                    Ofrecemos <strong>apoyo logístico completo sobre el terreno</strong> para agencias, touroperadores, grupos culturales y asociaciones que necesiten operar circuitos por España sin disponer de estructura propia en destino:
-                  </p>
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#2C4A2E;text-transform:uppercase;letter-spacing:1px;">Qué ofrecemos como receptiva</p>
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:6px;line-height:1.5;"><strong>Organización completa de rutas culturales</strong> por Madrid, Toledo, Córdoba, Sevilla y Granada</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:6px;line-height:1.5;"><strong>Guías certificados</strong> con dominio del árabe y el español en cada ciudad</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:6px;line-height:1.5;"><strong>Hoteles con desayuno halal</strong> y sala de oración o espacio habilitado</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:6px;line-height:1.5;"><strong>Restaurantes halal certificados</strong> en cada ciudad del circuito</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:6px;line-height:1.5;"><strong>Transporte privado</strong> con autocar, minibús o VTC según el tamaño del grupo</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#C2954A;">✦</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:0;line-height:1.5;"><strong>Entradas y visitas culturales</strong> gestionadas con reserva previa (Alhambra, Mezquita, etc.)</td>
-                    </tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;"><strong>Guías árabe-parlantes certificados</strong> en Madrid, Toledo, Córdoba, Sevilla y Granada</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;">Red hotelera con <strong>desayuno halal</strong> y sala de oración en cada ciudad</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:7px;line-height:1.5;"><strong>Restaurantes halal certificados</strong> y transporte privado (autocar / minibús / VTC)</td></tr>
+                    <tr><td width="20" valign="top" style="color:#C2954A;font-size:14px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.5;"><strong>Gestión de entradas</strong> a monumentos con reserva previa (Alhambra, Mezquita, Alcázar, etc.)</td></tr>
                   </table>
                 </td>
               </tr>
             </table>
-          </td>
-        </tr>
-
-        <!-- PARA QUIÉN -->
-        <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1A1A1A;border-radius:6px;">
-              <tr>
-                <td style="padding:20px 24px;">
-                  <p style="margin:0 0 12px 0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">¿Para qué tipo de organizaciones trabajamos?</p>
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#e7b765;">·</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:6px;line-height:1.5;">Agencias de viajes especializadas en turismo halal o mercado árabe</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#e7b765;">·</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:6px;line-height:1.5;">Touroperadores que venden España a mercados del Golfo Pérsico o comunidades islámicas en Europa</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#e7b765;">·</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:6px;line-height:1.5;">Asociaciones culturales o religiosas que organizan viajes de grupo para sus comunidades</td>
-                    </tr>
-                    <tr>
-                      <td width="20" valign="top" style="padding-top:2px;font-family:Arial,sans-serif;font-size:13px;color:#e7b765;">·</td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#cccccc;padding-bottom:0;line-height:1.5;">Empresas o universidades que necesitan organizar visitas culturales para grupos internacionales</td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- BLOQUE CORPORATIVO -->
-        <tr>
-          <td style="padding:24px 40px 0;" class="block-pad">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1A1A1A;border-radius:6px;">
-              <tr>
-                <td style="padding:22px 24px;">
-                  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Expansión y tecnología — Temporada actual y futura</p>
-                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Vive al Ándalus, marca operada por Bin Firnas Travel SL, se encuentra actualmente <strong style="color:#ffffff;">ampliando y consolidando su red de colaboradores estratégicos</strong> para la planificación de la temporada actual y futura. Nuestro objetivo es construir una red sólida de socios que nos permita ofrecer experiencias culturales, históricas y turísticas de alta calidad en toda España.
-                  </p>
-                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Estamos desarrollando <strong style="color:#e7b765;">herramientas tecnológicas, sistemas de automatización y procesos de coordinación B2B</strong> diseñados para mejorar la comunicación con agencias y colaboradores, agilizar la gestión operativa de circuitos y construir relaciones comerciales más eficientes, transparentes y beneficiosas para ambas partes.
-                  </p>
-                  <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.7;">
-                    Combinamos el conocimiento turístico tradicional con <strong style="color:#ffffff;">inteligencia artificial, digitalización e innovación</strong> para ofrecer a nuestros socios una plataforma de colaboración moderna y preparada para el turismo del futuro.
-                  </p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-
-        <!-- FINALIDAD DEL CONTACTO -->
-        <tr>
-          <td style="padding:16px 40px 0;" class="block-pad">
-            <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:#666666;line-height:1.7;font-style:italic;">
-              Este contacto tiene como finalidad conocer condiciones comerciales, disponibilidades, procedimientos operativos y tarifas orientativas para los próximos meses, permitiéndonos planificar futuras colaboraciones de forma organizada y beneficiosa para todas las partes.
-            </p>
           </td>
         </tr>
 
         <!-- MODELOS DE COLABORACIÓN -->
         <tr>
           <td style="padding:24px 40px 0;" class="block-pad">
-            <p style="margin:0 0 16px 0;font-family:Georgia,serif;font-size:16px;color:#1A1A1A;font-weight:bold;">Modelos de colaboración</p>
+            <p style="margin:0 0 14px 0;font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#1A1A1A;">Modelos de colaboración posibles</p>
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#2C4A2E;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Agencia receptiva en destino</strong> — {{nombre_proveedor}} vende el circuito, Vive al Ándalus opera toda la logística en España. Tarifa neta para agencias.
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#2C4A2E;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Referidos con comisión</strong> — {{nombre_proveedor}} nos envía grupos interesados en visitar España; pagamos comisión acordada por cada grupo confirmado (referencia: 8–12%).
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#2C4A2E;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:11px;line-height:1.6;">
-                  <strong>Circuitos a medida</strong> — diseñamos el itinerario conjuntamente según las necesidades específicas del grupo (fechas, ciudades, nivel, presupuesto).
-                </td>
-              </tr>
-              <tr>
-                <td width="28" valign="top" style="padding-top:2px;"><span style="color:#2C4A2E;font-size:16px;">✦</span></td>
-                <td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.6;">
-                  <strong>Soporte para grupos nacionales e internacionales</strong> — también operamos para grupos de habla española o inglesa que necesiten guía bilingüe y servicios halal en destino.
-                </td>
-              </tr>
+              <tr><td width="22" valign="top" style="color:#2C4A2E;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Agencia receptiva</strong> — {{nombre_proveedor}} vende, nosotros operamos en destino. Tarifa neta para agencias.</td></tr>
+              <tr><td width="22" valign="top" style="color:#2C4A2E;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Referidos con comisión</strong> — nos envían grupos interesados, pagamos comisión acordada por grupo confirmado</td></tr>
+              <tr><td width="22" valign="top" style="color:#2C4A2E;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:9px;line-height:1.6;"><strong>Circuitos a medida</strong> — diseñamos itinerario conjunto según fechas, ciudades y presupuesto</td></tr>
+              <tr><td width="22" valign="top" style="color:#2C4A2E;font-size:15px;padding-top:1px;">✦</td><td style="font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;padding-bottom:0;line-height:1.6;"><strong>Soporte puntual en destino</strong> — asistencia para grupos que ya tienen vuelo y alojamiento contratado</td></tr>
             </table>
           </td>
         </tr>
 
-        <!-- TABLA CONDICIONES -->
+        <!-- CÓMO TRABAJAMOS -->
         <tr>
           <td style="padding:24px 40px 0;" class="block-pad">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #e0d5c5;border-radius:6px;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1A1A1A;border-radius:6px;">
               <tr>
-                <td style="padding:14px 20px;background-color:#fdfaf5;border-bottom:1px solid #e0d5c5;">
-                  <p style="margin:0;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#2C4A2E;text-transform:uppercase;letter-spacing:1px;">Condiciones orientativas</p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding:16px 20px;">
-                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;width:42%;padding-bottom:8px;"><strong>Grupos/año estimados:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">4 – 8 el primer año, con crecimiento</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:8px;"><strong>Tamaño de grupo:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">15 – 50 personas por circuito</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:8px;"><strong>Confirmación:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:8px;">30% señal + 70% antes de salida</td>
-                    </tr>
-                    <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#3a3a3a;padding-bottom:0;"><strong>Temporada alta:</strong></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-bottom:0;">Primavera · Otoño · Vacaciones escolares</td>
-                    </tr>
-                  </table>
+                <td style="padding:20px 24px;">
+                  <p style="margin:0 0 8px 0;font-family:Georgia,serif;font-size:12px;font-weight:bold;color:#C2954A;text-transform:uppercase;letter-spacing:1px;">Cómo trabajamos</p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#cccccc;line-height:1.6;">Vive al Ándalus, marca operada por BIN FIRNAS TRAVEL SL, está consolidando una red de colaboradores estratégicos para circuitos culturales, históricos y turísticos por España. Combinamos experiencia turística, coordinación operativa y herramientas digitales para trabajar de forma más ágil, organizada y transparente con nuestros proveedores.</p>
+                  <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#888;line-height:1.5;font-style:italic;">Este primer contacto busca conocer condiciones comerciales, disponibilidad y tarifas orientativas para planificar posibles colaboraciones durante los próximos meses.</p>
                 </td>
               </tr>
             </table>
           </td>
         </tr>
 
-        <!-- CTA -->
+        <!-- 4 BOTONES -->
         <tr>
-          <td style="padding:32px 40px;" class="block-pad">
-            <p style="margin:0 0 20px 0;font-family:Arial,sans-serif;font-size:15px;color:#3a3a3a;line-height:1.7;">
-              Estaré encantado de enviarles nuestro dossier de producto con tarifas netas, itinerarios y condiciones de colaboración. ¿Tienen disponibilidad para una reunión comercial o una breve llamada esta semana?
-            </p>
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <td style="padding:28px 40px;" class="block-pad">
+            <p style="margin:0 0 16px 0;font-family:Arial,sans-serif;font-size:14px;color:#3a3a3a;">Estamos disponibles por cualquier canal que le resulte más cómodo:</p>
+            <table role="presentation" border="0" cellpadding="0" cellspacing="6" width="100%">
               <tr>
-                <td style="border-radius:5px;background:linear-gradient(135deg,#2C4A2E,#C2954A);">
-                  <a href="mailto:reservas@vivealandalus.com?subject=Re: Colaboración agencia {{referencia_contacto}}" style="display:inline-block;padding:14px 32px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;color:#ffffff;text-decoration:none;border-radius:5px;letter-spacing:0.5px;" class="btn-full">
-                    Responder a esta propuesta
-                  </a>
+                <td class="btn-td" width="50%" style="padding-bottom:6px;">
+                  <a href="https://vivealandalus.com" style="display:block;padding:12px 16px;background-color:#BD4523;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">🌐 Visitar nuestra web</a>
+                </td>
+                <td class="btn-td" width="50%" style="padding-bottom:6px;">
+                  <a href="mailto:reservas@vivealandalus.com?subject=Re: Colaboración agencia {{referencia_contacto}}" style="display:block;padding:12px 16px;background-color:#1A1A1A;color:#e7b765;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">📧 Responder por email</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="btn-td" width="50%">
+                  <a href="https://wa.me/34633305906" style="display:block;padding:12px 16px;background-color:#25D366;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">💬 WhatsApp</a>
+                </td>
+                <td class="btn-td" width="50%">
+                  <a href="tel:+34633305906" style="display:block;padding:12px 16px;background-color:#C2954A;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;border-radius:5px;text-align:center;">📞 Llamar ahora</a>
                 </td>
               </tr>
             </table>
@@ -261,19 +139,19 @@
 
         <!-- FIRMA -->
         <tr>
-          <td style="padding:0 40px 32px;" class="block-pad">
+          <td style="padding:0 40px 28px;" class="block-pad">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #e0d5c5;">
               <tr>
-                <td style="padding-top:24px;">
-                  <p style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:15px;color:#1A1A1A;font-weight:bold;">Abdulah Jiménez Contreras</p>
-                  <p style="margin:0 0 12px 0;font-family:Arial,sans-serif;font-size:13px;color:#BD4523;">Director · Vive al Ándalus</p>
+                <td style="padding-top:20px;">
+                  <p style="margin:0 0 3px 0;font-family:Georgia,serif;font-size:15px;color:#1A1A1A;font-weight:bold;">Abdulah Jiménez Contreras</p>
+                  <p style="margin:0 0 10px 0;font-family:Arial,sans-serif;font-size:13px;color:#BD4523;">Director · Vive al Ándalus</p>
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555555;padding-right:20px;">📞 <a href="tel:+34633305906" style="color:#555;text-decoration:none;">+34 633 30 59 06</a></td>
-                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555555;">📧 <a href="mailto:reservas@vivealandalus.com" style="color:#BD4523;text-decoration:none;">reservas@vivealandalus.com</a></td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;padding-right:20px;">📞 <a href="tel:+34633305906" style="color:#555;text-decoration:none;">+34 633 30 59 06</a></td>
+                      <td style="font-family:Arial,sans-serif;font-size:13px;color:#555;">📧 <a href="mailto:reservas@vivealandalus.com" style="color:#BD4523;text-decoration:none;">reservas@vivealandalus.com</a></td>
                     </tr>
-                    <tr><td colspan="2" style="height:6px;"></td></tr>
-                    <tr><td colspan="2" style="font-family:Arial,sans-serif;font-size:13px;color:#555555;">🌐 <a href="https://vivealandalus.com" style="color:#C2954A;text-decoration:none;">vivealandalus.com</a></td></tr>
+                    <tr><td colspan="2" style="height:5px;"></td></tr>
+                    <tr><td colspan="2" style="font-family:Arial,sans-serif;font-size:13px;color:#555;">🌐 <a href="https://vivealandalus.com" style="color:#C2954A;text-decoration:none;">vivealandalus.com</a></td></tr>
                   </table>
                 </td>
               </tr>
@@ -283,10 +161,10 @@
 
         <!-- FOOTER LEGAL -->
         <tr>
-          <td style="background-color:#1A1A1A;padding:20px 40px;" class="block-pad">
-            <p style="margin:0 0 6px 0;font-family:Arial,sans-serif;font-size:11px;color:#888888;"><strong style="color:#C2954A;">Bin Firnas Travel SL</strong> · CIF B56080765 · Licencia turística CIAN-147996-3</p>
-            <p style="margin:0 0 6px 0;font-family:Arial,sans-serif;font-size:10px;color:#666666;line-height:1.5;">Este correo y sus archivos adjuntos son confidenciales. Los datos del destinatario han sido obtenidos de fuentes públicas y se tratan conforme al RGPD (UE) 2016/679, con base en el interés legítimo para establecer relaciones comerciales B2B. Puede ejercer sus derechos enviando un correo a reservas@vivealandalus.com.</p>
-            <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#555555;">Para no recibir más comunicaciones de Vive al Ándalus, responda a este correo con el asunto "BAJA".</p>
+          <td style="background-color:#1A1A1A;padding:18px 40px;" class="block-pad">
+            <p style="margin:0 0 5px 0;font-family:Arial,sans-serif;font-size:11px;color:#888;"><strong style="color:#C2954A;">Bin Firnas Travel SL</strong> · CIF B56080765 · Licencia turística CIAN-147996-3</p>
+            <p style="margin:0 0 5px 0;font-family:Arial,sans-serif;font-size:10px;color:#666;line-height:1.5;">Datos obtenidos de fuentes públicas. Tratamiento conforme al RGPD (UE) 2016/679, base: interés legítimo B2B. Derechos: reservas@vivealandalus.com.</p>
+            <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;color:#555;">Para darse de baja, responda con el asunto "BAJA".</p>
           </td>
         </tr>
 
