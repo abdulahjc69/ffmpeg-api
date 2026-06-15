@@ -7884,8 +7884,8 @@ function buildEvents() {
   wrap.innerHTML = '';
   const placed = [];
   TIMELINE_EVENTS.forEach(ev => {
-    const y = Math.max(711, Math.min(1492, ev.year));
-    const pct = ((y - 711) / (1492 - 711)) * 100;
+    if (ev.year < 711 || ev.year > 1492) return; // fuera del rango del slider
+    const pct = ((ev.year - 711) / (1492 - 711)) * 100;
     // Evitar marcadores solapados (< 0.8% de distancia)
     const overlap = placed.some(p => Math.abs(p - pct) < 0.8);
     if (overlap) return;
@@ -8245,6 +8245,7 @@ function initMap() {
   // Slider, eventos, tour
   document.getElementById('timelineSlider').addEventListener('input', (e) => updateEpoca(parseInt(e.target.value)));
   buildEvents();
+  updateNarrativePanel(929); // inicializar panel explícitamente tras buildEvents
   document.getElementById('btnTour').addEventListener('click', toggleTour);
 
   // Botón vista general
