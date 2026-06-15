@@ -4092,8 +4092,12 @@ img, video, iframe { max-width: 100%; height: auto; }
   .mapa-section { box-sizing: border-box; }
   .mapa-section > .container { width: 100%; }
   #mapa-section .section-head { margin-bottom: 14px; }
-  /* Mapa compacto en desktop: mapa panorámico + timeline caben en una pantalla */
-  .mapa-wrapper { height: 360px; }
+  /* Ocultar el tag "Explora · Construye · Viaja" en desktop: el h2 es suficiente y ganamos altura */
+  #mapa-section .section-tag { display: none; }
+  /* Ocultar la fila de 4 puntos de #proceso en desktop: limpia la transición hacia el mapa */
+  .camino-confianza { display: none; }
+  /* Mapa más alto en desktop: mapa panorámico visible + timeline en una pantalla */
+  .mapa-wrapper { height: 390px; }
   .mapa-stage { margin-top: 16px; }
   #mapa-section.section { padding-top: 20px; padding-bottom: 8px; }
   .timeline-wrapper { margin-top: 0; }
@@ -4126,7 +4130,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 }
 /* Portátiles de pantalla baja (≤740px alto): mapa más panorámico para caber en una vista */
 @media (min-width: 901px) and (max-height: 740px) {
-  .mapa-wrapper { height: 295px; }
+  .mapa-wrapper { height: 315px; }
   #mapa-section.section { padding-top: 14px; padding-bottom: 6px; }
   .mapa-stage { margin-top: 10px; }
 }
