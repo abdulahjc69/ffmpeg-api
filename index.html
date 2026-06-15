@@ -1946,72 +1946,100 @@ input[type=range].timeline-slider::-moz-range-thumb {
 /* ===== PANEL NARRATIVO DEL TIMELINE ===== */
 .tl-narrative {
   border-top: 1px solid rgba(194,149,74,0.22);
-  padding: 16px 0 6px;
-  margin-top: 10px;
+  padding: 10px 0 4px;
+  margin-top: 8px;
 }
 .tl-narr-header {
   display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+  flex-wrap: nowrap;
 }
 .tl-narr-year {
   font-family: 'El Messiri','Amiri','Playfair Display',serif;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--negro);
   background: var(--oro);
-  padding: 2px 10px;
+  padding: 2px 8px;
   border-radius: 3px;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .tl-narr-title {
   font-family: 'El Messiri','Amiri','Playfair Display',serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--crema);
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.25;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
-.tl-narr-text {
+.tl-phrase-box {
+  position: relative;
+  min-height: 46px;
+  margin: 4px 0 7px;
+  overflow: hidden;
+}
+.tl-phrase {
   font-family: Arial,sans-serif;
-  font-size: 13px;
-  color: rgba(246,238,223,0.80);
-  line-height: 1.65;
-  margin: 0 0 12px 0;
+  font-size: 12.5px;
+  color: rgba(246,238,223,0.82);
+  line-height: 1.55;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.tl-narr-meta {
+.tl-phrase.active { opacity: 1; }
+.tl-narr-chips {
   display: flex;
-  gap: 18px;
   flex-wrap: wrap;
-  padding-top: 10px;
-  border-top: 1px solid rgba(246,238,223,0.08);
+  gap: 5px;
+  align-items: center;
+  min-height: 20px;
 }
-.tl-narr-block { flex: 1 1 180px; min-width: 0; }
-.tl-narr-label {
-  display: block;
+.tl-chip {
+  display: inline-flex;
+  align-items: center;
   font-family: Arial,sans-serif;
   font-size: 10px;
-  font-weight: 700;
-  color: var(--oro);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 3px;
-}
-.tl-narr-value {
-  font-family: Arial,sans-serif;
-  font-size: 12px;
-  color: rgba(246,238,223,0.62);
+  color: rgba(246,238,223,0.60);
+  background: rgba(194,149,74,0.08);
+  border: 1px solid rgba(194,149,74,0.18);
+  border-radius: 20px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1.4;
 }
+.tl-chip::before {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--oro);
+  opacity: 0.7;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+.tl-chip--per::before { content: 'PER'; }
+.tl-chip--cit::before { content: 'RUT'; }
+.tl-chip--mon::before { content: 'MON'; }
 @media only screen and (max-width: 620px) {
-  .tl-narrative { padding: 12px 0 4px; }
-  .tl-narr-title { font-size: 14px; }
-  .tl-narr-text { font-size: 12px; }
-  .tl-narr-block { flex: 1 1 100%; }
-  .tl-narr-meta { gap: 10px; }
+  .tl-narrative { padding: 8px 0 4px; }
+  .tl-narr-title { font-size: 13px; }
+  .tl-phrase { font-size: 12px; }
+  .tl-phrase-box { min-height: 42px; }
+  .tl-chip { max-width: 160px; }
 }
 
 .mapa-legend {
@@ -4335,21 +4363,14 @@ img, video, iframe { max-width: 100%; height: auto; }
             <span class="tl-narr-year" id="tlNarrYear">929 d.C.</span>
             <h3 class="tl-narr-title" id="tlNarrTitle">Abderramán III proclama el Califato de Córdoba</h3>
           </div>
-          <p class="tl-narr-text" id="tlNarrText"></p>
-          <div class="tl-narr-meta">
-            <div class="tl-narr-block" id="tlNarrCharBlock">
-              <span class="tl-narr-label">Personaje</span>
-              <span class="tl-narr-value" id="tlNarrChar"></span>
-            </div>
-            <div class="tl-narr-block" id="tlNarrCitiesBlock">
-              <span class="tl-narr-label">Ciudades de la ruta</span>
-              <span class="tl-narr-value" id="tlNarrCities"></span>
-            </div>
-            <div class="tl-narr-block" id="tlNarrMonBlock">
-              <span class="tl-narr-label">Monumentos</span>
-              <span class="tl-narr-value" id="tlNarrMon"></span>
-            </div>
+          <div class="tl-phrase-box" id="tlPhraseBox">
+            <span class="tl-phrase" id="tlPhrase0"></span>
+            <span class="tl-phrase" id="tlPhrase1"></span>
+            <span class="tl-phrase" id="tlPhrase2"></span>
+            <span class="tl-phrase" id="tlPhrase3"></span>
+            <span class="tl-phrase" id="tlPhrase4"></span>
           </div>
+          <div class="tl-narr-chips" id="tlNarrChips"></div>
         </div>
       </div>
     </div>
@@ -7831,24 +7852,68 @@ function findActiveHito(year) {
   return best || TIMELINE_EVENTS[0];
 }
 
+// ── Rotación de microfrases ───────────────────────────────────────────────
+let _phraseTimer = null;
+let _phraseIdx   = 0;
+let _phrases     = [];
+const PHRASE_SHOW_MS = 4200;
+
+function splitPhrases(text) {
+  if (!text) return [''];
+  const raw = text.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(s => s.length > 4);
+  if (raw.length <= 5) return raw;
+  const out = raw.slice(0, 4);
+  out.push(raw.slice(4).join(' '));
+  return out;
+}
+
+function _showPhrase(idx) {
+  document.querySelectorAll('.tl-phrase').forEach((el, i) => el.classList.toggle('active', i === idx));
+}
+
+function startPhraseRotation(phrases) {
+  stopPhraseRotation();
+  _phrases  = phrases.length ? phrases : [''];
+  _phraseIdx = 0;
+  const els = document.querySelectorAll('.tl-phrase');
+  els.forEach((el, i) => { el.textContent = _phrases[i] || ''; });
+  _showPhrase(0);
+  if (_phrases.length <= 1) return;
+  function next() {
+    _phraseIdx = (_phraseIdx + 1) % _phrases.length;
+    _showPhrase(_phraseIdx);
+    _phraseTimer = setTimeout(next, PHRASE_SHOW_MS);
+  }
+  _phraseTimer = setTimeout(next, PHRASE_SHOW_MS);
+}
+
+function stopPhraseRotation() {
+  if (_phraseTimer) { clearTimeout(_phraseTimer); _phraseTimer = null; }
+}
+
 // Actualiza el panel narrativo con el hito activo para el año dado
 function updateNarrativePanel(year) {
   const ev = findActiveHito(year);
   if (!ev) return;
   const lang = (typeof currentLang !== 'undefined') ? currentLang : 'es';
-  const get = (f) => (f && typeof f === 'object') ? (f[lang] || f.es || '') : (f || '');
-  const el = (id) => document.getElementById(id);
-  if (el('tlNarrYear'))   el('tlNarrYear').textContent   = ev.year + ' d.C.';
-  if (el('tlNarrTitle'))  el('tlNarrTitle').textContent  = get(ev.title);
-  if (el('tlNarrText'))   el('tlNarrText').textContent   = get(ev.narration);
-  if (el('tlNarrChar'))   el('tlNarrChar').textContent   = get(ev.character) || '—';
-  if (el('tlNarrCities')) {
-    const names = (ev.cities || []).map(c => CITY_DISPLAY_NAMES[c] || c).join(' · ');
-    el('tlNarrCities').textContent = names || '—';
-  }
-  if (el('tlNarrMon')) {
-    const mons = (ev.monuments || []).map(m => m.name).join(' · ');
-    el('tlNarrMon').textContent = mons || '—';
+  const get  = (f) => (f && typeof f === 'object') ? (f[lang] || f.es || '') : (f || '');
+  const el   = (id) => document.getElementById(id);
+  if (el('tlNarrYear'))  el('tlNarrYear').textContent  = ev.year + ' d.C.';
+  if (el('tlNarrTitle')) el('tlNarrTitle').textContent = get(ev.title);
+  // Microfrases
+  startPhraseRotation(splitPhrases(get(ev.narration)));
+  // Chips compactos
+  const chips = el('tlNarrChips');
+  if (chips) {
+    const charTxt  = get(ev.character) || '';
+    const charShort = charTxt.split('—')[0].split('(')[0].trim();
+    const citiesTxt = (ev.cities || []).map(c => CITY_DISPLAY_NAMES[c] || c).join(' · ');
+    const monTxt    = (ev.monuments || []).map(m => (m.name || '').split('—')[0].split('(')[0].trim()).join(' · ');
+    chips.innerHTML = [
+      charShort  ? '<span class="tl-chip tl-chip--per">' + charShort  + '</span>' : '',
+      citiesTxt  ? '<span class="tl-chip tl-chip--cit">' + citiesTxt  + '</span>' : '',
+      monTxt     ? '<span class="tl-chip tl-chip--mon">' + monTxt     + '</span>' : ''
+    ].join('');
   }
 }
 
