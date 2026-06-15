@@ -819,6 +819,8 @@ a:hover { color: var(--terra-d); }
   .atlas-overlay { left: 10px; bottom: 10px; max-width: 180px; padding: 8px 9px; }
   .atlas-overlay-body { gap: 6px; }
 }
+/* Panel de filtros del atlas: oculto visualmente (lógica JS intacta, época sync por timeline) */
+#atlasOverlay { display: none !important; }
 /* ===== Overlay de controles del mapa: zoom + capas (HTML estático, marca de agua) ===== */
 .mapa-controls-overlay {
   position: absolute;
@@ -1915,15 +1917,7 @@ input[type=range].timeline-slider::-moz-range-thumb {
 }
 .event-marker:hover { transform: translateX(-50%) scale(1.5); }
 .event-marker::after {
-  content: attr(data-year);
-  position: absolute;
-  top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  color: rgba(246,238,223,0.7);
-  white-space: nowrap;
-  font-weight: 600;
+  display: none; /* año visible solo en hover (::before tooltip) para evitar solapamiento con panel narrativo */
 }
 .event-marker:hover::before {
   content: attr(data-label);
