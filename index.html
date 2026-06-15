@@ -4382,6 +4382,120 @@ img, video, iframe { max-width: 100%; height: auto; }
 /* Texto secundario */
 .wiz-panel-sub, .wiz-srv-desc { color: var(--texto-sec); }
 </style>
+<style id="orden-072-b1-safe">
+/* ORDEN 072-B1-SAFE
+   Cirugía cromática mínima.
+   Terracota = conversión.
+   Teal = exploración.
+   Carbón = autoridad.
+   No tocar layout, mapa, vídeo, footer ni JS.
+*/
+
+/* 1) B2B premium: sección profesional seria, no fondo promocional rojo */
+.b2b {
+  background: linear-gradient(135deg, #1C1814 0%, #2A221B 100%) !important;
+  color: #F6EEDF !important;
+}
+
+.b2b-content h2 {
+  color: #F6EEDF !important;
+}
+
+.b2b-content p,
+.b2b-perks li {
+  color: rgba(246, 238, 223, 0.90) !important;
+}
+
+.b2b-card {
+  background: rgba(0, 0, 0, 0.24) !important;
+  border-color: rgba(231, 183, 101, 0.28) !important;
+}
+
+.b2b-card h3 {
+  color: #e7b765 !important;
+}
+
+/* 2) Chat: asistencia, no conversión monetaria */
+.chat-header {
+  background: #1C1814 !important;
+  color: #F6EEDF !important;
+}
+
+.chat-header h3,
+.chat-close {
+  color: #F6EEDF !important;
+}
+
+.chat-msg.user {
+  background: #0E7C86 !important;
+  color: #FFFFFF !important;
+}
+
+.chat-send {
+  background: #0E7C86 !important;
+  color: #FFFFFF !important;
+}
+
+.chat-send:hover {
+  background: #0A5A61 !important;
+}
+
+.chat-input-area textarea:focus {
+  border-color: #0E7C86 !important;
+  box-shadow: 0 0 0 3px rgba(14, 124, 134, 0.10) !important;
+}
+
+/* 3) Títulos no comerciales: informar, no gritar CTA */
+.pos-card h3,
+.ciudad-body h3,
+.perfil-card h3,
+.nos-card h3,
+.nos-card li strong,
+.panel-head h3,
+.ciu-section h5 {
+  color: #1C1814 !important;
+}
+
+/* 4) Hero secundario: exploración = teal.
+   El CTA principal "Planifica tu viaje" NO se toca. */
+#inicio .hero-cta .btn-hero-secondary {
+  color: #0E7C86 !important;
+  border-color: #0E7C86 !important;
+  background: transparent !important;
+}
+
+#inicio .hero-cta .btn-hero-secondary:hover {
+  background: #0E7C86 !important;
+  color: #FFFFFF !important;
+  border-color: #0E7C86 !important;
+}
+
+/* 5) Navegación superior: hover/active no monetario = teal.
+   No afecta footer porque se limita a .header .nav */
+.header .nav a:hover,
+.header .nav a.active {
+  color: #0E7C86 !important;
+  background: rgba(14, 124, 134, 0.08) !important;
+}
+
+.header .nav a::after {
+  background: linear-gradient(90deg, #0E7C86 0%, #C2954A 100%) !important;
+}
+
+/* 6) Controles del mapa: exploración = teal.
+   No tocar mapa, Leaflet, altura ni timeline. Solo colores de hover/active. */
+.mapa-controls-overlay .mc-zoom .mc-btn:hover,
+.mapa-controls-overlay .mc-layer:hover {
+  background: rgba(14, 124, 134, 0.10) !important;
+  color: #0E7C86 !important;
+}
+
+.mapa-controls-overlay .mc-layer.active {
+  background: rgba(14, 124, 134, 0.14) !important;
+  color: #0A5A61 !important;
+  font-weight: 700;
+}
+</style>
 </head>
 <body>
 
