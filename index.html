@@ -746,9 +746,12 @@ a:hover { color: var(--terra-d); }
   height: 640px;
   position: relative;
   background: #f0e8d8;
+  overscroll-behavior: contain;
 }
-#mapa { width: 100%; height: 100%; z-index: 1; }
-.leaflet-container { background: #e6dcc4 !important; font-family: 'Inter', sans-serif; }
+#mapa { width: 100%; height: 100%; z-index: 1; touch-action: none; }
+.leaflet-container { background: #e6dcc4 !important; font-family: 'Inter', sans-serif; touch-action: none; }
+/* Mientras el usuario arrastra el mapa, la página no se desplaza */
+body.map-is-interacting { overflow: hidden; }
 /* ===== ATLAS ANDALUSÍ · capa de exploración (enclaves + monumentos reales de Notion) ===== */
 .atlas-pin-wrap, .atlas-mon-wrap { background: transparent !important; border: 0 !important; }
 .atlas-pin {
@@ -10568,6 +10571,41 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 });
 
+</script>
+<script>
+/* ORDEN 068 — Estabilizar drag del mapa: la página no se mueve al interactuar con el mapa */
+(function () {
+  function init() {
+    var wrapper = document.querySelector('.mapa-wrapper');
+    if (!wrapper) return;
+
+    function lockScroll() { document.body.classList.add('map-is-interacting'); }
+    function unlockScroll() { document.body.classList.remove('map-is-interacting'); }
+
+    wrapper.addEventListener('pointerdown', function () {
+      lockScroll();
+      function up() {
+        unlockScroll();
+        document.removeEventListener('pointerup', up, true);
+        document.removeEventListener('pointercancel', up, true);
+      }
+      document.addEventListener('pointerup', up, true);
+      document.addEventListener('pointercancel', up, true);
+    });
+
+    /* Seguridad: si el ratón sale del mapa sin soltar (dragging fuera del wrapper),
+       liberamos el lock en el siguiente pointerup global */
+    wrapper.addEventListener('mouseleave', function (e) {
+      if (e.buttons === 0) unlockScroll();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
 <script>
 /* ORDEN01 scroll-spy: marca el enlace de nav de la sección visible */
