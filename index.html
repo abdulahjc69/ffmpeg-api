@@ -2054,6 +2054,69 @@ input[type=range].timeline-slider::-moz-range-thumb {
   .tl-chip { max-width: 160px; }
 }
 
+/* ===== LAYOUT 3 FILAS DEL TIMELINE (base mobile-first) ===== */
+.tl-row-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.tl-col-epoca {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.tl-col-title {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.tl-col-title .tl-narr-title {
+  font-family: 'El Messiri','Amiri','Playfair Display',serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--crema);
+  margin: 0;
+  line-height: 1.25;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.tl-col-tour {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.tl-row-phrase {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.tl-row-phrase .tl-phrase-box {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 46px;
+  margin: 0;
+}
+.tl-row-phrase .tl-narr-chips {
+  flex-shrink: 0;
+  max-width: 160px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+@media only screen and (max-width: 900px) {
+  .tl-row-info { flex-direction: column; align-items: flex-start; }
+  .tl-col-tour { flex-direction: row; align-items: center; gap: 10px; }
+  .tl-row-phrase { flex-direction: column; }
+  .tl-row-phrase .tl-narr-chips { max-width: none; flex-direction: row; align-items: center; }
+}
+
 .mapa-legend {
   background: rgba(26,26,26,0.92);
   backdrop-filter: blur(12px);
@@ -4097,27 +4160,32 @@ img, video, iframe { max-width: 100%; height: auto; }
   /* Ocultar la fila de 4 puntos de #proceso en desktop: limpia la transición hacia el mapa */
   .camino-confianza { display: none; }
   /* Mapa alto en desktop: con franja negra compacta, el mapa gana protagonismo */
-  .mapa-wrapper { height: 460px; }
-  .mapa-stage { margin-top: 16px; }
-  #mapa-section.section { padding-top: 20px; padding-bottom: 8px; }
+  .mapa-wrapper { height: 475px; }
+  .mapa-stage { margin-top: 12px; }
+  #mapa-section.section { padding-top: 14px; padding-bottom: 6px; }
   .timeline-wrapper { margin-top: 0; }
   /* ── Franja negra compacta en desktop ── */
-  .timeline-wrapper { padding: 8px 24px 6px; }
-  .timeline-head { margin-bottom: 4px; gap: 16px; }
-  .timeline-left { gap: 2px; }
-  .timeline-current-year { font-size: 20px; }
+  .timeline-wrapper { padding: 7px 24px 5px; }
   .epoca-desc { display: none; }
   .epoca-name { font-size: 13px; }
-  .timeline-right { flex-direction: row; align-items: center; gap: 12px; }
-  .timeline-range { padding-top: 0; font-size: 11px; }
-  .btn-tour { padding: 7px 14px; font-size: 12px; }
-  .timeline-track-wrap { padding: 2px 0 8px; }
-  .tl-narrative { padding: 6px 0 0; margin-top: 4px; }
-  .tl-narr-year { display: none; }
-  .tl-narr-header { margin-bottom: 2px; }
-  .tl-narr-title { font-size: 13px; }
-  .tl-phrase-box { min-height: 36px; margin: 2px 0 4px; }
+  .timeline-current-year { font-size: 20px; }
+  .btn-tour { padding: 6px 13px; font-size: 12px; }
+  .timeline-range { font-size: 11px; }
+  /* Fila A: 3 columnas en desktop */
+  .tl-row-info { flex-wrap: nowrap; align-items: center; margin-bottom: 4px; gap: 12px; }
+  .tl-col-epoca { gap: 1px; flex-shrink: 0; }
+  .tl-col-tour { flex-direction: row; align-items: center; gap: 10px; }
+  /* Fila B: horizontal en desktop */
+  .tl-row-phrase { flex-direction: row; align-items: center; margin-bottom: 2px; }
+  .tl-row-phrase .tl-phrase-box { min-height: 34px; }
+  .tl-row-phrase .tl-narr-chips { max-width: 180px; flex-direction: column; align-items: flex-end; gap: 3px; }
+  .tl-col-title .tl-narr-title { font-size: 13px; -webkit-line-clamp: 1; }
   .tl-phrase { font-size: 12px; }
+  /* Fila C: slider ajustado */
+  .timeline-track-wrap { padding: 2px 0 6px; }
+  /* Marcadores encima de la línea (sin solapar fila B) */
+  .event-marker.alta { top: -3px !important; }
+  .event-marker.media { top: -1px !important; }
 
   /* PROCESO: cabecera algo más arriba (no tan centrada) + botones que se iluminan */
   #proceso { justify-content: flex-start; padding-top: clamp(36px, 6vh, 72px); }
@@ -4377,8 +4445,9 @@ img, video, iframe { max-width: 100%; height: auto; }
         </div>
       </div>
       <div class="timeline-wrapper">
-        <div class="timeline-head">
-          <div class="timeline-left">
+        <!-- FILA A: año+época | título hito | tour -->
+        <div class="tl-row-info">
+          <div class="tl-col-epoca">
             <div class="timeline-current-year"><span id="currentYear">929</span> <small style="font-size: 16px; opacity: 0.5;">d.C.</small></div>
             <div class="epoca-info-inline">
               <span class="epoca-year" id="epocaYear">929–1030</span>
@@ -4386,26 +4455,18 @@ img, video, iframe { max-width: 100%; height: auto; }
               <p class="epoca-desc" id="epocaDesc">Apogeo de Al-Ándalus.</p>
             </div>
           </div>
-          <div class="timeline-right">
+          <div class="tl-col-title">
+            <h3 class="tl-narr-title" id="tlNarrTitle">Abderramán III proclama el Califato de Córdoba</h3>
+          </div>
+          <div class="tl-col-tour">
             <button class="btn-tour" id="btnTour" aria-label="Tour cronológico">
               <span id="btnTourIcon">▶</span> <span id="btnTourLabel" data-t="map.tour">Tour cronológico</span>
             </button>
             <div class="timeline-range">711 ◂ Al-Ándalus ▸ 1492</div>
           </div>
         </div>
-        <div class="timeline-track-wrap">
-          <div class="timeline-track">
-            <div class="timeline-progress" id="timelineProgress" style="width:27.9%;"></div>
-          </div>
-          <input type="range" class="timeline-slider" id="timelineSlider" min="711" max="1492" value="929" step="1">
-          <div class="timeline-events" id="timelineEvents"></div>
-        </div>
-        <!-- PANEL NARRATIVO DEL HITO ACTIVO -->
-        <div class="tl-narrative" id="tlNarrative">
-          <div class="tl-narr-header">
-            <span class="tl-narr-year" id="tlNarrYear">929 d.C.</span>
-            <h3 class="tl-narr-title" id="tlNarrTitle">Abderramán III proclama el Califato de Córdoba</h3>
-          </div>
+        <!-- FILA B: microfrase narrativa -->
+        <div class="tl-row-phrase">
           <div class="tl-phrase-box" id="tlPhraseBox">
             <span class="tl-phrase" id="tlPhrase0"></span>
             <span class="tl-phrase" id="tlPhrase1"></span>
@@ -4414,6 +4475,18 @@ img, video, iframe { max-width: 100%; height: auto; }
             <span class="tl-phrase" id="tlPhrase4"></span>
           </div>
           <div class="tl-narr-chips" id="tlNarrChips"></div>
+        </div>
+        <!-- FILA C: slider + marcadores -->
+        <div class="timeline-track-wrap">
+          <div class="timeline-track">
+            <div class="timeline-progress" id="timelineProgress" style="width:27.9%;"></div>
+          </div>
+          <input type="range" class="timeline-slider" id="timelineSlider" min="711" max="1492" value="929" step="1">
+          <div class="timeline-events" id="timelineEvents"></div>
+        </div>
+        <!-- legado oculto para JS que aún lo busque -->
+        <div id="tlNarrative" style="display:none;">
+          <span id="tlNarrYear"></span>
         </div>
       </div>
     </div>
