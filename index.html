@@ -4626,7 +4626,7 @@ img, video, iframe { max-width: 100%; height: auto; }
     <div class="mapa-stage">
       <div class="mapa-layout">
         <div class="mapa-wrapper">
-          <div id="mapa"></div>
+          <div id="mapa"><div id="mapaFallback" style="display:none;position:absolute;inset:0;z-index:2;background:#f0e8d8;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;"><span style="font-size:32px;">🗺️</span><p style="font-family:inherit;font-size:15px;color:#3a2e24;font-weight:600;margin:0;">Mapa interactivo disponible online</p><p style="font-family:inherit;font-size:13px;color:rgba(58,46,36,0.65);margin:0;">Activa la conexión a internet para explorar los 30+ enclaves andalusíes sobre el mapa.</p></div></div>
           <!-- Etiqueta narrativa del hito activo sobre el mapa -->
           <div id="tlMapCaption" class="tl-map-caption" aria-hidden="true">
             <span class="tl-map-caption-year" id="tlMapCaptionYear"></span>
@@ -4734,7 +4734,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 </section>
 
 <!-- ============ EXPLORADOR JERÁRQUICO DEL ATLAS · prototipo F4 ============ -->
-<section class="section vaexp-section" id="explorador" style="display:none">
+<section class="section vaexp-section" id="explorador">
 <style>
 #explorador [hidden]{display:none !important;}
 .vaexp-section{background:#f7f5f0;}
@@ -7992,6 +7992,9 @@ const TIMELINE_EVENTS = [
   { year:1492, title:{es:"Cae Granada: el último suspiro de Al-Ándalus"}, narration:{es:"El 2 de enero de 1492, Muhammad XII —Boabdil— entrega las llaves de Granada a los Reyes Católicos. La tradición recoge que, al alejarse de la ciudad, lloró al contemplar por última vez la Alhambra desde el paso que la memoria popular llama El suspiro del Moro, en las Alpujarras. Los Reyes Católicos respetaron inicialmente la mezquita y las costumbres de los musulmanes granadinos. El 31 de marzo firman el Decreto de la Alhambra, ordenando la expulsión de los judíos. En octubre, Colón llega a América. Tres giros históricos en el mismo año. La Alhambra queda de pie."}, character:{es:"Muhammad XII — Boabdil, último sultán nazarí (r. 1482–1492). Los Reyes Católicos: Isabel I de Castilla y Fernando II de Aragón."}, historicalRelation:{es:"1492 es el año más denso de la historia de España: fin de Al-Ándalus, expulsión de los sefardíes, inicio de la expansión americana."}, cities:["granada","alpujarra"], monuments:[{name:"La Alhambra — Palacios Nazaríes y Generalife",city:"granada"},{name:"El Suspiro del Moro — Alpujarra granadina (tradición)",city:"alpujarra"}], mapAction:{highlightCities:["granada","alpujarra"]}, importance:"alta", readSeconds:40, autoTour:true }
 ];
 
+// Exponer en window para acceso desde contextos externos (ORDEN 075-C)
+window.TIMELINE_EVENTS = TIMELINE_EVENTS;
+
 // Helper para tomar la versión localizada de campos epoca/evento
 function ftL(field) { return (field && typeof field === 'object') ? (field[currentLang] || field.es || '') : (field || ''); }
 
@@ -8414,9 +8417,11 @@ function updateEpoca(year) {
 
 function buildEvents() {
   const wrap = document.getElementById('timelineEvents');
+  if (!wrap) return;
   wrap.innerHTML = '';
   const placed = [];
-  TIMELINE_EVENTS.forEach(ev => {
+  var _TLE = window.TIMELINE_EVENTS || TIMELINE_EVENTS;
+  _TLE.forEach(ev => {
     if (ev.year < 711 || ev.year > 1492) return; // fuera del rango del slider
     const pct = ((ev.year - 711) / (1492 - 711)) * 100;
     // Evitar marcadores solapados (< 0.8% de distancia)
@@ -8772,14 +8777,15 @@ function initMap() {
   // Atlas Andalusí: capa de exploración (huella andalusí real, no afecta al configurador)
   initAtlasLayer();
 
-  // Polígono inicial
+  // Polígono inicial y timeline (con mapa ya disponible)
   updateEpoca(929);
-
-  // Slider, eventos, tour
-  document.getElementById('timelineSlider').addEventListener('input', (e) => updateEpoca(parseInt(e.target.value)));
   buildEvents();
-  updateNarrativePanel(929); // inicializar panel explícitamente tras buildEvents
+  updateNarrativePanel(929);
   document.getElementById('btnTour').addEventListener('click', toggleTour);
+
+  // Ocultar fallback visual del mapa — Leaflet cargó correctamente
+  var fb = document.getElementById('mapaFallback');
+  if (fb) fb.style.display = 'none';
 
   // Botón vista general
   document.getElementById('btnVistaGeneral').addEventListener('click', vistaGeneral);
@@ -9297,6 +9303,32 @@ function initModalListeners() {
 
 window.addEventListener('load', initMap);
 if (document.readyState === 'complete') setTimeout(initMap, 100);
+
+// ── ORDEN 075-C: inicialización independiente de timeline y slider ──
+// Si Leaflet no carga (local/offline), el timeline narrativo sí debe funcionar.
+(function initTimelineIndependent() {
+  function run() {
+    try { buildEvents(); } catch(e) {}
+    try { updateEpoca(929); } catch(e) {}
+    try { updateNarrativePanel(929); } catch(e) {}
+    try {
+      var slider = document.getElementById('timelineSlider');
+      if (slider) slider.addEventListener('input', function(e) { try { updateEpoca(parseInt(e.target.value, 10)); } catch(x) {} });
+    } catch(e) {}
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  // Fallback visual del mapa: si Leaflet no carga en 4 s, mostrar aviso elegante
+  setTimeout(function() {
+    if (typeof L === 'undefined' || !window.mapInstance) {
+      var fb = document.getElementById('mapaFallback');
+      if (fb) fb.style.display = 'flex';
+    }
+  }, 4000);
+})();
 
 // ============================================
 // FORM CONFIGURADOR (legacy B2B form, ya no presente en esta versión)
@@ -10319,7 +10351,7 @@ cfgUpdate();
 // WIZARD DE PLANIFICACIÓN (7 pasos)
 // ============================================
 
-const VWIZ = {
+var VWIZ = {
   step: 1,
   fecha_inicio: '',
   fecha_fin: '',
