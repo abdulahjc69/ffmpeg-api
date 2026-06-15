@@ -4096,11 +4096,28 @@ img, video, iframe { max-width: 100%; height: auto; }
   #mapa-section .section-tag { display: none; }
   /* Ocultar la fila de 4 puntos de #proceso en desktop: limpia la transición hacia el mapa */
   .camino-confianza { display: none; }
-  /* Mapa más alto en desktop: mapa panorámico visible + timeline en una pantalla */
-  .mapa-wrapper { height: 390px; }
+  /* Mapa alto en desktop: con franja negra compacta, el mapa gana protagonismo */
+  .mapa-wrapper { height: 460px; }
   .mapa-stage { margin-top: 16px; }
   #mapa-section.section { padding-top: 20px; padding-bottom: 8px; }
   .timeline-wrapper { margin-top: 0; }
+  /* ── Franja negra compacta en desktop ── */
+  .timeline-wrapper { padding: 8px 24px 6px; }
+  .timeline-head { margin-bottom: 4px; gap: 16px; }
+  .timeline-left { gap: 2px; }
+  .timeline-current-year { font-size: 20px; }
+  .epoca-desc { display: none; }
+  .epoca-name { font-size: 13px; }
+  .timeline-right { flex-direction: row; align-items: center; gap: 12px; }
+  .timeline-range { padding-top: 0; font-size: 11px; }
+  .btn-tour { padding: 7px 14px; font-size: 12px; }
+  .timeline-track-wrap { padding: 2px 0 8px; }
+  .tl-narrative { padding: 6px 0 0; margin-top: 4px; }
+  .tl-narr-year { display: none; }
+  .tl-narr-header { margin-bottom: 2px; }
+  .tl-narr-title { font-size: 13px; }
+  .tl-phrase-box { min-height: 36px; margin: 2px 0 4px; }
+  .tl-phrase { font-size: 12px; }
 
   /* PROCESO: cabecera algo más arriba (no tan centrada) + botones que se iluminan */
   #proceso { justify-content: flex-start; padding-top: clamp(36px, 6vh, 72px); }
@@ -4130,7 +4147,7 @@ img, video, iframe { max-width: 100%; height: auto; }
 }
 /* Portátiles de pantalla baja (≤740px alto): mapa más panorámico para caber en una vista */
 @media (min-width: 901px) and (max-height: 740px) {
-  .mapa-wrapper { height: 315px; }
+  .mapa-wrapper { height: 370px; }
   #mapa-section.section { padding-top: 14px; padding-bottom: 6px; }
   .mapa-stage { margin-top: 10px; }
 }
