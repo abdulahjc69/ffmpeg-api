@@ -1940,6 +1940,79 @@ input[type=range].timeline-slider::-moz-range-thumb {
   border: 1px solid var(--oro);
   z-index: 10;
 }
+.event-marker.alta { background: var(--oro); width: 14px; height: 14px; top: 20px; }
+.event-marker.media { background: rgba(194,149,74,0.55); width: 10px; height: 10px; top: 22px; }
+
+/* ===== PANEL NARRATIVO DEL TIMELINE ===== */
+.tl-narrative {
+  border-top: 1px solid rgba(194,149,74,0.22);
+  padding: 16px 0 6px;
+  margin-top: 10px;
+}
+.tl-narr-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.tl-narr-year {
+  font-family: 'El Messiri','Amiri','Playfair Display',serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--negro);
+  background: var(--oro);
+  padding: 2px 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tl-narr-title {
+  font-family: 'El Messiri','Amiri','Playfair Display',serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--crema);
+  margin: 0;
+  line-height: 1.3;
+}
+.tl-narr-text {
+  font-family: Arial,sans-serif;
+  font-size: 13px;
+  color: rgba(246,238,223,0.80);
+  line-height: 1.65;
+  margin: 0 0 12px 0;
+}
+.tl-narr-meta {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid rgba(246,238,223,0.08);
+}
+.tl-narr-block { flex: 1 1 180px; min-width: 0; }
+.tl-narr-label {
+  display: block;
+  font-family: Arial,sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--oro);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.tl-narr-value {
+  font-family: Arial,sans-serif;
+  font-size: 12px;
+  color: rgba(246,238,223,0.62);
+  line-height: 1.4;
+}
+@media only screen and (max-width: 620px) {
+  .tl-narrative { padding: 12px 0 4px; }
+  .tl-narr-title { font-size: 14px; }
+  .tl-narr-text { font-size: 12px; }
+  .tl-narr-block { flex: 1 1 100%; }
+  .tl-narr-meta { gap: 10px; }
+}
 
 .mapa-legend {
   background: rgba(26,26,26,0.92);
@@ -4255,6 +4328,28 @@ img, video, iframe { max-width: 100%; height: auto; }
           </div>
           <input type="range" class="timeline-slider" id="timelineSlider" min="711" max="1492" value="929" step="1">
           <div class="timeline-events" id="timelineEvents"></div>
+        </div>
+        <!-- PANEL NARRATIVO DEL HITO ACTIVO -->
+        <div class="tl-narrative" id="tlNarrative">
+          <div class="tl-narr-header">
+            <span class="tl-narr-year" id="tlNarrYear">929 d.C.</span>
+            <h3 class="tl-narr-title" id="tlNarrTitle">Abderramán III proclama el Califato de Córdoba</h3>
+          </div>
+          <p class="tl-narr-text" id="tlNarrText"></p>
+          <div class="tl-narr-meta">
+            <div class="tl-narr-block" id="tlNarrCharBlock">
+              <span class="tl-narr-label">Personaje</span>
+              <span class="tl-narr-value" id="tlNarrChar"></span>
+            </div>
+            <div class="tl-narr-block" id="tlNarrCitiesBlock">
+              <span class="tl-narr-label">Ciudades de la ruta</span>
+              <span class="tl-narr-value" id="tlNarrCities"></span>
+            </div>
+            <div class="tl-narr-block" id="tlNarrMonBlock">
+              <span class="tl-narr-label">Monumentos</span>
+              <span class="tl-narr-value" id="tlNarrMon"></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -7416,11 +7511,11 @@ const EPOCAS = [
     polygon: [[42.5,-9.0],[42.6,-6.2],[42.4,-3.5],[42.6,-1.0],[42.2,0.6],[41.5,1.8],[41.0,3.0],[39.0,0.0],[37.5,-0.7],[36.0,-2.0],[36.0,-5.5],[36.1,-7.5],[37.2,-9.0],[39.0,-9.5],[41.0,-9.2],[42.5,-9.0]] },
   { yearStart: 929, yearEnd: 1030,
     name: { es:'Califato de Córdoba', en:'Caliphate of Córdoba', ar:'خلافة قرطبة', fr:'Califat de Cordoue', pt:'Califado de Córdoba' },
-    desc: { es:'Apogeo. Abderramán III proclama el califato. Córdoba: 500.000 habitantes, la mayor ciudad de Europa.',
-            en:'Peak. Abd al-Rahman III proclaims the caliphate. Córdoba: 500,000 inhabitants, the largest city in Europe.',
-            ar:'الذروة. عبد الرحمن الناصر يعلن الخلافة. قرطبة: 500,000 نسمة، أكبر مدينة في أوروبا.',
-            fr:'Apogée. Abd al-Rahman III proclame le califat. Cordoue : 500 000 habitants, la plus grande ville d\'Europe.',
-            pt:'Apogeu. Abderramán III proclama o califado. Córdoba: 500.000 habitantes, a maior cidade da Europa.' },
+    desc: { es:'Apogeo de Al-Ándalus. Abderramán III proclama el califato y Córdoba alcanza su máximo esplendor cultural.',
+            en:'Peak of Al-Andalus. Abd al-Rahman III proclaims the caliphate and Córdoba reaches its cultural zenith.',
+            ar:'ذروة الأندلس. عبد الرحمن الناصر يعلن الخلافة وقرطبة تبلغ أوج ازدهارها الحضاري.',
+            fr:'Apogée d\'Al-Andalus. Abd al-Rahman III proclame le califat et Cordoue atteint son zénith culturel.',
+            pt:'Apogeu de Al-Ândalus. Abderramán III proclama o califado e Córdoba atinge o seu máximo esplendor cultural.' },
     color: '#C2954A',
     polygon: [[42.0,-9.0],[42.2,-6.0],[42.0,-3.2],[42.3,-0.8],[41.7,0.8],[41.0,2.2],[40.5,2.5],[38.5,0.0],[37.5,-0.7],[36.0,-2.0],[36.0,-5.5],[36.1,-7.5],[37.2,-9.0],[39.0,-9.4],[41.0,-9.2],[42.0,-9.0]] },
   { yearStart: 1031, yearEnd: 1211,
@@ -7462,6 +7557,39 @@ const EVENTOS = [
   { year: 1236, label: { es:'Cae Córdoba', en:'Córdoba falls', ar:'سقوط قرطبة', fr:'Cordoue tombe', pt:'Córdoba cai' } },
   { year: 1248, label: { es:'Cae Sevilla', en:'Seville falls', ar:'سقوط إشبيلية', fr:'Séville tombe', pt:'Sevilla cai' } },
   { year: 1492, label: { es:'Cae Granada · Fin de Al-Ándalus', en:'Granada falls · End of Al-Andalus', ar:'سقوط غرناطة · نهاية الأندلس', fr:'Grenade tombe · Fin d\'Al-Andalus', pt:'Granada cai · Fim de Al-Ândalus' } }
+];
+
+// Mapa de nombres de ciudades VAA para el panel narrativo
+const CITY_DISPLAY_NAMES = {
+  madrid:'Madrid', toledo:'Toledo', cordoba:'Córdoba', sevilla:'Sevilla',
+  granada:'Granada', malaga:'Málaga', ronda:'Ronda', carmona:'Carmona',
+  alpujarra:'Alpujarra granadina'
+};
+
+// ============================================================
+// TIMELINE_EVENTS — 18 hitos históricos depurados (ORDEN 056)
+// Arquitectura multidioma: campos como objetos {es, en, fr, pt, ar}
+// Actualmente solo ES. Preparado para extensión futura.
+// ============================================================
+const TIMELINE_EVENTS = [
+  { year:700, title:{es:"La Hispania visigoda en crisis"}, narration:{es:"En el año 700, la Hispania visigoda es uno de los reinos más extensos y organizados de Occidente, con capital en Toledo. Pero el reino se resquebraja por dentro: luchas entre nobles por el trono, presión fiscal sobre la población hispanorromana y tensiones con las comunidades judías crean fracturas profundas. Cuando el rey Rodrigo usurpa el trono en 710, los nobles derrotados buscan apoyos en el norte de África. Sin saberlo, están facilitando una de las transformaciones más radicales que ha conocido la historia de Europa."}, character:{es:"Rodrigo — último rey visigodo (r. 710–711)"}, historicalRelation:{es:"Sin el colapso interno visigodo, la conquista de 711 no habría sido posible ni tan rápida."}, cities:["toledo"], monuments:[{name:"Toledo — capital del reino visigodo",city:"toledo"}], mapAction:{highlightCities:["toledo"]}, importance:"media", readSeconds:30, autoTour:false },
+  { year:711, title:{es:"Tariq ibn Ziyad cruza el Estrecho"}, narration:{es:"En la primavera del 711, el general bereber Tariq ibn Ziyad desembarca con siete mil hombres en el peñón que hoy lleva su nombre: Gibraltar, Yabal Tariq, 'monte de Tariq'. En julio, junto al río Guadalete, el ejército visigodo del rey Rodrigo sufre una derrota total; el rey muere o desaparece en combate. En pocos años el avance alcanza los Pirineos. La rapidez respondió a una combinación de victorias militares y capitulaciones negociadas. Las comunidades judías y cristianas que permanecieron quedaron bajo el estatuto jurídico de la dhimma: protección de su culto, bienes y vida a cambio de impuestos específicos."}, character:{es:"Tariq ibn Ziyad — general bereber, gobernador de Tánger bajo el mando del omeya Musa ibn Nusayr"}, historicalRelation:{es:"Inicio de Al-Ándalus. El punto de inflexión que abre ocho siglos de historia islámica en Europa occidental."}, cities:["malaga"], monuments:[{name:"Estrecho de Gibraltar — Yabal Tariq",city:"malaga"}], mapAction:{highlightCities:["malaga"]}, importance:"alta", readSeconds:38, autoTour:true },
+  { year:716, title:{es:"Las grandes ciudades caen en cuatro años"}, narration:{es:"Tras el desembarco de Tariq, el gobernador Musa ibn Nusayr cruza en 712 con un ejército mayor. En cuatro años caen las ciudades principales: Sevilla, Mérida, Toledo, Zaragoza, Córdoba. Fue un proceso de avance militar combinado con negociaciones y pactos de capitulación: algunas plazas resistieron hasta el combate, otras abrieron sus puertas a cambio de respetar vidas, propiedades e iglesias. Córdoba se convierte en capital administrativa. Sevilla, estratégica y con acceso fluvial, es desde el primer momento una de las ciudades más prósperas de Al-Ándalus. Toledo conserva su sede episcopal."}, character:{es:"Musa ibn Nusayr — gobernador omeya del norte de África, jefe de la segunda oleada"}, historicalRelation:{es:"La variedad de términos de rendición explica por qué iglesias, comunidades judías y costumbres locales sobrevivieron durante siglos bajo el poder islámico."}, cities:["toledo","sevilla","cordoba"], monuments:[{name:"Córdoba — primera capital administrativa",city:"cordoba"},{name:"Toledo — continuidad episcopal",city:"toledo"}], mapAction:{highlightCities:["toledo","sevilla","cordoba"]}, importance:"alta", readSeconds:38, autoTour:false },
+  { year:756, title:{es:"El príncipe fugitivo que fundó un estado"}, narration:{es:"Abd al-Rahman ibn Muawiya tenía cerca de veinte años cuando los abasíes masacraron a su familia omeya en Damasco. Pasó cinco años huyendo por el norte de África hasta llegar a Al-Ándalus en 755. En 756 derrota al gobernador local y se proclama emir independiente de Córdoba, rompiendo con el califato de Bagdad. No adopta el título de califa —solo emir—, pero su estado es completamente autónomo. Córdoba empieza a transformarse en capital cultural y se inician las obras de la primera Gran Mezquita sobre los restos de una iglesia visigoda. Una historia de exilio que se convierte en fundación."}, character:{es:"Abd al-Rahman I — 'Al-Dajil' (el Entrante). Único superviviente adulto de la rama siria de los Omeyas tras la masacre abasí de 750."}, historicalRelation:{es:"Primer estado islámico europeo completamente independiente de Oriente. La línea directa hacia el futuro Califato de Córdoba."}, cities:["cordoba"], monuments:[{name:"Gran Mezquita de Córdoba — primera fase (784–786)",city:"cordoba"}], mapAction:{highlightCities:["cordoba"]}, importance:"alta", readSeconds:38, autoTour:true },
+  { year:852, title:{es:"Magerit: la fortaleza que protege la frontera"}, narration:{es:"En torno al año 852, el emir Muhammad I ordena construir una fortaleza en el centro de la península para proteger Toledo de las incursiones del norte. La llaman Magerit, topónimo árabe que probablemente alude al arroyo que la abastece. Es un enclave militar sin gran población civil. Nadie imagina entonces que sobre ese emplazamiento se levantará, siglos después, la capital de la Monarquía Hispánica. El Manzanares, el cerro, los primeros muros de piedra: los cimientos de lo que se llamará Madrid. La historia de la actual capital de España comienza en árabe."}, character:{es:"Muhammad I — Emir de Córdoba (r. 852–886), nieto de Abderramán I"}, historicalRelation:{es:"Madrid nace como puesto militar andalusí. Dato prácticamente desconocido para el visitante internacional."}, cities:["madrid"], monuments:[{name:"Muralla árabe de Madrid — Parque Emir Muhammad I",city:"madrid"}], mapAction:{highlightCities:["madrid"]}, importance:"media", readSeconds:32, autoTour:false },
+  { year:929, title:{es:"Abderramán III proclama el Califato de Córdoba"}, narration:{es:"El 16 de enero de 929, el emir Abd al-Rahman III da el paso que nadie había dado en casi dos siglos: se proclama Califa, Príncipe de los Creyentes y Defensor de la Religión de Dios. Con este título desafía al califato abasí de Bagdad y al fatimí de El Cairo. Córdoba se convierte en una de las ciudades más pobladas de Europa occidental; fuentes árabes de la época llegan a citar 500.000 habitantes, cifra que los historiadores modernos matizan. Su biblioteca real, según las mismas fuentes, acumula cientos de miles de volúmenes. La Mezquita alcanza proporciones monumentales. Un viajero del siglo X la describe como la ciudad de las mil mezquitas."}, character:{es:"Abd al-Rahman III — 'Al-Nasir li-din Allah'. Gobernó 50 años (912–961), el reinado más extenso y próspero de Al-Ándalus."}, historicalRelation:{es:"Cima política de Al-Ándalus en el contexto mediterráneo. En este período Córdoba recibe embajadas de Bizancio, los reinos francos y el Sacro Imperio Romano Germánico."}, cities:["cordoba"], monuments:[{name:"Gran Mezquita de Córdoba — ampliada bajo Abderramán III",city:"cordoba"},{name:"Medina Azahara — en construcción desde 936",city:"cordoba"}], mapAction:{highlightCities:["cordoba"]}, importance:"alta", readSeconds:42, autoTour:true },
+  { year:936, title:{es:"Medina Azahara: la ciudad del poder"}, narration:{es:"A cinco kilómetros al oeste de Córdoba, Abderramán III comienza en 936 la construcción de una ciudad palatina sin precedentes en el Occidente medieval. Un ejército de obreros trabaja durante décadas según las crónicas. Se importa mármol de diversas procedencias mediterráneas; columnas de los reinos francos. Los embajadores de Bizancio y de los reinos europeos llegan aquí para negociar con el califa. En 1010, durante la guerra civil que destruye el califato, la ciudad es saqueada e incendiada. Desaparece bajo la tierra durante nueve siglos. Hoy las excavaciones revelan un complejo que sigue sorprendiendo a los arqueólogos. Patrimonio de la Humanidad desde 2018."}, character:{es:"Abd al-Rahman III — inicia la construcción en 936. Al-Hakam II — la amplía y convierte en centro intelectual."}, historicalRelation:{es:"Símbolo máximo del poder califal. Su destrucción en 1010 marcó el inicio visible del fin del califato."}, cities:["cordoba"], monuments:[{name:"Conjunto Arqueológico de Medina Azahara (UNESCO 2018)",city:"cordoba"}], mapAction:{highlightCities:["cordoba"]}, importance:"alta", readSeconds:38, autoTour:false },
+  { year:978, title:{es:"Al-Mansur: el hombre que gobernó sin ser califa"}, narration:{es:"El califa Hisham II tiene once años cuando sube al trono. Quien gobierna realmente es Muhammad ibn Abi Amir, conocido como Al-Mansur, 'el Victorioso'. En veinte años lanza 57 campañas contra los reinos del norte, saquea Barcelona (985), León, y en 997 arrasa Santiago de Compostela, llevándose según las crónicas las campanas de la catedral a hombros de prisioneros. En Córdoba protege a los poetas y amplía la mezquita. La red de fortalezas de la Marca Media —entre ellas Magerit, la futura Madrid— protege la frontera central. Muere en campaña en 1002. Al-Ándalus no recuperará esa cohesión."}, character:{es:"Al-Mansur (Muhammad ibn Abi Amir al-Ma'afiri) — el hajib que concentró todo el poder real del califato sin ser nunca su califa legítimo."}, historicalRelation:{es:"Su muerte sin un sucesor consolidado desencadenó la guerra civil que destruyó el califato en 1031."}, cities:["cordoba","madrid"], monuments:[{name:"Gran Mezquita de Córdoba — ampliación de Al-Mansur (987–990)",city:"cordoba"},{name:"Muralla árabe de Madrid — fortaleza de la Marca Media",city:"madrid"}], mapAction:{highlightCities:["cordoba","madrid"]}, importance:"alta", readSeconds:40, autoTour:true },
+  { year:1031, title:{es:"El califato se rompe: veinte reinos donde había uno"}, narration:{es:"En 1031 el consejo de Córdoba vota la abolición del califato. El poder central se fragmenta en veinte o treinta reinos independientes llamados taifas: Toledo tiene su taifa, Sevilla la suya, Granada, Málaga. Cada rey compite con los demás en lujo, ejércitos y mecenazgo cultural: contratan poetas, matemáticos y filósofos, y pagan tributos a los reinos del norte para comprar paz. Es uno de los períodos de mayor producción intelectual de Al-Ándalus y al mismo tiempo el más frágil políticamente. Una paradoja que resume el carácter de los últimos siglos de la historia andalusí: brillante en el pensamiento, vulnerable en la política."}, character:{es:"No hay un único protagonista. Figura representativa: Al-Mu'tamid ibn Abbad, rey taifa de Sevilla y poeta (1040–1095)."}, historicalRelation:{es:"La fragmentación hace inevitable la reconquista. Los reinos taifas se enfrentan entre sí más de lo que resisten a los reinos del norte."}, cities:["cordoba","sevilla","granada","malaga","toledo"], monuments:[{name:"Alcázar de Sevilla — palacio de Al-Mu'tamid",city:"sevilla"}], mapAction:{highlightCities:["cordoba","sevilla","granada","malaga","toledo"]}, importance:"alta", readSeconds:40, autoTour:true },
+  { year:1085, title:{es:"Toledo cae: el primer golpe irreversible"}, narration:{es:"El 25 de mayo de 1085, Alfonso VI de Castilla y León entra en Toledo sin apenas resistencia. El rey taifa Al-Qadir, incapaz de defender la ciudad, la entrega a cambio de ser reconocido rey de Valencia. Alfonso VI adopta el título de 'Emperador de las dos religiones' y mantiene inicialmente la mezquita abierta al culto. Pero el impacto político es enorme: por primera vez en más de tres siglos y medio, una gran capital de Al-Ándalus pasa a manos cristianas. Los reyes taifas, alarmados por el precedente, envían emisarios al sultán almorávide del norte de África."}, character:{es:"Alfonso VI de Castilla y León. Al-Qadir — último rey taifa de Toledo."}, historicalRelation:{es:"La caída de Toledo es el detonante directo de la llegada almorávide. El primer domino de la Reconquista final."}, cities:["toledo"], monuments:[{name:"Mezquita del Cristo de la Luz (Toledo) — mezquita árabe del siglo X",city:"toledo"}], mapAction:{highlightCities:["toledo"]}, importance:"alta", readSeconds:38, autoTour:true },
+  { year:1086, title:{es:"Los almorávides: el ejército del desierto en Al-Ándalus"}, narration:{es:"Yusuf ibn Tashfin, sultán de un nuevo poder bereber que controla el norte de África y el Sahara, desembarca en 1086 a petición de los reyes taifas. En octubre derrota a Alfonso VI en la batalla de Zalaca, junto a Badajoz. Pero los almorávides no se retiran: en 1090 deponen uno a uno a los reyes taifas y toman el control de Al-Ándalus. Sevilla se convierte en su capital ibérica. Traen una visión del islam más ortodoxa que la de las taifas: persiguen corrientes filosóficas heterodoxas y el ambiente de mecenazgo literario de los reinos taifa se ve sensiblemente afectado, aunque la actividad intelectual no desaparece."}, character:{es:"Yusuf ibn Tashfin — sultán almorávide, señor de Marrakech."}, historicalRelation:{es:"Los almorávides detienen temporalmente la reconquista pero no recuperan Toledo."}, cities:["sevilla"], monuments:[{name:"Alcázar de Sevilla — sede del gobierno almorávide",city:"sevilla"}], mapAction:{highlightCities:["sevilla"]}, importance:"media", readSeconds:40, autoTour:false },
+  { year:1126, title:{es:"Averroes y la edad del saber en Córdoba"}, narration:{es:"En 1126 nace en Córdoba Ibn Rushd, conocido en Europa como Averroes. Hacia 1135-1138, también en Córdoba, nace Maimónides, la figura más influyente de la filosofía judía medieval. En esos mismos años trabajan en Al-Ándalus matemáticos, astrónomos y médicos cuyos textos serán traducidos al latín en Toledo en los siglos siguientes. Los comentarios de Averroes sobre Aristóteles se convierten en referencia fundamental para el pensamiento escolástico europeo. Tomás de Aquino lo cita como 'el Comentador'. Ibn Tufayl, nacido en Guadix, anticipa la novela filosófica. Córdoba es, en este período, uno de los principales centros intelectuales del mundo mediterráneo."}, character:{es:"Ibn Rushd — Averroes (Córdoba, 1126–Marrakech, 1198). También: Maimónides (Córdoba, c.1135–Fustat, 1204)."}, historicalRelation:{es:"El saber generado en Al-Ándalus llega a Europa a través de las traducciones toledanas. Sin este puente, la recepción del aristotelismo en la escolástica europea habría seguido caminos muy distintos."}, cities:["cordoba","sevilla","ronda"], monuments:[{name:"Estatua de Averroes (Córdoba, Puerta de Almodóvar)",city:"cordoba"},{name:"Estatua de Maimónides (Córdoba, plaza Tiberiades)",city:"cordoba"},{name:"Baños Árabes de Ronda",city:"ronda"}], mapAction:{highlightCities:["cordoba","sevilla","ronda"]}, importance:"alta", readSeconds:42, autoTour:false },
+  { year:1184, title:{es:"Los almohades y la Giralda: Sevilla como nueva capital"}, narration:{es:"En 1147, los almohades —un movimiento reformista bereber del Atlas marroquí— cruzan a Al-Ándalus y desplazan a los almorávides. Sevilla se convierte en su capital ibérica y la transforman arquitectónicamente: en 1184 comienzan las obras del alminar de su gran mezquita, lo que hoy conocemos como la Giralda. La Torre del Oro controla el acceso fluvial al puerto. Ronda y Carmona son plazas militares de primera línea; Málaga, el principal puerto del sur. El arte almohade —ausente de figuras, construido sobre la geometría— deja en estos edificios una huella que define la identidad visual de Andalucía para siglos."}, character:{es:"Abu Yaqub Yusuf I — califa almohade que encarga la Giralda (1184). Ya'qub al-Mansur — quien la termina (1198)."}, historicalRelation:{es:"La Giralda fue el alminar de la Gran Mezquita almohade de Sevilla. El alminar almohade es el único elemento original del siglo XII visible en el skyline de Sevilla actual."}, cities:["sevilla","ronda","carmona","malaga"], monuments:[{name:"La Giralda de Sevilla — alminar almohade (1184–1198)",city:"sevilla"},{name:"Torre del Oro de Sevilla (c. 1220)",city:"sevilla"},{name:"Baños Árabes de Ronda",city:"ronda"},{name:"Alcázar de Carmona",city:"carmona"}], mapAction:{highlightCities:["sevilla","ronda","carmona","malaga"]}, importance:"alta", readSeconds:40, autoTour:false },
+  { year:1212, title:{es:"Las Navas de Tolosa: el punto de no retorno"}, narration:{es:"El 16 de julio de 1212, en el paso de Las Navas de Tolosa (Jaén), los ejércitos coaligados de Castilla, Aragón y Navarra derrotan al califa almohade Muhammad al-Nasir —Miramamolín en las crónicas castellanas—. El papa Inocencio III lo ha declarado cruzada. Las cifras de combatientes que dan las crónicas medievales son con toda probabilidad exageradas, pero fue uno de los mayores enfrentamientos militares de la Reconquista. La derrota almohade es irreversible. En menos de cuarenta años, Córdoba, Jaén y Sevilla caerán. Carmona abre sus puertas en 1247, un año antes que Sevilla. Solo el reino nazarí de Granada resiste."}, character:{es:"Alfonso VIII de Castilla — organizador de la coalición cristiana. Muhammad al-Nasir (Miramamolín) — califa almohade derrotado."}, historicalRelation:{es:"Después de Las Navas la pregunta ya no es si Al-Ándalus caerá sino cuándo. Punto de no retorno de la Reconquista."}, cities:["carmona","sevilla"], monuments:[{name:"Alcázar de Carmona — control de la ruta Córdoba–Sevilla",city:"carmona"},{name:"Torre del Oro de Sevilla",city:"sevilla"}], mapAction:{highlightCities:["carmona","sevilla"]}, importance:"alta", readSeconds:40, autoTour:true },
+  { year:1236, title:{es:"Cae Córdoba: 500 años después"}, narration:{es:"El 29 de junio de 1236, festividad de San Pedro y San Pablo, Fernando III de Castilla entra en Córdoba. La ciudad tiene ahora una fracción de su antigua población. La Gran Mezquita pasa a ser catedral. Las familias nobles y los ulemas se marchan hacia Granada o el norte de África. Los patios, las fuentes y los muros quedan. Los fondos documentales y bibliográficos se dispersan o se trasladan. Cinco siglos de cultura, ciencia y arquitectura andalusí quedan preservados —y superpuestos— en la Mezquita-Catedral: uno de los testimonios arquitectónicos más complejos y emocionantes de la historia de España."}, character:{es:"Fernando III de Castilla y León — 'el Santo' (canonizado en 1671)."}, historicalRelation:{es:"La Mezquita-Catedral es la prueba física más visible del cambio: quinientos años de historia islámica no se borran, se superponen."}, cities:["cordoba"], monuments:[{name:"Mezquita-Catedral de Córdoba — convertida en catedral en 1236",city:"cordoba"},{name:"Alcázar de los Reyes Cristianos (Córdoba)",city:"cordoba"}], mapAction:{highlightCities:["cordoba"]}, importance:"alta", readSeconds:38, autoTour:true },
+  { year:1238, title:{es:"Muhammad I funda el Reino Nazarí y comienza la Alhambra"}, narration:{es:"Mientras Córdoba cae, Muhammad ibn Yusuf ibn Nasr —apodado Ibn al-Ahmar, 'el Rojo'— consolida un nuevo reino con capital en Granada. En 1238 entra en la ciudad y comienza a construir sobre la colina de la Sabika la alcazaba que será el núcleo de la Alhambra. Su divisa —Wa-la ghalib illa Allah, no hay vencedor sino Dios— se repite en cada arco, patio e inscripción del palacio. El Reino Nazarí sobrevive 254 años más, convirtiéndose en el estado islámico europeo de mayor duración. Una resistencia que se apoyó tanto en la diplomacia y los tributos como en la geografía."}, character:{es:"Muhammad I ibn Nasr — 'Ibn al-Ahmar'. Fundador de la dinastía nazarí (r. 1232–1273). Los grandes palacios los construyen Yusuf I y Muhammad V en el siglo XIV."}, historicalRelation:{es:"La Alhambra tal como la conocemos se construye entre 1238 y los años 1390. Es el monumento más visitado de España."}, cities:["granada","malaga"], monuments:[{name:"La Alhambra — Alcazaba (s. XIII) y Palacios Nazaríes (s. XIV)",city:"granada"},{name:"Alcazaba de Málaga — principal fortaleza nazarí del litoral",city:"malaga"}], mapAction:{highlightCities:["granada","malaga"]}, importance:"alta", readSeconds:38, autoTour:true },
+  { year:1248, title:{es:"Cae Sevilla: el reino nazarí queda solo"}, narration:{es:"El 23 de noviembre de 1248, tras más de un año de asedio, Sevilla rinde sus llaves a Fernando III. Carmona se había entregado el año anterior. Gran parte de la población musulmana abandonó la ciudad; las crónicas describen una salida masiva hacia Granada y el norte de África. Fernando III muere en 1252, cuatro años después, sin haber tomado Granada. Su hijo Alfonso X el Sabio fija su corte en Sevilla y la convierte en el nuevo centro cultural de la península. El Reino Nazarí de Granada queda como único territorio islámico en Europa y así permanecerá 244 años más."}, character:{es:"Fernando III de Castilla — quien no vivirá para ver caer Granada. Alfonso X el Sabio — construye el esplendor cultural de Sevilla sobre los cimientos islámicos."}, historicalRelation:{es:"Tras la caída de Sevilla, el reino nazarí sobrevive gracias a la diplomacia, los tributos y las tensiones internas castellanas."}, cities:["sevilla","carmona"], monuments:[{name:"Real Alcázar de Sevilla — sede islámica que Alfonso X reforma en estilo mudéjar",city:"sevilla"},{name:"Alcázar de Carmona",city:"carmona"}], mapAction:{highlightCities:["sevilla","carmona"]}, importance:"alta", readSeconds:38, autoTour:false },
+  { year:1492, title:{es:"Cae Granada: el último suspiro de Al-Ándalus"}, narration:{es:"El 2 de enero de 1492, Muhammad XII —Boabdil— entrega las llaves de Granada a los Reyes Católicos. La tradición recoge que, al alejarse de la ciudad, lloró al contemplar por última vez la Alhambra desde el paso que la memoria popular llama El suspiro del Moro, en las Alpujarras. Los Reyes Católicos respetaron inicialmente la mezquita y las costumbres de los musulmanes granadinos. El 31 de marzo firman el Decreto de la Alhambra, ordenando la expulsión de los judíos. En octubre, Colón llega a América. Tres giros históricos en el mismo año. La Alhambra queda de pie."}, character:{es:"Muhammad XII — Boabdil, último sultán nazarí (r. 1482–1492). Los Reyes Católicos: Isabel I de Castilla y Fernando II de Aragón."}, historicalRelation:{es:"1492 es el año más denso de la historia de España: fin de Al-Ándalus, expulsión de los sefardíes, inicio de la expansión americana."}, cities:["granada","alpujarra"], monuments:[{name:"La Alhambra — Palacios Nazaríes y Generalife",city:"granada"},{name:"El Suspiro del Moro — Alpujarra granadina (tradición)",city:"alpujarra"}], mapAction:{highlightCities:["granada","alpujarra"]}, importance:"alta", readSeconds:40, autoTour:true }
 ];
 
 // Helper para tomar la versión localizada de campos epoca/evento
@@ -7693,6 +7821,37 @@ function findEpoca(year) {
   return EPOCAS.length - 1;
 }
 
+// Devuelve el hito más reciente cuyo year <= year dado
+function findActiveHito(year) {
+  let best = null;
+  for (let i = 0; i < TIMELINE_EVENTS.length; i++) {
+    if (TIMELINE_EVENTS[i].year <= year) best = TIMELINE_EVENTS[i];
+    else break;
+  }
+  return best || TIMELINE_EVENTS[0];
+}
+
+// Actualiza el panel narrativo con el hito activo para el año dado
+function updateNarrativePanel(year) {
+  const ev = findActiveHito(year);
+  if (!ev) return;
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'es';
+  const get = (f) => (f && typeof f === 'object') ? (f[lang] || f.es || '') : (f || '');
+  const el = (id) => document.getElementById(id);
+  if (el('tlNarrYear'))   el('tlNarrYear').textContent   = ev.year + ' d.C.';
+  if (el('tlNarrTitle'))  el('tlNarrTitle').textContent  = get(ev.title);
+  if (el('tlNarrText'))   el('tlNarrText').textContent   = get(ev.narration);
+  if (el('tlNarrChar'))   el('tlNarrChar').textContent   = get(ev.character) || '—';
+  if (el('tlNarrCities')) {
+    const names = (ev.cities || []).map(c => CITY_DISPLAY_NAMES[c] || c).join(' · ');
+    el('tlNarrCities').textContent = names || '—';
+  }
+  if (el('tlNarrMon')) {
+    const mons = (ev.monuments || []).map(m => m.name).join(' · ');
+    el('tlNarrMon').textContent = mons || '—';
+  }
+}
+
 function updateEpoca(year) {
   const idx = findEpoca(year);
   const ep = EPOCAS[idx];
@@ -7706,7 +7865,6 @@ function updateEpoca(year) {
   if (idx !== currentEpocaIdx && mapInstance) {
     currentEpocaIdx = idx;
     if (polygonLayer) mapInstance.removeLayer(polygonLayer);
-    // Sin contorno: solo mancha de color suave dentro del mapa
     polygonLayer = L.polygon(ep.polygon, {
       stroke: false,
       fillColor: '#C2954A',
@@ -7716,18 +7874,28 @@ function updateEpoca(year) {
     }).addTo(mapInstance);
     polygonLayer.bringToBack();
   }
+
+  // Actualizar panel narrativo
+  updateNarrativePanel(year);
 }
 
 function buildEvents() {
   const wrap = document.getElementById('timelineEvents');
   wrap.innerHTML = '';
-  EVENTOS.forEach(ev => {
-    const pct = ((ev.year - 711) / (1492 - 711)) * 100;
+  const placed = [];
+  TIMELINE_EVENTS.forEach(ev => {
+    const y = Math.max(711, Math.min(1492, ev.year));
+    const pct = ((y - 711) / (1492 - 711)) * 100;
+    // Evitar marcadores solapados (< 0.8% de distancia)
+    const overlap = placed.some(p => Math.abs(p - pct) < 0.8);
+    if (overlap) return;
+    placed.push(pct);
     const m = document.createElement('div');
-    m.className = 'event-marker';
+    m.className = 'event-marker ' + (ev.importance || 'media');
     m.style.left = pct + '%';
     m.setAttribute('data-year', ev.year);
-    m.setAttribute('data-label', ev.year + ' · ' + ftL(ev.label));
+    const lbl = (ev.title && ev.title.es) ? ev.title.es : String(ev.year);
+    m.setAttribute('data-label', ev.year + ' · ' + lbl);
     m.addEventListener('click', () => {
       document.getElementById('timelineSlider').value = ev.year;
       updateEpoca(ev.year);
@@ -8097,11 +8265,14 @@ function initMap() {
   initModalListeners();
 }
 
+// Años del tour automático — solo los 10 hitos de máximo impacto narrativo
+const TL_AUTO_TOUR = [711, 756, 929, 978, 1031, 1085, 1212, 1236, 1238, 1492];
+
 function toggleTour() {
   const btn = document.getElementById('btnTour');
   const icon = document.getElementById('btnTourIcon');
   if (tourInterval) {
-    clearInterval(tourInterval);
+    clearTimeout(tourInterval);
     tourInterval = null;
     btn.classList.remove('playing');
     icon.textContent = '▶';
@@ -8109,25 +8280,25 @@ function toggleTour() {
   }
   btn.classList.add('playing');
   icon.textContent = '⏸';
-  const slider = document.getElementById('timelineSlider');
-  let y = 711;
-  slider.value = y;
-  updateEpoca(y);
-  tourInterval = setInterval(() => {
-    y += 12;
-    if (y >= 1492) {
-      y = 1492;
-      slider.value = y;
-      updateEpoca(y);
-      clearInterval(tourInterval);
+  let idx = 0;
+  function showNextHito() {
+    if (idx >= TL_AUTO_TOUR.length) {
       tourInterval = null;
       btn.classList.remove('playing');
       icon.textContent = '▶';
       return;
     }
-    slider.value = y;
-    updateEpoca(y);
-  }, 250);
+    const year = TL_AUTO_TOUR[idx++];
+    const slider = document.getElementById('timelineSlider');
+    slider.value = year;
+    updateEpoca(year);
+    const ev = TIMELINE_EVENTS.find(e => e.year === year);
+    // Pausa: entre 4 y 6 s (8 s en el último hito)
+    const base = ev ? Math.min(Math.max(ev.readSeconds * 1000, 4000), 6000) : 4000;
+    const pause = (year === 1492) ? 8000 : base;
+    tourInterval = setTimeout(showNextHito, pause);
+  }
+  showNextHito();
 }
 
 // ============================================
