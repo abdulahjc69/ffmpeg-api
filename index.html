@@ -4222,6 +4222,48 @@ img, video, iframe { max-width: 100%; height: auto; }
   #mapa-section.section { padding-top: 14px; padding-bottom: 6px; }
   .mapa-stage { margin-top: 10px; }
 }
+
+/* ORDEN 069 — Ajuste visual mapa desktop: título arriba + mapa más alto, sin tocar timeline */
+@media (min-width: 901px) {
+  #mapa-section.section {
+    padding-top: 0 !important;
+    padding-bottom: 8px !important;
+  }
+  #mapa-section > .container {
+    max-width: 1440px;
+  }
+  #mapa-section .section-head {
+    margin: 0 auto 6px !important;
+    padding-top: 0 !important;
+  }
+  #mapa-section .section-head h2 {
+    margin: 0 !important;
+    line-height: 1.06;
+    font-size: clamp(34px, 3vw, 46px);
+  }
+  #mapa-section .mapa-stage {
+    margin-top: 0 !important;
+  }
+  #mapa-section .mapa-wrapper {
+    height: clamp(500px, calc(100dvh - 220px), 640px) !important;
+    min-height: 500px;
+  }
+}
+
+/* ORDEN 069 — Portátiles bajos: no volver a achatar el mapa a 370px */
+@media (min-width: 901px) and (max-height: 740px) {
+  #mapa-section .mapa-wrapper {
+    height: clamp(480px, calc(100dvh - 215px), 540px) !important;
+    min-height: 480px;
+  }
+  #mapa-section.section {
+    padding-top: 0 !important;
+    padding-bottom: 6px !important;
+  }
+  #mapa-section .mapa-stage {
+    margin-top: 0 !important;
+  }
+}
 </style>
 <style id="panel-search-css">
 .panel-search-wrap{position:sticky;top:0;z-index:5;background:#1A1A1A;padding:0 0 10px;}
