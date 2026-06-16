@@ -1,0 +1,359 @@
+{
+  "_meta_esquema": {
+    "version": "1.0",
+    "empresa": "Bin Firnas Travel SL",
+    "marca": "Vive al Ándalus",
+    "documento": "Registro de Incidencias de Proveedores VAA",
+    "fecha_creacion": "2026-06-10",
+    "ley_fundamental": "Una incidencia registrada nunca se borra. Una incidencia resuelta se marca como resuelta. El registro permanece.",
+    "regla_descripcion": "La descripcion debe ser factual. Hechos objetivos, no valoraciones. Las opiniones van en notas_internas.",
+    "regla_halal": "Toda incidencia de tipo incumplimiento_halal, con independencia de su gravedad, incrementa halal.incumplimientos_halal_count en la ficha del proveedor. Este contador nunca decrece.",
+    "regla_estado_proveedor": "El sistema no cambia automáticamente el estado del proveedor. La incidencia documenta la recomendación. Abdu toma la decisión y la ejecuta en proveedores_maestro_v1."
+  },
+
+  "tipos_posibles": [
+    "retraso",
+    "no_respuesta",
+    "overbooking",
+    "cancelacion_proveedor",
+    "cambio_condiciones",
+    "incumplimiento_halal",
+    "calidad_inferior",
+    "error_documental",
+    "disputa_precio",
+    "queja_cliente",
+    "accesibilidad",
+    "otro"
+  ],
+
+  "gravedades_posibles": ["baja", "media", "alta", "critica"],
+
+  "estados_posibles": [
+    "abierta",
+    "en_gestion",
+    "resuelta",
+    "cerrada_sin_resolucion"
+  ],
+
+  "compensacion_tipos_posibles": [
+    "descuento",
+    "servicio_extra",
+    "reembolso",
+    "disculpa_formal",
+    "ninguna"
+  ],
+
+  "incidencia_plantilla": {
+
+    "_meta": {
+      "id_incidencia": "INC-AAAA-NNNN",
+      "fecha_registro": null,
+      "_fecha_registro_nota": "OBLIGATORIO. Cuándo registró VAA la incidencia. Puede ser posterior a fecha_ocurrencia.",
+      "registrado_por": "",
+      "version_esquema": "1.0"
+    },
+
+    "contexto": {
+      "id_proveedor": "",
+      "_id_proveedor_nota": "OBLIGATORIO. Formato PRV-AAAA-NNNN.",
+      "nombre_proveedor": "",
+      "_nombre_proveedor_nota": "Desnormalizado. Foto fija del momento. No actualizar si cambia el nombre en el maestro.",
+      "tipo_proveedor": "",
+      "id_expediente": null,
+      "_id_expediente_nota": "Opcional. Null si la incidencia ocurrió fuera de un expediente concreto.",
+      "id_seleccion": null,
+      "_id_seleccion_nota": "Opcional. Formato SEL-AAAA-NNNN si hay selección asociada."
+    },
+
+    "incidencia": {
+      "tipo": "",
+      "tipo_posibles": ["retraso","no_respuesta","overbooking","cancelacion_proveedor","cambio_condiciones","incumplimiento_halal","calidad_inferior","error_documental","disputa_precio","queja_cliente","accesibilidad","otro"],
+      "tipo_otro_descripcion": "",
+      "_tipo_otro_nota": "Obligatorio si tipo = otro.",
+      "fecha_ocurrencia": null,
+      "_fecha_ocurrencia_nota": "OBLIGATORIO. Cuándo sucedió la incidencia.",
+      "descripcion": "",
+      "_descripcion_nota": "OBLIGATORIO. Descripción factual y objetiva. Hechos, no valoraciones. Ejemplo correcto: 'El conductor llegó 45 minutos tarde al aeropuerto MAD. El grupo esperó en la zona de llegadas.' Ejemplo incorrecto: 'El conductor es un irresponsable'.",
+      "gravedad": "",
+      "gravedad_posibles": ["baja", "media", "alta", "critica"],
+      "criterio_gravedad": "",
+      "_criterio_nota": "OBLIGATORIO. Por qué se asignó ese nivel de gravedad.",
+      "en_destino": null,
+      "_en_destino_nota": "true si ocurrió mientras el grupo estaba en viaje activo."
+    },
+
+    "impacto": {
+      "impacto_cliente": null,
+      "descripcion_impacto_cliente": "",
+      "_impacto_cliente_nota": "Obligatorio si impacto_cliente = true.",
+      "impacto_economico": null,
+      "coste_adicional_eur": null,
+      "_coste_nota": "Coste adicional que asumió VAA por la incidencia (taxi alternativo, hotel sustituto, etc.).",
+      "descripcion_coste": "",
+      "queja_formal_cliente": null
+    },
+
+    "resolucion": {
+      "estado": "abierta",
+      "estado_posibles": ["abierta", "en_gestion", "resuelta", "cerrada_sin_resolucion"],
+      "resuelta": false,
+      "fecha_resolucion": null,
+      "como_se_resolvio": "",
+      "_como_nota": "Descripción de cómo se resolvió. Obligatorio si resuelta = true.",
+      "resuelto_por": "",
+      "compensacion_otorgada": false,
+      "compensacion_tipo": "",
+      "compensacion_tipo_posibles": ["descuento", "servicio_extra", "reembolso", "disculpa_formal", "ninguna"],
+      "compensacion_importe": null,
+      "_compensacion_importe_nota": "Solo si compensacion_tipo = reembolso o descuento. En EUR.",
+      "compensacion_descripcion": ""
+    },
+
+    "consecuencias_proveedor": {
+      "_nota": "Documenta el impacto sobre el estado y clasificación del proveedor. La ejecución real se hace en proveedores_maestro_v1.",
+      "afecta_nivel_estrategico": false,
+      "nivel_anterior": "",
+      "nivel_nuevo": "",
+      "_nivel_nuevo_nota": "Si afecta_nivel_estrategico = true, indicar el nivel al que debe moverse el proveedor. Opciones: en_evaluacion, secundario, habitual, prioritario, en_observacion, bloqueado.",
+      "motivo_cambio_nivel": "",
+      "afecta_halal": false,
+      "_afecta_halal_nota": "Siempre true si tipo = incumplimiento_halal. También puede aplicar a otros tipos.",
+      "incremento_halal_count": 0,
+      "_incremento_nota": "Cuánto se incrementa halal.incumplimientos_halal_count en la ficha del proveedor. Normalmente 1. Este campo solo indica la intención; la actualización real se hace en proveedores_maestro_v1.",
+      "decision_tomada_por": "",
+      "fecha_decision_consecuencias": null
+    },
+
+    "accion_correctiva": {
+      "aplica": false,
+      "descripcion": "",
+      "_descripcion_nota": "Qué debe hacer el proveedor para evitar que se repita. Solo si aplica = true.",
+      "responsable": "",
+      "fecha_limite": null,
+      "completada": false
+    },
+
+    "evidencias": [],
+    "_evidencias_nota": "Array de objetos {nombre, tipo, ruta, descripcion, fecha}. Tipos: foto, email, captura, documento, audio, otro.",
+    "_evidencias_ejemplo": [
+      {
+        "nombre": "captura_whatsapp_retraso.jpg",
+        "tipo": "captura",
+        "ruta": "docs/adjuntos/INC-2026-0001-ev1.jpg",
+        "descripcion": "Captura de WhatsApp del tour leader informando del retraso",
+        "fecha": "2026-09-10"
+      }
+    ],
+
+    "notas_internas": "",
+    "_notas_nota": "Observaciones de Abdu. Valoraciones, contexto, decisiones internas. No visible al proveedor."
+  },
+
+  "ejemplos": [
+    {
+      "_comentario": "Ejemplo 1: Incumplimiento halal en hotel de Sevilla. Gravedad alta. Resuelto con compensación.",
+      "_meta": {
+        "id_incidencia": "INC-2026-0001",
+        "fecha_registro": "2026-09-18T10:00:00",
+        "registrado_por": "Abdu",
+        "version_esquema": "1.0"
+      },
+      "contexto": {
+        "id_proveedor": "PRV-2026-0001",
+        "nombre_proveedor": "Hotel Los Seises",
+        "tipo_proveedor": "hotel",
+        "id_expediente": "VAA-2026-0087",
+        "id_seleccion": "SEL-2026-0001"
+      },
+      "incidencia": {
+        "tipo": "incumplimiento_halal",
+        "tipo_otro_descripcion": "",
+        "fecha_ocurrencia": "2026-09-18T08:30:00",
+        "descripcion": "En el desayuno del día 2 de estancia se sirvieron embutidos de cerdo en el bufé sin separación física de la zona halal acordada previamente. El tour leader detectó el error a las 08:30 y avisó al personal de recepción. Los productos fueron retirados a las 08:40, aproximadamente 10 minutos después.",
+        "gravedad": "alta",
+        "criterio_gravedad": "Incumplimiento halal en presencia del grupo durante el servicio. Aunque se resolvió en 10 minutos, el grupo lo vio directamente. La cliente principal (Fatima Al-Rashidi) expresó su malestar al tour leader. El incumplimiento fue real, no solo potencial.",
+        "en_destino": true
+      },
+      "impacto": {
+        "impacto_cliente": true,
+        "descripcion_impacto_cliente": "El grupo vio los productos de cerdo en el bufé. La señora Al-Rashidi mostró su disgusto al tour leader. Los menores estaban presentes.",
+        "impacto_economico": false,
+        "coste_adicional_eur": null,
+        "descripcion_coste": "",
+        "queja_formal_cliente": false
+      },
+      "resolucion": {
+        "estado": "resuelta",
+        "resuelta": true,
+        "fecha_resolucion": "2026-09-18",
+        "como_se_resolvio": "El hotel retiró los productos en 10 minutos. El director del hotel, Sr. Martínez, se disculpó personalmente con el tour leader y ofreció una cena de cortesía para el grupo esa misma noche. La cena se coordinó con el tour leader y se realizó sin incidencias.",
+        "resuelto_por": "Director hotel + Tour leader (gestionó la resolución en destino)",
+        "compensacion_otorgada": true,
+        "compensacion_tipo": "servicio_extra",
+        "compensacion_importe": null,
+        "compensacion_descripcion": "Cena completa para 6 personas (sin cargo). Valor estimado 300 EUR."
+      },
+      "consecuencias_proveedor": {
+        "afecta_nivel_estrategico": true,
+        "nivel_anterior": "en_evaluacion",
+        "nivel_nuevo": "en_observacion",
+        "motivo_cambio_nivel": "Incumplimiento halal verificado en el primer expediente. El hotel no puede garantizar que no se repita sin un protocolo específico. Mantener en evaluación continua.",
+        "afecta_halal": true,
+        "incremento_halal_count": 1,
+        "decision_tomada_por": "Abdu",
+        "fecha_decision_consecuencias": "2026-09-20"
+      },
+      "accion_correctiva": {
+        "aplica": true,
+        "descripcion": "El hotel debe implementar separación física permanente y señalización clara de zona halal en el bufé. Enviar protocolo escrito de desayuno halal a VAA antes del 1 de noviembre de 2026.",
+        "responsable": "Marta García (responsable grupos Hotel Los Seises)",
+        "fecha_limite": "2026-11-01",
+        "completada": false
+      },
+      "evidencias": [
+        {
+          "nombre": "whatsapp_tour_leader_incidente_desayuno.jpg",
+          "tipo": "captura",
+          "ruta": "docs/adjuntos/INC-2026-0001-ev1.jpg",
+          "descripcion": "Captura WhatsApp del tour leader informando del incidente a Abdu a las 08:35",
+          "fecha": "2026-09-18"
+        }
+      ],
+      "notas_internas": "El hotel respondió bien a la resolución inmediata y la compensación fue generosa. Sin embargo, es la primera incidencia halal con este proveedor en el primer expediente. No podemos asumir que fue accidental sin más. Requiere seguimiento activo antes de volver a seleccionarles."
+    },
+    {
+      "_comentario": "Ejemplo 2: Retraso del conductor en transfer aeropuerto. Gravedad media. Resuelto sin compensación.",
+      "_meta": {
+        "id_incidencia": "INC-2026-0002",
+        "fecha_registro": "2026-09-10T11:00:00",
+        "registrado_por": "Abdu",
+        "version_esquema": "1.0"
+      },
+      "contexto": {
+        "id_proveedor": "PRV-2026-0003",
+        "nombre_proveedor": "Transportes Sur Andaluz SL",
+        "tipo_proveedor": "transporte",
+        "id_expediente": "VAA-2026-0087",
+        "id_seleccion": "SEL-2026-0002"
+      },
+      "incidencia": {
+        "tipo": "retraso",
+        "tipo_otro_descripcion": "",
+        "fecha_ocurrencia": "2026-09-10T10:30:00",
+        "descripcion": "El conductor Juan Romero llegó a la zona de llegadas del aeropuerto Adolfo Suárez Madrid-Barajas (T4) a las 10:30, con 45 minutos de retraso sobre la hora acordada (09:45 aterrizaje, recogida prevista 10:00). El grupo esperó en la zona de llegadas de T4. El retraso se debió a un corte de tráfico en la M-40.",
+        "gravedad": "media",
+        "criterio_gravedad": "El grupo esperó 30 minutos de pie en llegadas con menores y equipaje. La causa fue externa (tráfico) y no negligencia directa del conductor. El conductor avisó a las 10:15 por WhatsApp que llegaba tarde.",
+        "en_destino": true
+      },
+      "impacto": {
+        "impacto_cliente": true,
+        "descripcion_impacto_cliente": "El grupo esperó aproximadamente 30 minutos en la zona de llegadas. Los menores (7 y 12 años) estaban cansados tras el vuelo de larga distancia. La señora Al-Rashidi preguntó al tour leader si era normal.",
+        "impacto_economico": false,
+        "coste_adicional_eur": null,
+        "descripcion_coste": "",
+        "queja_formal_cliente": false
+      },
+      "resolucion": {
+        "estado": "resuelta",
+        "resuelta": true,
+        "fecha_resolucion": "2026-09-10",
+        "como_se_resolvio": "El conductor llegó, se disculpó con el grupo y el viaje continuó normalmente. El tour leader gestionó la espera manteniendo al grupo sentado en la zona de cafetería.",
+        "resuelto_por": "Tour leader en destino",
+        "compensacion_otorgada": false,
+        "compensacion_tipo": "ninguna",
+        "compensacion_importe": null,
+        "compensacion_descripcion": ""
+      },
+      "consecuencias_proveedor": {
+        "afecta_nivel_estrategico": false,
+        "nivel_anterior": "habitual",
+        "nivel_nuevo": "",
+        "motivo_cambio_nivel": "Causa externa (tráfico). Proveedor avisó con tiempo razonable. Primera incidencia de este tipo. Sin cambio de nivel por ahora.",
+        "afecta_halal": false,
+        "incremento_halal_count": 0,
+        "decision_tomada_por": "Abdu",
+        "fecha_decision_consecuencias": "2026-09-11"
+      },
+      "accion_correctiva": {
+        "aplica": true,
+        "descripcion": "Para próximos expedientes: acordar con el conductor que salga con 30 minutos adicionales de margen para el transfer MAD dado el tráfico habitual en la M-40 en horas de llegadas internacionales.",
+        "responsable": "Abdu",
+        "fecha_limite": "2026-10-01",
+        "completada": false
+      },
+      "evidencias": [
+        {
+          "nombre": "whatsapp_conductor_aviso_retraso.jpg",
+          "tipo": "captura",
+          "ruta": "docs/adjuntos/INC-2026-0002-ev1.jpg",
+          "descripcion": "Captura WhatsApp de Juan Romero avisando del retraso a las 10:15",
+          "fecha": "2026-09-10"
+        }
+      ],
+      "notas_internas": "Juan avisó con antelación, que es lo correcto. El retraso fue por tráfico real, no por negligencia. Aun así hay que registrarlo. La acción correctiva es interna de VAA: acordar márgenes más amplios para transfers MAD en futuras cotizaciones."
+    },
+    {
+      "_comentario": "Ejemplo 3: No respuesta de proveedor. Fuera de expediente (consulta libre). Gravedad baja.",
+      "_meta": {
+        "id_incidencia": "INC-2026-0003",
+        "fecha_registro": "2026-06-20T12:00:00",
+        "registrado_por": "Abdu",
+        "version_esquema": "1.0"
+      },
+      "contexto": {
+        "id_proveedor": "PRV-2026-0012",
+        "nombre_proveedor": "Restaurante La Mezquita Córdoba",
+        "tipo_proveedor": "restaurante",
+        "id_expediente": null,
+        "id_seleccion": null
+      },
+      "incidencia": {
+        "tipo": "no_respuesta",
+        "tipo_otro_descripcion": "",
+        "fecha_ocurrencia": "2026-06-20T00:00:00",
+        "descripcion": "Se envió solicitud de cotización (correo P03) al restaurante el 2026-06-13. A fecha 2026-06-20 (7 días después) no se ha recibido ninguna respuesta ni acuse de recibo.",
+        "gravedad": "baja",
+        "criterio_gravedad": "No hay expediente concreto afectado. Es una cotización libre para cartera de proveedores. Sin impacto operativo inmediato.",
+        "en_destino": false
+      },
+      "impacto": {
+        "impacto_cliente": false,
+        "descripcion_impacto_cliente": "",
+        "impacto_economico": false,
+        "coste_adicional_eur": null,
+        "descripcion_coste": "",
+        "queja_formal_cliente": false
+      },
+      "resolucion": {
+        "estado": "cerrada_sin_resolucion",
+        "resuelta": false,
+        "fecha_resolucion": "2026-06-20",
+        "como_se_resolvio": "Sin resolución. Se descarta el proveedor para la cartera activa. Se mantiene registro.",
+        "resuelto_por": "Abdu",
+        "compensacion_otorgada": false,
+        "compensacion_tipo": "ninguna",
+        "compensacion_importe": null,
+        "compensacion_descripcion": ""
+      },
+      "consecuencias_proveedor": {
+        "afecta_nivel_estrategico": true,
+        "nivel_anterior": "en_evaluacion",
+        "nivel_nuevo": "pausado",
+        "motivo_cambio_nivel": "No responde a solicitudes en 7 días. No es viable como proveedor activo hasta que haya contacto real.",
+        "afecta_halal": false,
+        "incremento_halal_count": 0,
+        "decision_tomada_por": "Abdu",
+        "fecha_decision_consecuencias": "2026-06-20"
+      },
+      "accion_correctiva": {
+        "aplica": false,
+        "descripcion": "",
+        "responsable": "",
+        "fecha_limite": null,
+        "completada": false
+      },
+      "evidencias": [],
+      "notas_internas": "Enviamos el correo P03 estándar. Ninguna respuesta en 7 días. Posible que la dirección de email sea incorrecta o que el restaurante no atienda solicitudes B2B. Buscar número de teléfono y probar contacto directo antes de descartar definitivamente."
+    }
+  ]
+}

@@ -1,0 +1,487 @@
+{
+  "_meta": {
+    "version": "1.3",
+    "empresa": "Bin Firnas Travel SL",
+    "marca": "Vive al Ándalus",
+    "documento": "Expediente Maestro VAA",
+    "fecha_creacion": "2026-06-10",
+    "fecha_actualizacion": "2026-06-10",
+    "version_anterior": "1.2",
+    "cambios_v1_3": "Añadido Bloque 12 — Ciclo Comercial: propuestas[], id_reserva, estado_comercial_resumen, reglas de integridad I-1 a I-7.",
+    "nota": "Este JSON define la estructura oficial de todos los expedientes VAA. Los campos marcados con _interno:true NUNCA se envían al cliente."
+  },
+
+  "expediente": {
+    "referencia": "VAA-2026-0087",
+    "fecha_solicitud": "2026-07-15T10:32:00",
+    "estado": "nuevo",
+    "estados_posibles": [
+      "nuevo",
+      "en_cotizacion",
+      "propuesta_enviada",
+      "negociacion",
+      "aceptado_cliente",
+      "pendiente_pago_30",
+      "venta_cerrada",
+      "documentacion_pendiente",
+      "en_operacion",
+      "finalizado",
+      "cancelado"
+    ],
+    "regla_venta_cerrada": "El estado venta_cerrada solo se activa tras confirmar la recepción del 30% de reserva. Sin pago no hay confirmación.",
+    "urgencia": "normal",
+    "urgencia_posibles": ["normal","alta","muy_alta"],
+    "canal_entrada": "wizard_web",
+    "canal_posibles": ["wizard_web","formulario_legacy","whatsapp","email","referido"],
+    "agente_asignado": "Abdu"
+  },
+
+  "cliente": {
+    "nombre": "Fatima",
+    "apellidos": "Al-Rashidi Al-Otaibi",
+    "email": "fatima@example.com",
+    "telefono_whatsapp": "+966501234567",
+    "pais_residencia": "Arabia Saudí",
+    "idioma_comunicacion": "ar",
+    "idiomas_posibles": ["ar","en","es","fr","pt"],
+    "tipo_cliente": "familia",
+    "tipos_posibles": [
+      "familia",
+      "pareja",
+      "grupo_amigos",
+      "empresa",
+      "asociacion",
+      "colegio",
+      "instituto",
+      "universidad",
+      "universidad_mayores",
+      "agencia_viajes",
+      "tour_operador",
+      "grupo_organizado",
+      "profesional_turistico",
+      "otro"
+    ]
+  },
+
+  "grupo": {
+    "adultos": 4,
+    "menores": 2,
+    "edades_menores": [7, 12],
+    "total_viajeros": 6,
+    "tipo_grupo": "familia",
+    "necesidades_accesibilidad": false,
+    "regla_menores": "Todo menor debe tener edad registrada. Todo menor debe viajar acompañado de padre, madre o tutor legal. Se documentará en rooming list en fase de documentacion_pendiente."
+  },
+
+  "fechas": {
+    "fecha_inicio": "2026-09-10",
+    "fecha_fin": "2026-09-25",
+    "duracion_dias": 16,
+    "duracion_noches": 15,
+    "fechas_flexibles": false,
+    "margen_flexibilidad_dias": 0,
+    "temporada": "alta",
+    "temporadas_posibles": ["alta","media","baja"]
+  },
+
+  "llegada_internacional": {
+    "medio": "avion",
+    "medios_posibles": ["avion","tren","autobus","vehiculo_propio","barco","ferry"],
+    "alerta_revision_manual": true,
+    "alerta_nota": "Solicitud incluye vuelo internacional. Requiere revisión manual por Abdu antes de confirmar al cliente.",
+    "aeropuerto_ciudad": "Aeropuerto Adolfo Suárez Madrid-Barajas (MAD)",
+    "terminal": "T4",
+    "fecha": "2026-09-10",
+    "hora": "09:45",
+    "numero_vuelo": "SV136",
+    "recogida_incluida": true,
+    "cartel_nombre": "Al-Rashidi"
+  },
+
+  "salida_internacional": {
+    "medio": "avion",
+    "alerta_revision_manual": true,
+    "alerta_nota": "Solicitud incluye vuelo internacional. Requiere revisión manual por Abdu antes de confirmar al cliente.",
+    "aeropuerto_ciudad": "Aeropuerto de Málaga-Costa del Sol (AGP)",
+    "terminal": "T3",
+    "fecha": "2026-09-25",
+    "hora": "18:20",
+    "numero_vuelo": "SV137",
+    "transfer_aeropuerto": true,
+    "hora_necesaria_en_aeropuerto": "16:20"
+  },
+
+  "ruta": {
+    "ciudades_orden": ["Madrid","Toledo","Córdoba","Sevilla","Granada","Málaga"],
+    "ciudad_inicio": "Madrid",
+    "ciudad_final": "Málaga",
+    "total_noches_ruta": 15,
+    "noches_por_ciudad": {
+      "Madrid": 3,
+      "Toledo": 1,
+      "Córdoba": 2,
+      "Sevilla": 4,
+      "Granada": 3,
+      "Málaga": 2
+    },
+    "detalle_ciudades": [
+      {
+        "ciudad": "Madrid",
+        "noches": 3,
+        "nota_operativa": "Check-in día llegada. Transfer aeropuerto MAD incluido."
+      },
+      {
+        "ciudad": "Toledo",
+        "noches": 1,
+        "nota_operativa": "Excursión o noche independiente. Coordinar traslado desde Madrid."
+      },
+      {
+        "ciudad": "Córdoba",
+        "noches": 2,
+        "nota_operativa": "Reservar Mezquita-Catedral con antelación. Posible visita Medina Azahara."
+      },
+      {
+        "ciudad": "Sevilla",
+        "noches": 4,
+        "nota_operativa": "Hub central. Mayor densidad de actividades y restaurantes halal."
+      },
+      {
+        "ciudad": "Granada",
+        "noches": 3,
+        "nota_operativa": "ALHAMBRA: reservar entradas con 60 días mínimo de antelación."
+      },
+      {
+        "ciudad": "Málaga",
+        "noches": 2,
+        "nota_operativa": "Check-out día vuelo. Transfer aeropuerto AGP incluido."
+      }
+    ]
+  },
+
+  "operacion_ruta": {
+    "_interno": true,
+    "_advertencia": "Datos estimados orientativos. El transportista debe validar viabilidad legal y operativa antes de confirmar.",
+
+    "_meta": {
+      "version_bloque": "1.0",
+      "fuente_distancias": "pendiente — OSRM / OpenRouteService",
+      "fuente_cartografia": "OpenStreetMap",
+      "fecha_calculo": null,
+      "validado_por_transportista": false,
+      "regla_fundamental": "La IA calcula. El transportista valida. Abdu decide. Ningún dato es definitivo hasta validado_por_transportista = true."
+    },
+
+    "resumen": {
+      "km_estimados_totales": null,
+      "tiempo_conduccion_estimado_min": null,
+      "tiempo_conduccion_estimado_hh_mm": null,
+      "numero_tramos": 0,
+      "ciudad_inicio": "",
+      "ciudad_final": "",
+      "dias_con_traslado": 0,
+      "dias_sin_traslado": 0,
+      "alertas_activas": 0,
+      "operativamente_viable": "pendiente_validacion",
+      "operativamente_viable_posibles": [null, "pendiente_validacion", "si", "no"],
+      "operativamente_viable_nota": "Solo puede cambiar a 'si' o 'no' tras validación del transportista o decisión de Abdu."
+    },
+
+    "tramos": [
+      {
+        "id": 1,
+        "origen": "",
+        "destino": "",
+        "km_estimados": null,
+        "tiempo_conduccion_estimado_min": null,
+        "tiempo_conduccion_estimado_hh_mm": null,
+        "carretera_principal": "",
+        "nota_operativa": "",
+        "alertas": []
+      }
+    ],
+
+    "ciudades": [
+      {
+        "ciudad": "",
+        "orden": 0,
+        "noches": 0,
+        "dias_visita_disponibles": null,
+        "fecha_entrada": null,
+        "fecha_salida": null,
+        "hora_check_in_prevista": null,
+        "hora_check_out_prevista": null,
+        "transfer_entrada": "",
+        "transfer_salida": "",
+        "alertas": []
+      }
+    ],
+
+    "conductor": {
+      "aplica": false,
+      "km_estimados_totales": null,
+      "dias_servicio_activo": 0,
+      "dias_conduccion_efectiva": 0,
+      "dias_espera_en_ciudad": 0,
+      "numero_conductores_recomendado": null,
+      "numero_conductores_recomendado_nota": "Campo reservado para futura lógica automática basada en km estimados, tiempos y normativa. La decisión final corresponde al transportista y a Abdu.",
+      "alerta_normativa_descanso": false,
+      "tramo_mas_largo": {
+        "tramo": "",
+        "km_estimados": null,
+        "tiempo_estimado_min": null,
+        "alerta": "",
+        "pausa_recomendada": ""
+      },
+      "nota": "Estimaciones orientativas. El transportista debe confirmar viabilidad completa según normativa vigente de tiempos de conducción y descanso antes de aceptar el servicio."
+    },
+
+    "alertas": [],
+
+    "catalogo_alertas": [
+      { "tipo": "jornada_larga",                "condicion": "tiempo_conduccion_estimado_min > 180", "severidad": "media",  "descripcion": "Tramo estimado superior a 3h. Recomendable pausa." },
+      { "tipo": "riesgo_conductor",              "condicion": "tiempo_conduccion_estimado_min > 270", "severidad": "alta",   "descripcion": "Tramo estimado superior a 4.5h. Revisar con transportista." },
+      { "tipo": "visita_muy_corta",              "condicion": "dias_visita_disponibles < 0.75",       "severidad": "baja",   "descripcion": "Ciudad con tiempo de visita muy reducido." },
+      { "tipo": "llegada_tardia_hotel",          "condicion": "hora_llegada_prevista > 20:00",        "severidad": "media",  "descripcion": "Llegada al hotel después de las 20:00. Avisar recepción." },
+      { "tipo": "salida_muy_temprana",           "condicion": "hora_salida_prevista < 07:00",         "severidad": "baja",   "descripcion": "Salida antes de las 07:00. Coordinar desayuno o servicio en ruta." },
+      { "tipo": "exceso_traslados",              "condicion": ">=2 cambios de ciudad en 3 dias",      "severidad": "media",  "descripcion": "Ritmo intenso de traslados. Riesgo de fatiga grupal." },
+      { "tipo": "grupo_menores_tramo_largo",     "condicion": "menores > 0 AND conduccion > 180 min", "severidad": "baja",   "descripcion": "Grupo con menores en tramo largo. Planificar parada familiar." },
+      { "tipo": "transfer_aeropuerto_ajustado",  "condicion": "margen < 90 min llegada/salida vuelo", "severidad": "alta",   "descripcion": "Margen ajustado entre vuelo y traslado. Verificar horarios." }
+    ]
+  },
+
+  "servicios": {
+
+    "alojamiento": {
+      "incluido": true,
+      "categoria_estrellas": 4,
+      "regimen": "con_desayuno",
+      "regimenes_posibles": ["sin_pension","con_desayuno","media_pension","pension_completa"],
+      "hab_dobles": 2,
+      "hab_individuales": 0,
+      "hab_triples": 1,
+      "hab_familiares": 0,
+      "accesibilidad_hab": false,
+      "servicio_maletas": true
+    },
+
+    "transporte": {
+      "incluido": true,
+      "tipo_vehiculo": "minibus_8",
+      "tipos_vehiculo_posibles": ["turismo_4","minibus_8","minibus_16","autobus_30","autocar_55"],
+      "conductor_incluido": true,
+      "cobertura": "toda_ruta",
+      "cobertura_posibles": ["toda_ruta","parcial","solo_transfers"],
+      "transfer_llegada_aeropuerto": true,
+      "transfer_salida_aeropuerto": true
+    },
+
+    "tour_leader": {
+      "incluido": true,
+      "cobertura": "toda_ruta",
+      "idioma": "ar",
+      "nombre_asignado": ""
+    },
+
+    "guia_local": {
+      "incluido": true,
+      "ciudades": ["Córdoba","Sevilla","Granada"],
+      "idioma": "ar",
+      "duracion": "medio_dia",
+      "duraciones_posibles": ["medio_dia","dia_completo"]
+    },
+
+    "restauracion": {
+      "incluida": true,
+      "comidas_incluidas": ["almuerzo"],
+      "comidas_posibles": ["desayuno","almuerzo","cena"],
+      "tipo_cocina": "andaluza_tradicional_halal",
+      "restaurantes_preconcertados": true,
+      "dias_restaurante": 10
+    },
+
+    "halal": {
+      "requerido": true,
+      "opciones": ["comida_halal","hotel_sin_alcohol_en_mesa"],
+      "opciones_posibles": ["comida_halal","hotel_sin_alcohol_en_mesa","oratorio_disponible","quibla_en_habitacion"],
+      "certificacion_documentada": false
+    },
+
+    "llegada_internacional_servicio": {
+      "incluido": true,
+      "descripcion": "Transfer y bienvenida en aeropuerto de llegada"
+    }
+  },
+
+  "operacion_interna": {
+    "_interno": true,
+    "_advertencia": "ESTE BLOQUE NUNCA SE ENVÍA AL CLIENTE. Solo para uso interno de Bin Firnas Travel SL.",
+
+    "habitaciones": {
+      "hab_cliente_dobles": 2,
+      "hab_cliente_individuales": 0,
+      "hab_cliente_triples": 1,
+      "hab_cliente_familiares": 0,
+      "hab_cliente_subtotal": 3,
+      "hab_staff_cantidad": 1,
+      "hab_staff_nota": "Conductor y tour leader comparten 1 habitación operativa con camas separadas. Solo se solicitan 2 habitaciones de staff si Abdu lo autoriza expresamente como excepción.",
+      "hab_staff_excepcion_autorizada": false,
+      "total_hab_a_solicitar": 4,
+      "regla": "Si conductor o tour leader con pernocta → +1 hab. operativa. Si ambos → comparten esa 1 hab. Solo 2 hab. staff por excepción autorizada por Abdu. Nunca visible al cliente."
+    },
+
+    "financiero": {
+      "margen_estandar_pct": 25,
+      "precio_venta_minimo_formula": "coste_base * 1.25",
+      "descuentos": {
+        "aplica_solo_si_pax_mayor_que": 25,
+        "descuento_maximo_puntos": 10,
+        "nota": "Nunca aplicar descuentos automáticos. La decisión económica final corresponde exclusivamente a Abdu."
+      },
+      "coste_estimado_base": null,
+      "precio_venta_objetivo": null,
+      "precio_venta_final": null
+    },
+
+    "proveedores": {
+      "transporte": "",
+      "hoteles": "",
+      "guias_locales": "",
+      "restaurantes": "",
+      "otros": ""
+    },
+
+    "comisiones": {
+      "estado": "pendiente",
+      "importe": null,
+      "notas": ""
+    },
+
+    "alertas": [
+      {
+        "tipo": "revision_manual_vuelos",
+        "activa": true,
+        "motivo": "Solicitud incluye vuelos internacionales (SV136 llegada MAD, SV137 salida AGP). Revisar y validar antes de confirmar al cliente."
+      }
+    ],
+
+    "notas_internas": [
+      "Familia pide confirmación de certificación halal en todos los restaurantes.",
+      "Padre solicita habitación en planta baja (accesibilidad relativa, no estricta).",
+      "Preferencia de hoteles con piscina en Sevilla y Málaga para los menores.",
+      "Alhambra: reservar entradas con 60 días de antelación mínimo.",
+      "Posible extensión a 2 noches en Ronda — consultar antes del cierre.",
+      "Menores (7 y 12 años): edades registradas. Documentar acompañante legal en rooming list."
+    ]
+  },
+
+  "ciclo_comercial": {
+    "_interno": true,
+    "_advertencia": "ESTE BLOQUE NUNCA SE ENVÍA AL CLIENTE. Solo para uso interno de Bin Firnas Travel SL.",
+    "_version_bloque": "1.0",
+
+    "_reglas_integridad": {
+      "I-1": "Un expediente solo puede tener un id_reserva activo simultáneamente. Reserva cancelada → documentar en id_reserva_anterior.",
+      "I-2": "Toda propuesta generada se añade a propuestas[]. Nunca se elimina una entrada. Las sustituidas cambian estado a sustituida.",
+      "I-3": "es_version_activa = true solo puede existir en una versión simultáneamente. Al crear nueva versión, la anterior pierde el flag.",
+      "I-4": "La reserva solo puede nacer desde propuesta con estado = aceptada y aprobacion_humana.aprobada = true.",
+      "I-5": "El estado del expediente debe sincronizarse con el estado de la reserva en cada transición relevante.",
+      "I-6": "propuestas[n].precio_total_eur es un snapshot histórico inmutable. No se actualiza nunca.",
+      "I-7": "La reserva referencia la versión de propuesta que el cliente aceptó, aunque existan versiones posteriores."
+    },
+
+    "_campos_no_duplicar": [
+      "condiciones_cancelacion_completas → vive en propuesta_comercial_v1",
+      "estado_financiero_detallado → vive en reserva_comercial_v1",
+      "estado_proveedores → vive en reserva_comercial_v1",
+      "pagos PAG-AAAA-NNNN → viven en reserva_comercial_v1",
+      "alertas_activas_reserva → viven en reserva_comercial_v1",
+      "historial_completo_reserva → vive en reserva_comercial_v1",
+      "responsable_actual → vive en reserva_comercial_v1"
+    ],
+
+    "propuestas": [
+      {
+        "_comentario": "Ejemplo — V1 sustituida por cambio de precio",
+        "id_propuesta": "PRO-2026-0087-V1",
+        "version": "V1",
+        "estado": "sustituida",
+        "fecha_creacion": "2026-05-15",
+        "fecha_emision": "2026-05-16",
+        "precio_total_eur": 7800.00,
+        "es_version_activa": false,
+        "motivo_nueva_version": null
+      },
+      {
+        "_comentario": "Ejemplo — V2 aceptada por el cliente, origen de la reserva activa",
+        "id_propuesta": "PRO-2026-0087-V2",
+        "version": "V2",
+        "estado": "aceptada",
+        "fecha_creacion": "2026-05-20",
+        "fecha_emision": "2026-05-21",
+        "precio_total_eur": 8500.00,
+        "es_version_activa": true,
+        "motivo_nueva_version": "cambio_precio — Cliente negoció ajuste de servicios. Se reformuló propuesta con precio revisado."
+      }
+    ],
+
+    "estados_propuesta_posibles": [
+      "borrador", "pendiente_aprobacion", "aprobada", "enviada",
+      "pendiente_respuesta", "aceptada", "rechazada", "caducada",
+      "sustituida", "cancelada"
+    ],
+
+    "id_reserva": "RES-2026-0001",
+    "id_propuesta_origen_reserva": "PRO-2026-0087-V2",
+    "fecha_reserva_creada": "2026-06-10",
+    "reserva_cancelada": false,
+    "id_reserva_anterior": null,
+
+    "estado_comercial_resumen": "reserva_activa",
+    "estado_comercial_resumen_posibles": [
+      "sin_propuesta",
+      "propuesta_en_borrador",
+      "propuesta_enviada",
+      "propuesta_aceptada",
+      "reserva_activa",
+      "reserva_completada",
+      "cancelado"
+    ],
+
+    "notas_ciclo_comercial": "V1 enviada el 2026-05-16 a 7.800 EUR. Cliente negoció ajuste de itinerario. V2 emitida el 2026-05-21 a 8.500 EUR con guía local ampliado. Cliente aceptó V2 el 2026-06-09. Reserva RES-2026-0001 abierta el 2026-06-10."
+  },
+
+  "comunicaciones": {
+
+    "resumen_cliente": {
+      "_visible_cliente": true,
+      "incluir": [
+        "nombre_cliente",
+        "ciudades_y_fechas",
+        "lista_servicios_incluidos",
+        "proximos_pasos",
+        "contacto_vaa"
+      ],
+      "excluir_siempre": [
+        "costes_operativos",
+        "margenes",
+        "nombres_proveedores",
+        "habitaciones_staff",
+        "notas_internas",
+        "comisiones",
+        "alertas_internas",
+        "operacion_ruta"
+      ],
+      "plantilla_asunto": "Tu viaje a Al-Ándalus — Propuesta VAA-2026-0087",
+      "plantilla_apertura": "Estimada Fatima, gracias por confiar en Vive al Ándalus para organizar tu viaje familiar por Al-Ándalus."
+    },
+
+    "expediente_interno_abdu": {
+      "_visible_cliente": false,
+      "incluir": "todos_los_bloques_1_a_10",
+      "formato": "PDF + JSON",
+      "canal": "email_interno + Notion"
+    },
+
+    "historial": []
+  }
+}

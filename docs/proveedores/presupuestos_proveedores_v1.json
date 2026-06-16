@@ -1,0 +1,342 @@
+{
+  "_meta_esquema": {
+    "version": "1.0",
+    "empresa": "Bin Firnas Travel SL",
+    "marca": "Vive al Ándalus",
+    "documento": "Registro de Presupuestos de Proveedores VAA",
+    "fecha_creacion": "2026-06-10",
+    "ley_fundamental": "Ningún presupuesto recibido se elimina jamás. Un presupuesto rechazado hoy es inteligencia comercial mañana.",
+    "moneda_operativa": "EUR",
+    "nota_moneda": "Todos los importes en EUR. Si el proveedor cotiza en otra moneda, registrar equivalente EUR + nota_conversion con moneda original, importe original y tipo de cambio del día.",
+    "nota_separacion": "Un presupuesto pertenece a un proveedor (id_proveedor) y puede estar asociado a un expediente (id_expediente). El expediente solo guarda el id_presupuesto del seleccionado. Nunca se duplican datos de presupuesto dentro del expediente."
+  },
+
+  "estados_posibles": [
+    "recibido",
+    "en_revision",
+    "seleccionado",
+    "reserva_confirmada",
+    "rechazado",
+    "caducado",
+    "cancelado_proveedor",
+    "anulado"
+  ],
+
+  "tipos_servicio_posibles": [
+    "alojamiento",
+    "transporte_ruta",
+    "transfer_llegada",
+    "transfer_salida",
+    "restauracion",
+    "guia_local",
+    "tour_leader",
+    "entrada_monumento",
+    "actividad",
+    "otro"
+  ],
+
+  "fuentes_posibles": [
+    "email",
+    "whatsapp",
+    "telefono",
+    "web_proveedor",
+    "en_persona",
+    "otro"
+  ],
+
+  "presupuesto_plantilla": {
+
+    "_meta": {
+      "id_presupuesto": "PRS-AAAA-NNNN",
+      "fecha_recepcion": null,
+      "fecha_validez": null,
+      "registrado_por": "",
+      "fuente": "",
+      "fuente_posibles": ["email", "whatsapp", "telefono", "web_proveedor", "en_persona", "otro"],
+      "version_esquema": "1.0"
+    },
+
+    "proveedor": {
+      "id_proveedor": "PRV-AAAA-NNNN",
+      "nombre_comercial": "",
+      "_nombre_comercial_nota": "Desnormalizado. Fotografía del nombre en el momento de recepción. No modificar aunque el nombre del proveedor cambie en el maestro.",
+      "tipo": ""
+    },
+
+    "expediente": {
+      "id_expediente": null,
+      "_id_expediente_nota": "Puede ser null en cotizaciones libres o comparativas de mercado sin expediente asociado.",
+      "ciudad": "",
+      "servicio": "",
+      "tipo_servicio": "",
+      "tipo_servicio_posibles": ["alojamiento", "transporte_ruta", "transfer_llegada", "transfer_salida", "restauracion", "guia_local", "tour_leader", "entrada_monumento", "actividad", "otro"],
+      "tipo_consulta": "",
+      "_tipo_consulta_nota": "Si no hay expediente: 'libre' para cotización especulativa o comparativa de mercado."
+    },
+
+    "fechas_servicio": {
+      "fecha_entrada": null,
+      "fecha_salida": null,
+      "noches": null,
+      "dias": null
+    },
+
+    "grupo": {
+      "adultos": null,
+      "menores": null,
+      "total_pax": null
+    },
+
+    "importe": {
+      "moneda": "EUR",
+      "importe_total": null,
+      "importe_por_pax": null,
+      "_importe_por_pax_nota": "Calculado: importe_total / total_pax. Registrar para facilitar comparativas.",
+      "importe_por_noche": null,
+      "_importe_por_noche_nota": "Calculado: importe_total / noches. Solo para alojamiento.",
+      "importe_por_hab_noche": null,
+      "_importe_por_hab_noche_nota": "Solo para alojamiento: importe / habitaciones / noches.",
+      "base_calculo": "",
+      "_base_calculo_nota": "Descripción de qué incluye el importe. Ejemplos: 'por hab/noche con desayuno', 'servicio completo ruta 15 días', 'almuerzo menú cerrado por persona'.",
+      "iva_incluido": null,
+      "nota_conversion": "",
+      "_nota_conversion_nota": "Solo si el proveedor cotizó en divisa distinta a EUR. Formato: 'SAR 12.500 / tipo cambio 0.2499 EUR/SAR aplicado el 2026-06-10'."
+    },
+
+    "detalle_lineas": [],
+    "_detalle_lineas_nota": "Opcional. Array de objetos {concepto, cantidad, precio_unitario, subtotal, nota}. Rellenar cuando el proveedor envíe desglose detallado.",
+    "_detalle_lineas_ejemplo": [
+      { "concepto": "Habitación doble con desayuno", "cantidad": 2, "precio_unitario": 180.00, "subtotal": 360.00, "nota": "Por noche" },
+      { "concepto": "Habitación triple con desayuno", "cantidad": 1, "precio_unitario": 220.00, "subtotal": 220.00, "nota": "Por noche" },
+      { "concepto": "Habitación operativa staff", "cantidad": 1, "precio_unitario": 120.00, "subtotal": 120.00, "nota": "Por noche" }
+    ],
+
+    "condiciones": {
+      "deposito_requerido": null,
+      "deposito_pct": null,
+      "deposito_importe": null,
+      "_deposito_nota": "Si deposito_pct está informado, deposito_importe = importe_total * deposito_pct / 100.",
+      "plazo_cancelacion": "",
+      "_plazo_cancelacion_nota": "Texto libre. Ejemplos: 'cancelación gratuita hasta 30 días antes', 'no reembolsable', '50% hasta 14 días, 100% desde 7 días'.",
+      "politica_noshow": "",
+      "vigencia_presupuesto": "",
+      "_vigencia_nota": "Hasta cuándo es válido el precio cotizado según el proveedor.",
+      "notas_condiciones": ""
+    },
+
+    "estado_presupuesto": {
+      "estado_actual": "recibido",
+      "estado_posibles": ["recibido", "en_revision", "seleccionado", "reserva_confirmada", "rechazado", "caducado", "cancelado_proveedor", "anulado"],
+      "seleccionado": false,
+      "_seleccionado_regla": "Solo puede existir UN presupuesto con seleccionado=true por combinación [id_expediente + tipo_servicio + ciudad]. Si se cambia de proveedor: el anterior pasa a rechazado (con motivo), el nuevo pasa a seleccionado.",
+      "motivo_rechazo": "",
+      "_motivo_rechazo_nota": "OBLIGATORIO si estado_actual = rechazado o cancelado_proveedor. Sin motivo documentado se pierde inteligencia comercial.",
+      "fecha_decision": null,
+      "decision_tomada_por": ""
+    },
+
+    "archivos_adjuntos": [],
+    "_archivos_adjuntos_nota": "Array de objetos {nombre, tipo, ruta, fecha_adjunto}. Tipos: pdf, email, imagen, otro.",
+
+    "notas_internas": "",
+    "_notas_internas_nota": "Observaciones libres de Abdu sobre este presupuesto. No visible al proveedor ni al cliente."
+  },
+
+  "ejemplos": [
+    {
+      "_comentario": "Ejemplo 1: Presupuesto de hotel en Sevilla para expediente VAA-2026-0087. Recibido, pendiente de decidir.",
+      "_meta": {
+        "id_presupuesto": "PRS-2026-0001",
+        "fecha_recepcion": "2026-06-12T11:30:00",
+        "fecha_validez": "2026-07-31",
+        "registrado_por": "Abdu",
+        "fuente": "email",
+        "version_esquema": "1.0"
+      },
+      "proveedor": {
+        "id_proveedor": "PRV-2026-0001",
+        "nombre_comercial": "Hotel Los Seises",
+        "tipo": "hotel"
+      },
+      "expediente": {
+        "id_expediente": "VAA-2026-0087",
+        "ciudad": "Sevilla",
+        "servicio": "Alojamiento 4 noches, grupo 6 pax + 1 staff — 3 hab + 1 operativa",
+        "tipo_servicio": "alojamiento",
+        "tipo_consulta": ""
+      },
+      "fechas_servicio": {
+        "fecha_entrada": "2026-09-17",
+        "fecha_salida": "2026-09-21",
+        "noches": 4,
+        "dias": null
+      },
+      "grupo": {
+        "adultos": 4,
+        "menores": 2,
+        "total_pax": 6
+      },
+      "importe": {
+        "moneda": "EUR",
+        "importe_total": 2560.00,
+        "importe_por_pax": 426.67,
+        "importe_por_noche": 640.00,
+        "importe_por_hab_noche": 160.00,
+        "base_calculo": "4 habitaciones (2 dobles + 1 triple + 1 individual operativa) × 4 noches × con desayuno incluido",
+        "iva_incluido": true,
+        "nota_conversion": ""
+      },
+      "detalle_lineas": [
+        { "concepto": "Hab. doble con desayuno", "cantidad": 2, "precio_unitario": 155.00, "subtotal": 310.00, "nota": "Por noche" },
+        { "concepto": "Hab. triple con desayuno", "cantidad": 1, "precio_unitario": 195.00, "subtotal": 195.00, "nota": "Por noche" },
+        { "concepto": "Hab. individual operativa", "cantidad": 1, "precio_unitario": 135.00, "subtotal": 135.00, "nota": "Por noche — staff" }
+      ],
+      "condiciones": {
+        "deposito_requerido": true,
+        "deposito_pct": 30,
+        "deposito_importe": 768.00,
+        "plazo_cancelacion": "Cancelación gratuita hasta 21 días antes. 50% hasta 7 días. No reembolsable desde 7 días.",
+        "politica_noshow": "100% del importe total",
+        "vigencia_presupuesto": "Precio válido hasta 31 de julio de 2026",
+        "notas_condiciones": "Precio especial grupo. No acumulable con otras ofertas. Desayuno halal disponible con aviso previo 48h."
+      },
+      "estado_presupuesto": {
+        "estado_actual": "en_revision",
+        "seleccionado": false,
+        "motivo_rechazo": "",
+        "fecha_decision": null,
+        "decision_tomada_por": ""
+      },
+      "archivos_adjuntos": [
+        { "nombre": "hotel_los_seises_cotizacion_vaa2026-0087.pdf", "tipo": "pdf", "ruta": "docs/adjuntos/PRS-2026-0001.pdf", "fecha_adjunto": "2026-06-12" }
+      ],
+      "notas_internas": "Han confirmado que el desayuno puede ser halal con 48h de aviso. Pendiente verificar si tienen certificación o solo adaptación."
+    },
+    {
+      "_comentario": "Ejemplo 2: Segundo hotel en Sevilla para el mismo expediente. Más barato pero sin confirmar halal. Presupuesto rechazado.",
+      "_meta": {
+        "id_presupuesto": "PRS-2026-0002",
+        "fecha_recepcion": "2026-06-13T09:15:00",
+        "fecha_validez": "2026-07-15",
+        "registrado_por": "Abdu",
+        "fuente": "whatsapp",
+        "version_esquema": "1.0"
+      },
+      "proveedor": {
+        "id_proveedor": "PRV-2026-0002",
+        "nombre_comercial": "Hotel Bécquer",
+        "tipo": "hotel"
+      },
+      "expediente": {
+        "id_expediente": "VAA-2026-0087",
+        "ciudad": "Sevilla",
+        "servicio": "Alojamiento 4 noches, grupo 6 pax + 1 staff — 3 hab + 1 operativa",
+        "tipo_servicio": "alojamiento",
+        "tipo_consulta": ""
+      },
+      "fechas_servicio": {
+        "fecha_entrada": "2026-09-17",
+        "fecha_salida": "2026-09-21",
+        "noches": 4,
+        "dias": null
+      },
+      "grupo": {
+        "adultos": 4,
+        "menores": 2,
+        "total_pax": 6
+      },
+      "importe": {
+        "moneda": "EUR",
+        "importe_total": 2080.00,
+        "importe_por_pax": 346.67,
+        "importe_por_noche": 520.00,
+        "importe_por_hab_noche": 130.00,
+        "base_calculo": "4 habitaciones × 4 noches con desayuno",
+        "iva_incluido": true,
+        "nota_conversion": ""
+      },
+      "detalle_lineas": [],
+      "condiciones": {
+        "deposito_requerido": true,
+        "deposito_pct": 50,
+        "deposito_importe": 1040.00,
+        "plazo_cancelacion": "No reembolsable desde confirmación",
+        "politica_noshow": "100% no reembolsable",
+        "vigencia_presupuesto": "Válido hasta 15 de julio de 2026",
+        "notas_condiciones": ""
+      },
+      "estado_presupuesto": {
+        "estado_actual": "rechazado",
+        "seleccionado": false,
+        "motivo_rechazo": "No garantizan desayuno halal. Condiciones de cancelación desfavorables (no reembolsable desde confirmación). Se prefiere Hotel Los Seises aunque sea más caro.",
+        "fecha_decision": "2026-06-15",
+        "decision_tomada_por": "Abdu"
+      },
+      "archivos_adjuntos": [],
+      "notas_internas": "Precio competitivo pero no pueden garantizar halal. Guardar para expedientes sin requisito halal en el futuro."
+    },
+    {
+      "_comentario": "Ejemplo 3: Cotización libre de transportista (sin expediente concreto). Consulta especulativa para temporada 2027.",
+      "_meta": {
+        "id_presupuesto": "PRS-2026-0003",
+        "fecha_recepcion": "2026-06-10T16:00:00",
+        "fecha_validez": null,
+        "registrado_por": "Abdu",
+        "fuente": "telefono",
+        "version_esquema": "1.0"
+      },
+      "proveedor": {
+        "id_proveedor": "PRV-2026-0003",
+        "nombre_comercial": "Transportes Sur Andaluz SL",
+        "tipo": "transporte"
+      },
+      "expediente": {
+        "id_expediente": null,
+        "ciudad": "Ruta Andalucía completa",
+        "servicio": "Consulta orientativa tarifa ruta Madrid-Málaga 15 días minibus 8-16 pax temporada 2027",
+        "tipo_servicio": "transporte_ruta",
+        "tipo_consulta": "libre"
+      },
+      "fechas_servicio": {
+        "fecha_entrada": null,
+        "fecha_salida": null,
+        "noches": 15,
+        "dias": 16
+      },
+      "grupo": {
+        "adultos": null,
+        "menores": null,
+        "total_pax": 8
+      },
+      "importe": {
+        "moneda": "EUR",
+        "importe_total": 4800.00,
+        "importe_por_pax": 600.00,
+        "importe_por_noche": 320.00,
+        "importe_por_hab_noche": null,
+        "base_calculo": "Servicio completo ruta Madrid-Málaga 16 días con conductor. Minibus 8 pax. Sin transfers aeropuerto.",
+        "iva_incluido": false,
+        "nota_conversion": ""
+      },
+      "detalle_lineas": [],
+      "condiciones": {
+        "deposito_requerido": null,
+        "deposito_pct": null,
+        "deposito_importe": null,
+        "plazo_cancelacion": "Pendiente concretar",
+        "politica_noshow": "Pendiente concretar",
+        "vigencia_presupuesto": "Orientativo para 2027. Sin validez contractual.",
+        "notas_condiciones": "Precio orientativo. Juan Romero indica que suele subir 5-8% anual. Confirmar al inicio de 2027."
+      },
+      "estado_presupuesto": {
+        "estado_actual": "recibido",
+        "seleccionado": false,
+        "motivo_rechazo": "",
+        "fecha_decision": null,
+        "decision_tomada_por": ""
+      },
+      "archivos_adjuntos": [],
+      "notas_internas": "Llamada informal. Juan dice que para grupos repetidores mantiene precio del año anterior si se confirma antes de marzo. Registrar como referencia de precios 2026 para temporada 2027."
+    }
+  ]
+}

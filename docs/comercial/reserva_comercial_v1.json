@@ -1,0 +1,534 @@
+{
+  "$schema": "reserva_comercial_v1.1",
+  "_doc": "Sistema de Reservas Comerciales VAA — Bin Firnas Travel SL — Marca: Vive al Ándalus",
+  "_version": "1.0",
+  "_fecha_creacion_esquema": "2026-06-10",
+  "_responsable": "Abdulah Jiménez Contreras",
+
+  "plantilla": {
+    "_meta": {
+      "id_reserva": "RES-AAAA-NNNN",
+      "fecha_creacion": "YYYY-MM-DDTHH:MM:SSZ",
+      "creado_por": "string",
+      "version_esquema": "1.0",
+      "ultima_modificacion": "YYYY-MM-DDTHH:MM:SSZ"
+    },
+
+    "referencias": {
+      "id_expediente": "VAA-AAAA-NNNN",
+      "id_propuesta_origen": "PRO-AAAA-NNNN-Vn",
+      "version_propuesta": "string",
+      "fecha_aceptacion_propuesta": "YYYY-MM-DD"
+    },
+
+    "cliente": {
+      "nombre_completo": "string",
+      "email": "string",
+      "telefono": "string",
+      "pais_residencia": "string",
+      "idioma_preferido": "es | en | fr | pt | ar",
+      "num_pax": 0,
+      "num_adultos": 0,
+      "num_menores": 0,
+      "edades_menores": [],
+      "necesidades_especiales": null
+    },
+
+    "estado_reserva": {
+      "estado": "creada | primer_pago_pendiente | primer_pago_confirmado | en_operacion | proveedores_confirmados | pago_completo_pendiente | pago_completo_confirmado | documentacion_enviada | en_destino | viaje_completado | cerrada | cancelada | en_disputa",
+      "fecha_ultimo_cambio_estado": "YYYY-MM-DDTHH:MM:SSZ",
+      "motivo_cambio_estado": "string",
+      "cancelada": false,
+      "motivo_cancelacion": null,
+      "fecha_cancelacion": null,
+      "penalizacion_cancelacion_eur": null
+    },
+
+    "estado_financiero": {
+      "precio_total_venta_eur": 0.00,
+      "coste_total_proveedores_eur": 0.00,
+      "margen_bruto_eur": 0.00,
+      "margen_porcentaje": 0.00,
+      "total_cobrado_eur": 0.00,
+      "total_pendiente_cobro_eur": 0.00,
+      "porcentaje_cobrado": 0.00,
+      "total_pagado_proveedores_eur": 0.00,
+      "total_pendiente_pago_proveedores_eur": 0.00,
+      "fecha_limite_pago_completo": "YYYY-MM-DD",
+      "metodo_pago_cliente": null
+    },
+
+    "estado_documentacion": {
+      "contrato_firmado": false,
+      "fecha_firma_contrato": null,
+      "pasaportes_recibidos": false,
+      "fecha_recepcion_pasaportes": null,
+      "vouchers_generados": false,
+      "vouchers_enviados": false,
+      "programa_enviado": false,
+      "programa_definitivo_cerrado": false,
+      "_programa_definitivo_cerrado_regla": "Solo puede pasar a true mediante aprobación humana explícita de Abdu. Ninguna automatización puede activar este campo. C04 no puede enviarse si este campo es false.",
+      "programa_definitivo_aprobado_por": null,
+      "_programa_definitivo_aprobado_por_nota": "Obligatorio si programa_definitivo_cerrado = true. Solo Abdu o aprobador autorizado.",
+      "programa_definitivo_fecha_aprobacion": null,
+      "_programa_definitivo_fecha_aprobacion_nota": "Obligatorio si programa_definitivo_cerrado = true. Fecha y hora exacta de aprobación. Inmutable una vez registrada.",
+      "seguro_viaje": false,
+      "notas_documentacion": null
+    },
+
+    "estado_proveedores": [
+      {
+        "id_seleccion": "SEL-AAAA-NNNN",
+        "id_proveedor": "PRV-AAAA-NNNN",
+        "nombre_proveedor": "string",
+        "tipo_servicio": "alojamiento | transporte | restaurante | guia_local | tour_leader | actividad | seguro | otro",
+        "descripcion_servicio": "string",
+        "confirmado": false,
+        "localizador": null,
+        "fecha_confirmacion": null,
+        "coste_eur": 0.00,
+        "pagado": false,
+        "importe_pagado_eur": null,
+        "notas": null
+      }
+    ],
+
+    "estado_operacion": {
+      "fecha_entrada": "YYYY-MM-DD",
+      "fecha_salida": "YYYY-MM-DD",
+      "num_noches": 0,
+      "destinos": [],
+      "tour_leader_asignado": false,
+      "id_tour_leader": null,
+      "nombre_tour_leader": null,
+      "notas_operacion": null
+    },
+
+    "importes": {
+      "desglose": [
+        {
+          "concepto": "string",
+          "importe_eur": 0.00,
+          "tipo": "ingreso | coste"
+        }
+      ],
+      "total_ingresos_eur": 0.00,
+      "total_costes_eur": 0.00,
+      "resultado_eur": 0.00
+    },
+
+    "pagos": [
+      {
+        "id_pago": "PAG-AAAA-NNNN",
+        "tipo": "cobro_cliente | pago_proveedor",
+        "importe_eur": 0.00,
+        "porcentaje_sobre_total": null,
+        "fecha_pago": "YYYY-MM-DD",
+        "metodo": "string",
+        "concepto": "string",
+        "confirmado": false,
+        "id_proveedor_destinatario": null,
+        "comprobante": null,
+        "notas": null
+      }
+    ],
+
+    "alertas": [
+      {
+        "codigo": "ALT-001 a ALT-017",
+        "tipo": "string",
+        "activa": false,
+        "fecha_activacion": null,
+        "descripcion": "string",
+        "resuelta": false,
+        "fecha_resolucion": null
+      }
+    ],
+
+    "responsable_actual": {
+      "responsable_actual": "cliente | abdu | proveedor | sistema | tour_leader | delegado",
+      "proxima_accion": "string",
+      "fecha_limite_accion": "YYYY-MM-DDTHH:MM:SSZ",
+      "prioridad_accion": "baja | media | alta | critica"
+    },
+
+    "historial": [
+      {
+        "fecha": "YYYY-MM-DDTHH:MM:SSZ",
+        "accion": "string",
+        "realizado_por": "string",
+        "estado_anterior": null,
+        "estado_nuevo": null,
+        "notas": null
+      }
+    ]
+  },
+
+  "ejemplos": [
+    {
+      "_comentario": "Ejemplo 1 — Familia Al-Rashidi: reserva activa tras aceptar PRO-2026-0087-V2",
+      "_meta": {
+        "id_reserva": "RES-2026-0001",
+        "fecha_creacion": "2026-06-10T10:30:00Z",
+        "creado_por": "Abdulah Jiménez Contreras",
+        "version_esquema": "1.0",
+        "ultima_modificacion": "2026-06-10T10:30:00Z"
+      },
+      "referencias": {
+        "id_expediente": "VAA-2026-0087",
+        "id_propuesta_origen": "PRO-2026-0087-V2",
+        "version_propuesta": "V2",
+        "fecha_aceptacion_propuesta": "2026-06-09"
+      },
+      "cliente": {
+        "nombre_completo": "Faisal Al-Rashidi",
+        "email": "faisal.alrashidi@gmail.com",
+        "telefono": "+971 50 123 4567",
+        "pais_residencia": "Emiratos Árabes Unidos",
+        "idioma_preferido": "ar",
+        "num_pax": 6,
+        "num_adultos": 4,
+        "num_menores": 2,
+        "edades_menores": [8, 11],
+        "necesidades_especiales": null
+      },
+      "estado_reserva": {
+        "estado": "primer_pago_pendiente",
+        "fecha_ultimo_cambio_estado": "2026-06-10T10:30:00Z",
+        "motivo_cambio_estado": "Reserva creada tras aceptación de PRO-2026-0087-V2. Esperando primer pago del 30%.",
+        "cancelada": false,
+        "motivo_cancelacion": null,
+        "fecha_cancelacion": null,
+        "penalizacion_cancelacion_eur": null
+      },
+      "estado_financiero": {
+        "precio_total_venta_eur": 8500.00,
+        "coste_total_proveedores_eur": 6200.00,
+        "margen_bruto_eur": 2300.00,
+        "margen_porcentaje": 27.06,
+        "total_cobrado_eur": 0.00,
+        "total_pendiente_cobro_eur": 8500.00,
+        "porcentaje_cobrado": 0.00,
+        "total_pagado_proveedores_eur": 0.00,
+        "total_pendiente_pago_proveedores_eur": 6200.00,
+        "fecha_limite_pago_completo": "2026-07-15",
+        "metodo_pago_cliente": "Transferencia bancaria"
+      },
+      "estado_documentacion": {
+        "contrato_firmado": false,
+        "fecha_firma_contrato": null,
+        "pasaportes_recibidos": false,
+        "fecha_recepcion_pasaportes": null,
+        "vouchers_generados": false,
+        "vouchers_enviados": false,
+        "programa_enviado": false,
+        "programa_definitivo_cerrado": false,
+        "programa_definitivo_aprobado_por": null,
+        "programa_definitivo_fecha_aprobacion": null,
+        "seguro_viaje": false,
+        "notas_documentacion": "Pendiente solicitar copia de 6 pasaportes tras primer pago."
+      },
+      "estado_proveedores": [
+        {
+          "id_seleccion": "SEL-2026-0012",
+          "id_proveedor": "PRV-2026-0003",
+          "nombre_proveedor": "Hotel Alhambra Palace Granada",
+          "tipo_servicio": "alojamiento",
+          "descripcion_servicio": "3 noches en Granada, habitaciones dobles + familiar, régimen halal",
+          "confirmado": false,
+          "localizador": null,
+          "fecha_confirmacion": null,
+          "coste_eur": 1800.00,
+          "pagado": false,
+          "importe_pagado_eur": null,
+          "notas": "Confirmar disponibilidad en cuanto llegue el 30%."
+        },
+        {
+          "id_seleccion": "SEL-2026-0013",
+          "id_proveedor": "PRV-2026-0007",
+          "nombre_proveedor": "Transportes Al-Andalus SL",
+          "tipo_servicio": "transporte",
+          "descripcion_servicio": "Minibús privado para 6 pax durante 8 días. Ruta Granada-Sevilla-Córdoba.",
+          "confirmado": false,
+          "localizador": null,
+          "fecha_confirmacion": null,
+          "coste_eur": 2400.00,
+          "pagado": false,
+          "importe_pagado_eur": null,
+          "notas": null
+        },
+        {
+          "id_seleccion": "SEL-2026-0014",
+          "id_proveedor": "PRV-2026-0011",
+          "nombre_proveedor": "Guías Bilingüe Granada",
+          "tipo_servicio": "guia_local",
+          "descripcion_servicio": "Guía árabe-español para visita Alhambra y Albaicín (medio día).",
+          "confirmado": false,
+          "localizador": null,
+          "fecha_confirmacion": null,
+          "coste_eur": 350.00,
+          "pagado": false,
+          "importe_pagado_eur": null,
+          "notas": null
+        }
+      ],
+      "estado_operacion": {
+        "fecha_entrada": "2026-08-01",
+        "fecha_salida": "2026-08-09",
+        "num_noches": 8,
+        "destinos": ["Granada", "Sevilla", "Córdoba"],
+        "tour_leader_asignado": false,
+        "id_tour_leader": null,
+        "nombre_tour_leader": null,
+        "notas_operacion": "Grupo familiar árabe. Prioridad: restaurantes halal certificados en todos los destinos."
+      },
+      "importes": {
+        "desglose": [
+          { "concepto": "Precio total paquete cliente", "importe_eur": 8500.00, "tipo": "ingreso" },
+          { "concepto": "Alojamiento 8 noches (hotel Granada + Sevilla + Córdoba)", "importe_eur": 3650.00, "tipo": "coste" },
+          { "concepto": "Transporte privado 8 días", "importe_eur": 2400.00, "tipo": "coste" },
+          { "concepto": "Guía local Granada (medio día)", "importe_eur": 350.00, "tipo": "coste" }
+        ],
+        "total_ingresos_eur": 8500.00,
+        "total_costes_eur": 6400.00,
+        "resultado_eur": 2100.00
+      },
+      "pagos": [],
+      "alertas": [
+        {
+          "codigo": "ALT-010",
+          "tipo": "primer_pago_no_recibido",
+          "activa": true,
+          "fecha_activacion": "2026-06-10T10:30:00Z",
+          "descripcion": "Reserva creada. Esperando primer pago del 30% (2.550 EUR). Plazo: 72h desde creación.",
+          "resuelta": false,
+          "fecha_resolucion": null
+        },
+        {
+          "codigo": "ALT-005",
+          "tipo": "contrato_sin_firmar",
+          "activa": true,
+          "fecha_activacion": "2026-06-10T10:30:00Z",
+          "descripcion": "El contrato todavía no ha sido firmado por el cliente.",
+          "resuelta": false,
+          "fecha_resolucion": null
+        }
+      ],
+      "responsable_actual": {
+        "responsable_actual": "cliente",
+        "proxima_accion": "Realizar primer pago del 30% (2.550 EUR) mediante transferencia bancaria para activar la operativa con proveedores.",
+        "fecha_limite_accion": "2026-06-13T23:59:00Z",
+        "prioridad_accion": "alta"
+      },
+      "historial": [
+        {
+          "fecha": "2026-06-10T10:30:00Z",
+          "accion": "Reserva RES-2026-0001 creada tras aceptación de propuesta PRO-2026-0087-V2 por Faisal Al-Rashidi el 2026-06-09. Precio total: 8.500 EUR. Margen bruto: 2.300 EUR (27,06%). Estado inicial: primer_pago_pendiente.",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "estado_anterior": null,
+          "estado_nuevo": "primer_pago_pendiente",
+          "notas": "El cliente ha confirmado verbalmente que realizará la transferencia en las próximas 24h."
+        }
+      ]
+    },
+
+    {
+      "_comentario": "Ejemplo 2 — Grupo mezquita Birmingham: reserva en operación con primer pago recibido",
+      "_meta": {
+        "id_reserva": "RES-2026-0002",
+        "fecha_creacion": "2026-05-20T09:00:00Z",
+        "creado_por": "Abdulah Jiménez Contreras",
+        "version_esquema": "1.0",
+        "ultima_modificacion": "2026-06-05T16:00:00Z"
+      },
+      "referencias": {
+        "id_expediente": "VAA-2026-0071",
+        "id_propuesta_origen": "PRO-2026-0071-V3",
+        "version_propuesta": "V3",
+        "fecha_aceptacion_propuesta": "2026-05-19"
+      },
+      "cliente": {
+        "nombre_completo": "Mohammed Tariq (rep. Grupo Mezquita Birmingham)",
+        "email": "tariq@birmingham-masjid.org.uk",
+        "telefono": "+44 7700 900123",
+        "pais_residencia": "Reino Unido",
+        "idioma_preferido": "en",
+        "num_pax": 22,
+        "num_adultos": 18,
+        "num_menores": 4,
+        "edades_menores": [6, 9, 12, 14],
+        "necesidades_especiales": "2 personas con movilidad reducida. Requieren habitaciones accesibles y transporte adaptado."
+      },
+      "estado_reserva": {
+        "estado": "en_operacion",
+        "fecha_ultimo_cambio_estado": "2026-05-28T11:00:00Z",
+        "motivo_cambio_estado": "Primer pago del 30% confirmado el 2026-05-25. Operativa con proveedores activada.",
+        "cancelada": false,
+        "motivo_cancelacion": null,
+        "fecha_cancelacion": null,
+        "penalizacion_cancelacion_eur": null
+      },
+      "estado_financiero": {
+        "precio_total_venta_eur": 19800.00,
+        "coste_total_proveedores_eur": 14400.00,
+        "margen_bruto_eur": 5400.00,
+        "margen_porcentaje": 27.27,
+        "total_cobrado_eur": 5940.00,
+        "total_pendiente_cobro_eur": 13860.00,
+        "porcentaje_cobrado": 30.00,
+        "total_pagado_proveedores_eur": 0.00,
+        "total_pendiente_pago_proveedores_eur": 14400.00,
+        "fecha_limite_pago_completo": "2026-07-20",
+        "metodo_pago_cliente": "Transferencia bancaria SEPA"
+      },
+      "estado_documentacion": {
+        "contrato_firmado": true,
+        "fecha_firma_contrato": "2026-05-22",
+        "pasaportes_recibidos": false,
+        "fecha_recepcion_pasaportes": null,
+        "vouchers_generados": false,
+        "vouchers_enviados": false,
+        "programa_enviado": false,
+        "programa_definitivo_cerrado": false,
+        "programa_definitivo_aprobado_por": null,
+        "programa_definitivo_fecha_aprobacion": null,
+        "seguro_viaje": false,
+        "notas_documentacion": "Pendiente recibir 22 pasaportes. Mohammed confirmó que los envía antes del 20 de junio."
+      },
+      "estado_proveedores": [
+        {
+          "id_seleccion": "SEL-2026-0021",
+          "id_proveedor": "PRV-2026-0008",
+          "nombre_proveedor": "Hotel Meliá Sevilla (halal certificado)",
+          "tipo_servicio": "alojamiento",
+          "descripcion_servicio": "5 noches en Sevilla, 11 habitaciones dobles, régimen halal completo.",
+          "confirmado": true,
+          "localizador": "SVQ-MEL-2026-4471",
+          "fecha_confirmacion": "2026-06-01",
+          "coste_eur": 5500.00,
+          "pagado": false,
+          "importe_pagado_eur": null,
+          "notas": "Localizador confirmado. Pendiente verificar habitaciones accesibles."
+        },
+        {
+          "id_seleccion": "SEL-2026-0022",
+          "id_proveedor": "PRV-2026-0007",
+          "nombre_proveedor": "Transportes Al-Andalus SL",
+          "tipo_servicio": "transporte",
+          "descripcion_servicio": "Bus privado 30 plazas adaptado para 22 pax (incluye 2 plazas accesibles). 7 días.",
+          "confirmado": false,
+          "localizador": null,
+          "fecha_confirmacion": null,
+          "coste_eur": 4200.00,
+          "pagado": false,
+          "importe_pagado_eur": null,
+          "notas": "Pendiente confirmación de bus adaptado. Fecha límite respuesta: 2026-06-15."
+        }
+      ],
+      "estado_operacion": {
+        "fecha_entrada": "2026-08-05",
+        "fecha_salida": "2026-08-12",
+        "num_noches": 7,
+        "destinos": ["Sevilla", "Córdoba", "Granada"],
+        "tour_leader_asignado": true,
+        "id_tour_leader": "PRV-2026-0015",
+        "nombre_tour_leader": "Yusuf Morales",
+        "notas_operacion": "Grupo grande con menores y movilidad reducida. Tour leader bilingüe árabe-inglés confirmado."
+      },
+      "importes": {
+        "desglose": [
+          { "concepto": "Precio total paquete grupo 22 pax", "importe_eur": 19800.00, "tipo": "ingreso" },
+          { "concepto": "Alojamiento 7 noches x 22 pax", "importe_eur": 8700.00, "tipo": "coste" },
+          { "concepto": "Transporte bus privado adaptado 7 días", "importe_eur": 4200.00, "tipo": "coste" },
+          { "concepto": "Tour leader bilingüe 7 días", "importe_eur": 1500.00, "tipo": "coste" }
+        ],
+        "total_ingresos_eur": 19800.00,
+        "total_costes_eur": 14400.00,
+        "resultado_eur": 5400.00
+      },
+      "pagos": [
+        {
+          "id_pago": "PAG-2026-0001",
+          "tipo": "cobro_cliente",
+          "importe_eur": 5940.00,
+          "porcentaje_sobre_total": 30.00,
+          "fecha_pago": "2026-05-25",
+          "metodo": "Transferencia bancaria SEPA",
+          "concepto": "Primer pago 30% reserva RES-2026-0002",
+          "confirmado": true,
+          "id_proveedor_destinatario": null,
+          "comprobante": "transferencia_PAG-2026-0001.pdf",
+          "notas": "Recibido en cuenta ES91 2100 0418 4502 0005 1332."
+        }
+      ],
+      "alertas": [
+        {
+          "codigo": "ALT-002",
+          "tipo": "proveedor_sin_confirmar",
+          "activa": true,
+          "fecha_activacion": "2026-06-05T16:00:00Z",
+          "descripcion": "Transportes Al-Andalus SL (bus adaptado) sin confirmar. Viaje en 60 días. Fecha límite respuesta proveedor: 2026-06-15.",
+          "resuelta": false,
+          "fecha_resolucion": null
+        },
+        {
+          "codigo": "ALT-004",
+          "tipo": "pasaportes_pendientes",
+          "activa": true,
+          "fecha_activacion": "2026-06-05T16:00:00Z",
+          "descripcion": "22 pasaportes pendientes de recibir. Mohammed confirmó envío antes del 20 de junio.",
+          "resuelta": false,
+          "fecha_resolucion": null
+        }
+      ],
+      "responsable_actual": {
+        "responsable_actual": "proveedor",
+        "proxima_accion": "Transportes Al-Andalus SL debe confirmar disponibilidad de bus adaptado 30 plazas con 2 plazas accesibles para 2026-08-05. Fecha límite respuesta: 2026-06-15.",
+        "fecha_limite_accion": "2026-06-15T23:59:00Z",
+        "prioridad_accion": "alta"
+      },
+      "historial": [
+        {
+          "fecha": "2026-05-20T09:00:00Z",
+          "accion": "Reserva RES-2026-0002 creada tras aceptación de PRO-2026-0071-V3. Grupo 22 pax mezquita Birmingham. Precio: 19.800 EUR.",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "estado_anterior": null,
+          "estado_nuevo": "primer_pago_pendiente",
+          "notas": null
+        },
+        {
+          "fecha": "2026-05-25T11:30:00Z",
+          "accion": "Recibido primer pago de 5.940 EUR (30%) mediante transferencia SEPA. Comprobante PAG-2026-0001 verificado.",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "estado_anterior": "primer_pago_pendiente",
+          "estado_nuevo": "primer_pago_confirmado",
+          "notas": null
+        },
+        {
+          "fecha": "2026-05-28T11:00:00Z",
+          "accion": "Operativa activada. Contactados todos los proveedores. Hotel Meliá Sevilla confirma disponibilidad. Transportes Al-Andalus pendiente de confirmar bus adaptado.",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "estado_anterior": "primer_pago_confirmado",
+          "estado_nuevo": "en_operacion",
+          "notas": null
+        },
+        {
+          "fecha": "2026-06-01T10:00:00Z",
+          "accion": "Hotel Meliá Sevilla confirma reserva con localizador SVQ-MEL-2026-4471. 11 habitaciones dobles confirmadas. Verificadas 2 habitaciones accesibles.",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "estado_anterior": "en_operacion",
+          "estado_nuevo": "en_operacion",
+          "notas": "Pendiente confirmación transporte para completar estado proveedores_confirmados."
+        },
+        {
+          "fecha": "2026-06-05T16:00:00Z",
+          "accion": "Tour leader Yusuf Morales asignado y confirmado. Transportes Al-Andalus aún sin responder sobre bus adaptado. Plazo dado: 2026-06-15.",
+          "realizado_por": "Abdulah Jiménez Contreras",
+          "estado_anterior": "en_operacion",
+          "estado_nuevo": "en_operacion",
+          "notas": "Si no responden antes del 15, buscar alternativa de transporte adaptado."
+        }
+      ]
+    }
+  ]
+}
