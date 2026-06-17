@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """
-Lee atlas_imagenes_resultado.json (generado por subir_atlas_a_cloudinary.py)
-e inserta los secure_url en el campo `img` de ATLAS_FALLBACK dentro de index.html.
+Lee atlas_imagenes_resultado.json (salida de subir_atlas_a_cloudinary.py)
+e inserta los campos `img` en ATLAS_FALLBACK dentro de index.html.
+
+USO:
+    python3 insertar_imgs_en_atlas.py
+
+Modifica SOLO index.html (campo `img` dentro de ATLAS_FALLBACK).
+NO hace commit, NO publica, NO toca producción.
 
 USO:
     python3 insertar_imgs_en_atlas.py
