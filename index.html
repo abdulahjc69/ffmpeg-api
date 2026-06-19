@@ -6897,6 +6897,399 @@ const POIS = {
   ]
 };
 
+const POI_GALLERIES = {
+  'Mezquita-catedral_de_Córdoba': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Mosque_Cathedral_of_Cordoba.jpg/800px-Mosque_Cathedral_of_Cordoba.jpg', caption: 'Vista exterior de la Mezquita-Catedral', caption_en: 'Exterior view of the Mosque-Cathedral' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Mezquita_de_Cordoba_-_Hypostyle_hall.jpg/800px-Mezquita_de_Cordoba_-_Hypostyle_hall.jpg', caption: 'Bosque de columnas bicolores', caption_en: 'Hypostyle hall with bicolor arches' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Cordoba_Mosque_(3769700946).jpg/800px-Cordoba_Mosque_(3769700946).jpg', caption: 'Arcos de herradura nazaríes', caption_en: 'Horseshoe arches inside' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Mezquita-Catedral_de_Córdoba_-_Interior_(3).jpg/800px-Mezquita-Catedral_de_Córdoba_-_Interior_(3).jpg', caption: 'Interior de la nave central', caption_en: 'Central nave interior' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Cordoba_mezquita_bn_retouched.jpg/800px-Cordoba_mezquita_bn_retouched.jpg', caption: 'Arcos dobles en blanco y negro', caption_en: 'Double arches in black and white' },
+  ],
+  'Medina_Azahara': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Medina_Azahara_Salón_rico_2.jpg/800px-Medina_Azahara_Salón_rico_2.jpg', caption: 'Salón del Trono restaurado', caption_en: 'Restored Throne Room' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Medina_Azahara_-_panoramio_(1).jpg/800px-Medina_Azahara_-_panoramio_(1).jpg', caption: 'Ruinas del palacio califal', caption_en: 'Ruins of the caliphal palace' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Medina_Azahara_-_panoramio_(2).jpg/800px-Medina_Azahara_-_panoramio_(2).jpg', caption: 'Patios y jardines del yacimiento', caption_en: 'Courtyards and gardens' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Medina_Azahara_Gate.jpg/800px-Medina_Azahara_Gate.jpg', caption: 'Puerta principal de acceso', caption_en: 'Main entrance gate' },
+  ],
+  'Calleja_de_las_Flores': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Calleja_de_las_Flores_(Córdoba).jpg/800px-Calleja_de_las_Flores_(Córdoba).jpg', caption: 'Callejón con geranios y la Mezquita al fondo', caption_en: 'Alley with geraniums and Mosque in background' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Calleja_de_las_flores_Cordoba.jpg/800px-Calleja_de_las_flores_Cordoba.jpg', caption: 'Fachadas encaladas y flores', caption_en: 'Whitewashed facades and flowers' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Calle_de_la_Flor_Cordoba.jpg/800px-Calle_de_la_Flor_Cordoba.jpg', caption: 'Rincón típico cordobés', caption_en: 'Typical Córdoba corner' },
+  ],
+  'Puente_romano_de_Córdoba': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Puente_Romano_-_Córdoba_(2).jpg/800px-Puente_Romano_-_Córdoba_(2).jpg', caption: 'Puente romano al atardecer con la Mezquita', caption_en: 'Roman bridge at sunset with the Mosque' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cordoba_Roman_Bridge_2015_01.jpg/800px-Cordoba_Roman_Bridge_2015_01.jpg', caption: 'Vista desde la orilla del Guadalquivir', caption_en: 'View from the Guadalquivir bank' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Puente_romano_Cordoba.jpg/800px-Puente_romano_Cordoba.jpg', caption: 'Arcos del puente y torre Calahorra', caption_en: 'Bridge arches and Calahorra tower' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Torre_Calahorra_y_Puente_Romano_Cordoba.jpg/800px-Torre_Calahorra_y_Puente_Romano_Cordoba.jpg', caption: 'Torre de la Calahorra al fondo', caption_en: 'Calahorra tower in background' },
+  ],
+  'Sinagoga_de_Córdoba': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Cordoba_Synagogue.jpg/800px-Cordoba_Synagogue.jpg', caption: 'Interior de la sinagoga medieval', caption_en: 'Interior of the medieval synagogue' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Sinagoga_Cordoba_2.jpg/800px-Sinagoga_Cordoba_2.jpg', caption: 'Yeserías mudéjares e inscripciones hebreas', caption_en: 'Mudéjar plasterwork and Hebrew inscriptions' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Sinagoga_de_Cordoba_interior.jpg/800px-Sinagoga_de_Cordoba_interior.jpg', caption: 'Detalles de la decoración nazarí', caption_en: 'Details of Nasrid decoration' },
+  ],
+  'Alcázar_de_los_Reyes_Cristianos_de_Córdoba': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Alcazar_de_Cordoba_jardines.jpg/800px-Alcazar_de_Cordoba_jardines.jpg', caption: 'Jardines del Alcázar con fuentes', caption_en: 'Alcázar gardens with fountains' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Alcazar_reyes_cristianos_cordoba.jpg/800px-Alcazar_reyes_cristianos_cordoba.jpg', caption: 'Torres y murallas del Alcázar', caption_en: 'Towers and walls of the Alcázar' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Alcazardelosreyescristianos.jpg/800px-Alcazardelosreyescristianos.jpg', caption: 'Vista aérea del palacio', caption_en: 'Aerial view of the palace' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Cordoba_Alcazar_gardens.jpg/800px-Cordoba_Alcazar_gardens.jpg', caption: 'Estanque y cipreses en los jardines', caption_en: 'Pond and cypress trees in gardens' },
+  ],
+  'Torre_de_la_Calahorra': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Torre_Calahorra_Córdoba.jpg/800px-Torre_Calahorra_Córdoba.jpg', caption: 'Torre de la Calahorra desde el puente', caption_en: 'Calahorra tower from the bridge' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Torre_de_la_Calahorra_Cordoba.jpg/800px-Torre_de_la_Calahorra_Cordoba.jpg', caption: 'Fortaleza almohade del siglo XII', caption_en: '12th-century Almohad fortress' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Cordoba_torre_calahorra.jpg/800px-Cordoba_torre_calahorra.jpg', caption: 'Vista nocturna de la torre', caption_en: 'Nighttime view of the tower' },
+  ],
+  'Palacio_de_Viana': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Palacio_de_Viana_(Córdoba)_-_Patio_de_la_Capilla.jpg/800px-Palacio_de_Viana_(Córdoba)_-_Patio_de_la_Capilla.jpg', caption: 'Patio de la Capilla con fuente', caption_en: 'Chapel Courtyard with fountain' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Palacio_de_Viana_-_Patio_del_Naranjo.jpg/800px-Palacio_de_Viana_-_Patio_del_Naranjo.jpg', caption: 'Patio de los Naranjos en flor', caption_en: 'Orange tree courtyard in bloom' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Viana_Palace_Cordoba.jpg/800px-Viana_Palace_Cordoba.jpg', caption: 'Fachada renacentista del palacio', caption_en: 'Renaissance facade of the palace' },
+  ],
+  'Plaza_de_la_Corredera': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Plaza_de_la_Corredera_(Córdoba).jpg/800px-Plaza_de_la_Corredera_(Córdoba).jpg', caption: 'Pórticos y balcones de la plaza mayor', caption_en: 'Arcades and balconies of the main square' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Plaza_Corredera_Cordoba.jpg/800px-Plaza_Corredera_Cordoba.jpg', caption: 'Mercado matinal en la plaza', caption_en: 'Morning market in the square' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Corredera_square_Cordoba.jpg/800px-Corredera_square_Cordoba.jpg', caption: 'Vista general de la única plaza mayor andaluza', caption_en: 'General view of the only Andalusian main square' },
+  ],
+  'Baños_del_Alcázar_Califal': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Banos_del_alcazar_califal_cordoba.jpg/800px-Banos_del_alcazar_califal_cordoba.jpg', caption: 'Bóvedas estrelladas de los baños califales', caption_en: 'Star-vaulted ceilings of the caliphal baths' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Hammam_califal_cordoba.jpg/800px-Hammam_califal_cordoba.jpg', caption: 'Interior de las termas árabes', caption_en: 'Interior of the Arab baths' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Alcazar_califal_banos_Cordoba.jpg/800px-Alcazar_califal_banos_Cordoba.jpg', caption: 'Sala fría de los baños', caption_en: 'Cold room of the baths' },
+  ],
+  'Giralda': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Giralda_Sevilla.jpg/800px-Giralda_Sevilla.jpg', caption: 'La Giralda vista desde la calle', caption_en: 'The Giralda seen from the street' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Giralda_Sevilla_2.jpg/800px-Giralda_Sevilla_2.jpg', caption: 'Torre almohade con campanario cristiano', caption_en: 'Almohad tower with Christian belfry' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Seville_-_La_Giralda.jpg/800px-Seville_-_La_Giralda.jpg', caption: 'Rampas interiores de la Giralda', caption_en: 'Interior ramps of the Giralda' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Giralda_close_up.jpg/800px-Giralda_close_up.jpg', caption: 'Detalles en sebka del cuerpo almohade', caption_en: 'Sebka lattice details of the Almohad body' },
+  ],
+  'Catedral_de_Sevilla': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Seville_Cathedral.jpg/800px-Seville_Cathedral.jpg', caption: 'Catedral de Sevilla, la más grande del gótico', caption_en: 'Seville Cathedral, the largest Gothic' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Seville_Cathedral_interior.jpg/800px-Seville_Cathedral_interior.jpg', caption: 'Interior de la nave central', caption_en: 'Interior of the central nave' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Cathedral_of_Seville_-_Retablo_Mayor.jpg/800px-Cathedral_of_Seville_-_Retablo_Mayor.jpg', caption: 'Retablo mayor dorado', caption_en: 'Golden main altarpiece' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sepulcro_de_Cristóbal_Colón_(Sevilla).jpg/800px-Sepulcro_de_Cristóbal_Colón_(Sevilla).jpg', caption: 'Sepulcro de Cristóbal Colón', caption_en: 'Tomb of Christopher Columbus' },
+  ],
+  'Real_Alcázar_de_Sevilla': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Real_Alcazar_of_Seville_-_Patio_de_las_Doncellas.jpg/800px-Real_Alcazar_of_Seville_-_Patio_de_las_Doncellas.jpg', caption: 'Patio de las Doncellas con reflejos en el agua', caption_en: 'Patio de las Doncellas with water reflections' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Salon_de_los_Embajadores_Sevilla.jpg/800px-Salon_de_los_Embajadores_Sevilla.jpg', caption: 'Salón de los Embajadores con cúpula dorada', caption_en: 'Hall of the Ambassadors with golden dome' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Real_Alcazar_Sevilla_gardens.jpg/800px-Real_Alcazar_Sevilla_gardens.jpg', caption: 'Jardines del Alcázar con fuentes', caption_en: 'Alcázar gardens with fountains' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Seville_Alcazar_palace.jpg/800px-Seville_Alcazar_palace.jpg', caption: 'Fachada mudéjar del palacio', caption_en: 'Mudéjar facade of the palace' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Alcazar_de_Sevilla_portada.jpg/800px-Alcazar_de_Sevilla_portada.jpg', caption: 'Portada principal del Alcázar', caption_en: 'Main entrance of the Alcázar' },
+  ],
+  'Torre_del_Oro': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Torre_del_Oro_-_Sevilla.jpg/800px-Torre_del_Oro_-_Sevilla.jpg', caption: 'Torre del Oro junto al Guadalquivir', caption_en: 'Torre del Oro beside the Guadalquivir' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Torre_del_Oro_Seville.jpg/800px-Torre_del_Oro_Seville.jpg', caption: 'Torre almohade del siglo XIII', caption_en: '13th-century Almohad tower' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Torre_del_Oro_Sevilla_noche.jpg/800px-Torre_del_Oro_Sevilla_noche.jpg', caption: 'La Torre del Oro iluminada de noche', caption_en: 'Torre del Oro illuminated at night' },
+  ],
+  'Plaza_de_España_(Sevilla)': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Plaza_de_España_-_Sevilla_(1).jpg/800px-Plaza_de_España_-_Sevilla_(1).jpg', caption: 'Hemiciclo completo de la Plaza de España', caption_en: 'Full semicircle of Plaza de España' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Plaza_de_España_Sevilla_canales.jpg/800px-Plaza_de_España_Sevilla_canales.jpg', caption: 'Canal con barcas y azulejos', caption_en: 'Canal with boats and tiles' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Plaza_de_España_azulejos.jpg/800px-Plaza_de_España_azulejos.jpg', caption: 'Bancos azulejados con escudos provinciales', caption_en: 'Tiled benches with provincial shields' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Plaza_Espana_Seville_sunset.jpg/800px-Plaza_Espana_Seville_sunset.jpg', caption: 'Atardecer dorado en la plaza', caption_en: 'Golden sunset at the square' },
+  ],
+  'Triana_(Sevilla)': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Puente_de_Triana_Sevilla.jpg/800px-Puente_de_Triana_Sevilla.jpg', caption: 'Puente de Triana sobre el Guadalquivir', caption_en: 'Triana bridge over the Guadalquivir' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Triana_Sevilla_calle_Betis.jpg/800px-Triana_Sevilla_calle_Betis.jpg', caption: 'Calle Betis con vistas a la Torre del Oro', caption_en: 'Betis street with views of Torre del Oro' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Triana_ceramics_Sevilla.jpg/800px-Triana_ceramics_Sevilla.jpg', caption: 'Cerámica tradicional del barrio de Triana', caption_en: 'Traditional ceramics from Triana' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Mercado_de_Triana.jpg/800px-Mercado_de_Triana.jpg', caption: 'Mercado de Triana en el antiguo castillo', caption_en: 'Triana market in the old castle' },
+  ],
+  'Casa_de_Pilatos': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Casa_de_Pilatos_Sevilla_patio.jpg/800px-Casa_de_Pilatos_Sevilla_patio.jpg', caption: 'Patio principal con fuente renacentista', caption_en: 'Main courtyard with Renaissance fountain' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Casa_Pilatos_Seville.jpg/800px-Casa_Pilatos_Seville.jpg', caption: 'Arcos mudéjares y azulejos', caption_en: 'Mudéjar arches and tiles' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Casa_de_Pilatos_Sevilla_2.jpg/800px-Casa_de_Pilatos_Sevilla_2.jpg', caption: 'Galería alta del palacio', caption_en: 'Upper gallery of the palace' },
+  ],
+  'Metropol_Parasol': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Metropol_Parasol_Sevilla.jpg/800px-Metropol_Parasol_Sevilla.jpg', caption: 'Las Setas desde la plaza de la Encarnación', caption_en: 'Las Setas from Plaza de la Encarnación' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Metropol_Parasol_interior.jpg/800px-Metropol_Parasol_interior.jpg', caption: 'Estructura de madera desde el interior', caption_en: 'Wooden structure from inside' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Metropol_Parasol_pasarela.jpg/800px-Metropol_Parasol_pasarela.jpg', caption: 'Pasarela superior con vistas a Sevilla', caption_en: 'Upper walkway with views over Seville' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Metropol_Parasol_night.jpg/800px-Metropol_Parasol_night.jpg', caption: 'Las Setas iluminadas de noche', caption_en: 'Las Setas illuminated at night' },
+  ],
+  'Archivo_General_de_Indias': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Archivo_de_Indias_Sevilla.jpg/800px-Archivo_de_Indias_Sevilla.jpg', caption: 'Fachada renacentista del Archivo de Indias', caption_en: 'Renaissance facade of the Archive of the Indies' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Archivo_General_de_Indias_interior.jpg/800px-Archivo_General_de_Indias_interior.jpg', caption: 'Galerías con legajos históricos', caption_en: 'Galleries with historical documents' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Archivo_Indias_patio.jpg/800px-Archivo_Indias_patio.jpg', caption: 'Patio interior del edificio', caption_en: 'Interior courtyard of the building' },
+  ],
+  'Barrio_de_Santa_Cruz_(Sevilla)': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Barrio_Santa_Cruz_Sevilla.jpg/800px-Barrio_Santa_Cruz_Sevilla.jpg', caption: 'Callejón encalado del barrio judío', caption_en: 'Whitewashed alley in the Jewish quarter' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Santa_Cruz_Sevilla_naranjos.jpg/800px-Santa_Cruz_Sevilla_naranjos.jpg', caption: 'Patio con naranjos y fuente', caption_en: 'Courtyard with orange trees and fountain' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Barrio_de_Santa_Cruz_Sevilla_2.jpg/800px-Barrio_de_Santa_Cruz_Sevilla_2.jpg', caption: 'Rejas con flores y fachadas blancas', caption_en: 'Grilled windows with flowers and white walls' },
+  ],
+  'Alhambra': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/La_Alhambra_granada.jpg/800px-La_Alhambra_granada.jpg', caption: 'La Alhambra con Sierra Nevada al fondo', caption_en: 'The Alhambra with Sierra Nevada in background' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Alhambra_-_Palacios_nazaries.jpg/800px-Alhambra_-_Palacios_nazaries.jpg', caption: 'Palacios nazaríes de la Alhambra', caption_en: 'Nasrid Palaces of the Alhambra' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Alhambra_interior_Patio_de_los_Arrayanes.jpg/800px-Alhambra_interior_Patio_de_los_Arrayanes.jpg', caption: 'Patio de los Arrayanes con estanque', caption_en: 'Arrayanes courtyard with pond' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Granada_Alhambra_November_2015_007.jpg/800px-Granada_Alhambra_November_2015_007.jpg', caption: 'Torres y murallas rojas de la Alhambra', caption_en: 'Red towers and walls of the Alhambra' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Alhambra_night.jpg/800px-Alhambra_night.jpg', caption: 'La Alhambra iluminada de noche', caption_en: 'The Alhambra illuminated at night' },
+  ],
+  'Patio_de_los_Leones': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Patio_de_los_leones.jpg/800px-Patio_de_los_leones.jpg', caption: 'Los doce leones de mármol en la fuente', caption_en: 'The twelve marble lions of the fountain' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Patio_de_los_Leones_Alhambra.jpg/800px-Patio_de_los_Leones_Alhambra.jpg', caption: 'Arquería del patio con mocárabes', caption_en: 'Courtyard arcade with muqarnas' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Leones_alhambra.jpg/800px-Leones_alhambra.jpg', caption: 'Detalle de los leones de mármol', caption_en: 'Detail of the marble lions' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Patio_de_los_leones_2018.jpg/800px-Patio_de_los_leones_2018.jpg', caption: 'Vista cenital del patio restaurado', caption_en: 'Overhead view of the restored courtyard' },
+  ],
+  'Generalife': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Generalife_gardens_granada.jpg/800px-Generalife_gardens_granada.jpg', caption: 'Jardines del Generalife con cipreses', caption_en: 'Generalife gardens with cypress trees' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Acequia_Court_Generalife_granada.jpg/800px-Acequia_Court_Generalife_granada.jpg', caption: 'Patio de la Acequia con surtidores', caption_en: 'Acequia courtyard with water jets' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Generalife_Granada_2.jpg/800px-Generalife_Granada_2.jpg', caption: 'Vista de la Alhambra desde el Generalife', caption_en: 'View of the Alhambra from Generalife' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Generalife_patio_flores.jpg/800px-Generalife_patio_flores.jpg', caption: 'Jardín de la sultana en primavera', caption_en: "Sultan's garden in spring" },
+  ],
+  'Albaicín': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Albaicin_Granada.jpg/800px-Albaicin_Granada.jpg', caption: 'Barrio del Albaicín con la Alhambra al fondo', caption_en: 'Albaicín neighborhood with Alhambra in background' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Albaicín_calles.jpg/800px-Albaicín_calles.jpg', caption: 'Calles empedradas del barrio morisco', caption_en: 'Cobblestone streets of the Moorish quarter' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Granada_Albaicin_panorama.jpg/800px-Granada_Albaicin_panorama.jpg', caption: 'Panorámica del Albaicín desde el aire', caption_en: 'Panoramic view of the Albaicín from above' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Albaicin_night_granada.jpg/800px-Albaicin_night_granada.jpg', caption: 'El Albaicín de noche con la Alhambra', caption_en: 'The Albaicín at night with the Alhambra' },
+  ],
+  'Sacromonte': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Sacromonte_Granada.jpg/800px-Sacromonte_Granada.jpg', caption: 'Cuevas del Sacromonte en la ladera', caption_en: 'Sacromonte caves on the hillside' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Sacromonte_cuevas.jpg/800px-Sacromonte_cuevas.jpg', caption: 'Entrada a una cueva gitana decorada', caption_en: 'Entrance to a decorated gypsy cave' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Sacromonte_panorama.jpg/800px-Sacromonte_panorama.jpg', caption: 'Vista del Sacromonte y el Darro', caption_en: 'View of Sacromonte and the Darro river' },
+  ],
+  'Mirador_de_San_Nicolás': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Mirador_San_Nicolas_Granada.jpg/800px-Mirador_San_Nicolas_Granada.jpg', caption: 'La Alhambra desde el mirador de San Nicolás', caption_en: 'The Alhambra from San Nicolás viewpoint' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/San_Nicolas_mirador_sunset.jpg/800px-San_Nicolas_mirador_sunset.jpg', caption: 'Atardecer con Sierra Nevada nevada', caption_en: 'Sunset with snowy Sierra Nevada' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Mirador_de_San_Nicolas_turistas.jpg/800px-Mirador_de_San_Nicolas_turistas.jpg', caption: 'El mirador más famoso de Granada', caption_en: 'The most famous viewpoint in Granada' },
+  ],
+  'Madraza_de_Granada': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Madraza_de_Granada.jpg/800px-Madraza_de_Granada.jpg', caption: 'Fachada exterior de la madraza nazarí', caption_en: 'Exterior facade of the Nasrid madrasa' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Madraza_interior_Granada.jpg/800px-Madraza_interior_Granada.jpg', caption: 'Interior del oratorio con mihrab', caption_en: 'Interior of the oratory with mihrab' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Madraza_Granada_detalle.jpg/800px-Madraza_Granada_detalle.jpg', caption: 'Yeserías policromadas del siglo XIV', caption_en: 'Polychrome plasterwork from the 14th century' },
+  ],
+  'Capilla_Real_de_Granada': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Capilla_Real_Granada.jpg/800px-Capilla_Real_Granada.jpg', caption: 'Fachada gótica de la Capilla Real', caption_en: 'Gothic facade of the Royal Chapel' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Capilla_Real_interior_Granada.jpg/800px-Capilla_Real_interior_Granada.jpg', caption: 'Interior con el sepulcro de los Reyes Católicos', caption_en: 'Interior with the tomb of the Catholic Monarchs' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Capilla_Real_rejas.jpg/800px-Capilla_Real_rejas.jpg', caption: 'Reja plateresca que separa el presbiterio', caption_en: 'Plateresque grill separating the presbytery' },
+  ],
+  'Catedral_de_Granada': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Catedral_de_Granada.jpg/800px-Catedral_de_Granada.jpg', caption: 'Fachada renacentista de la Catedral de Granada', caption_en: 'Renaissance facade of Granada Cathedral' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Catedral_Granada_interior.jpg/800px-Catedral_Granada_interior.jpg', caption: 'Interior de la rotonda renacentista', caption_en: 'Interior of the Renaissance rotunda' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Catedral_Granada_2.jpg/800px-Catedral_Granada_2.jpg', caption: 'Capilla Mayor con retablo dorado', caption_en: 'Main chapel with golden altarpiece' },
+  ],
+  'Monasterio_de_la_Cartuja_de_Granada': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Cartuja_Granada_sacristia.jpg/800px-Cartuja_Granada_sacristia.jpg', caption: 'Sacristía de la Cartuja, barroco extremo', caption_en: 'Cartuja sacristy, extreme Baroque' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Cartuja_de_Granada.jpg/800px-Cartuja_de_Granada.jpg', caption: 'Fachada e iglesia del monasterio', caption_en: 'Monastery facade and church' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Cartuja_interior_Granada.jpg/800px-Cartuja_interior_Granada.jpg', caption: 'Interior churrigueresco de la iglesia', caption_en: 'Churrigueresque interior of the church' },
+  ],
+  'Corral_del_Carbón': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Corral_del_Carbon_Granada.jpg/800px-Corral_del_Carbon_Granada.jpg', caption: 'Arco de entrada nazarí del Corral del Carbón', caption_en: 'Nasrid entrance arch of the Corral del Carbón' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Corral_del_Carbon_patio.jpg/800px-Corral_del_Carbon_patio.jpg', caption: 'Patio interior de la alhóndiga nazarí', caption_en: 'Inner courtyard of the Nasrid alhóndiga' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Corral_Carbon_Granada_2.jpg/800px-Corral_Carbon_Granada_2.jpg', caption: 'Galerías de madera del siglo XIV', caption_en: '14th-century wooden galleries' },
+  ],
+  'Puente_Nuevo_de_Ronda': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Puente_Nuevo_de_Ronda.jpg/800px-Puente_Nuevo_de_Ronda.jpg', caption: 'Puente Nuevo sobre el Tajo de Ronda', caption_en: 'Puente Nuevo over the Ronda Gorge' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Ronda_Puente_Nuevo_2.jpg/800px-Ronda_Puente_Nuevo_2.jpg', caption: 'El Tajo a 100 metros bajo el puente', caption_en: 'The gorge 100 meters below the bridge' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Puente_nuevo_Ronda_atardecer.jpg/800px-Puente_nuevo_Ronda_atardecer.jpg', caption: 'El puente iluminado al atardecer', caption_en: 'The bridge illuminated at sunset' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Ronda_panorama.jpg/800px-Ronda_panorama.jpg', caption: 'Panorámica de Ronda con el Tajo', caption_en: 'Panoramic view of Ronda with the gorge' },
+  ],
+  'Plaza_de_toros_de_Ronda': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Plaza_de_toros_de_Ronda.jpg/800px-Plaza_de_toros_de_Ronda.jpg', caption: 'La plaza de toros más antigua de España', caption_en: "Spain's oldest bullring" },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Ronda_bullring_interior.jpg/800px-Ronda_bullring_interior.jpg', caption: 'Interior del ruedo de Ronda (1785)', caption_en: 'Interior of the Ronda bullring (1785)' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Plaza_Toros_Ronda_2.jpg/800px-Plaza_Toros_Ronda_2.jpg', caption: 'Arcos del patio de cuadrillas', caption_en: 'Arches of the bullring courtyard' },
+  ],
+  'Baños_árabes_de_Ronda': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Banos_arabes_Ronda.jpg/800px-Banos_arabes_Ronda.jpg', caption: 'Bóvedas estrelladas de los baños árabes', caption_en: 'Star-vaulted ceilings of the Arab baths' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Ronda_hamman_interior.jpg/800px-Ronda_hamman_interior.jpg', caption: 'Sala templada de los baños nazaríes', caption_en: 'Warm room of the Nasrid baths' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Banos_arabes_Ronda_2.jpg/800px-Banos_arabes_Ronda_2.jpg', caption: 'Los mejor conservados de la península', caption_en: 'Best preserved baths in the Iberian Peninsula' },
+  ],
+  'Casa_del_Rey_Moro': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Casa_del_Rey_Moro_Ronda.jpg/800px-Casa_del_Rey_Moro_Ronda.jpg', caption: 'Jardines de la Casa del Rey Moro', caption_en: 'Gardens of the Casa del Rey Moro' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Casa_Rey_Moro_mina.jpg/800px-Casa_Rey_Moro_mina.jpg', caption: 'Mina de agua que baja al Tajo', caption_en: 'Water mine descending to the gorge' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Casa_del_Rey_Moro_fachada.jpg/800px-Casa_del_Rey_Moro_fachada.jpg', caption: 'Fachada del palacio nazarí', caption_en: 'Facade of the Nasrid palace' },
+  ],
+  'Tajo_de_Ronda': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Tajo_de_Ronda.jpg/800px-Tajo_de_Ronda.jpg', caption: 'El Tajo de Ronda, grieta natural de 100 metros', caption_en: 'Ronda Gorge, 100-meter natural cleft' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Ronda_tajo_panorama.jpg/800px-Ronda_tajo_panorama.jpg', caption: 'Vista del Tajo desde el mirador', caption_en: 'View of the gorge from the viewpoint' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Tajo_ronda_desde_abajo.jpg/800px-Tajo_ronda_desde_abajo.jpg', caption: 'El río Guadalevín en el fondo del Tajo', caption_en: 'The Guadalevín river at the bottom of the gorge' },
+  ],
+  'Iglesia_de_Santa_María_la_Mayor_(Ronda)': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Iglesia_Santa_Maria_Mayor_Ronda.jpg/800px-Iglesia_Santa_Maria_Mayor_Ronda.jpg', caption: 'Iglesia de Santa María la Mayor en Ronda', caption_en: 'Church of Santa María la Mayor in Ronda' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Santa_Maria_Ronda_interior.jpg/800px-Santa_Maria_Ronda_interior.jpg', caption: 'Interior con el mihrab musulmán conservado', caption_en: 'Interior with the preserved Muslim mihrab' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Santa_Maria_la_Mayor_Ronda_2.jpg/800px-Santa_Maria_la_Mayor_Ronda_2.jpg', caption: 'Torre campanario de la iglesia', caption_en: 'Bell tower of the church' },
+  ],
+  'Palacio_de_Mondragón': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Palacio_Mondragon_Ronda.jpg/800px-Palacio_Mondragon_Ronda.jpg', caption: 'Patio mudéjar del Palacio de Mondragón', caption_en: 'Mudéjar courtyard of Palacio de Mondragón' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Mondragon_palace_Ronda.jpg/800px-Mondragon_palace_Ronda.jpg', caption: 'Jardines colgantes con vistas a la sierra', caption_en: 'Hanging gardens with mountain views' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Palacio_Mondragon_fachada.jpg/800px-Palacio_Mondragon_fachada.jpg', caption: 'Fachada renacentista del palacio nazarí', caption_en: 'Renaissance facade of the Nasrid palace' },
+  ],
+  'Alcazaba_de_Málaga': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Alcazaba_de_Málaga.jpg/800px-Alcazaba_de_Málaga.jpg', caption: 'La Alcazaba de Málaga sobre la ciudad', caption_en: 'The Alcazaba of Málaga above the city' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Alcazaba_Malaga_interior.jpg/800px-Alcazaba_Malaga_interior.jpg', caption: 'Patios y jardines interiores de la Alcazaba', caption_en: 'Inner courtyards and gardens of the Alcazaba' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Alcazaba_Malaga_2.jpg/800px-Alcazaba_Malaga_2.jpg', caption: 'Torres defensivas de la fortaleza nazarí', caption_en: 'Defensive towers of the Nasrid fortress' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Alcazaba_Malaga_patio.jpg/800px-Alcazaba_Malaga_patio.jpg', caption: 'Patio de los Naranjos de la Alcazaba', caption_en: 'Orange tree courtyard of the Alcazaba' },
+  ],
+  'Castillo_de_Gibralfaro': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Castillo_de_Gibralfaro_Malaga.jpg/800px-Castillo_de_Gibralfaro_Malaga.jpg', caption: 'Castillo de Gibralfaro desde el mar', caption_en: 'Castillo de Gibralfaro from the sea' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Gibralfaro_castle_Malaga_2.jpg/800px-Gibralfaro_castle_Malaga_2.jpg', caption: 'Murallas del castillo y la bahía de Málaga', caption_en: 'Castle walls and bay of Málaga' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Gibralfaro_Malaga_panorama.jpg/800px-Gibralfaro_Malaga_panorama.jpg', caption: 'Panorámica de la Costa del Sol desde Gibralfaro', caption_en: 'Panoramic view of the Costa del Sol from Gibralfaro' },
+  ],
+  'Catedral_de_la_Encarnación_de_Málaga': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Catedral_Malaga.jpg/800px-Catedral_Malaga.jpg', caption: 'La Manquita de Málaga con su torre incompleta', caption_en: 'La Manquita of Málaga with its incomplete tower' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Catedral_Malaga_interior.jpg/800px-Catedral_Malaga_interior.jpg', caption: 'Interior renacentista de la catedral', caption_en: 'Renaissance interior of the cathedral' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Catedral_Malaga_2.jpg/800px-Catedral_Malaga_2.jpg', caption: 'Nave central de la catedral de Málaga', caption_en: 'Central nave of Málaga Cathedral' },
+  ],
+  'Museo_Picasso_Málaga': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Museo_Picasso_Malaga.jpg/800px-Museo_Picasso_Malaga.jpg', caption: 'Palacio de Buenavista, sede del Museo Picasso', caption_en: 'Palacio de Buenavista, home of Picasso Museum' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Museo_Picasso_Malaga_exterior.jpg/800px-Museo_Picasso_Malaga_exterior.jpg', caption: 'Fachada renacentista con yacimiento fenicio', caption_en: 'Renaissance facade with Phoenician archaeological site' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Museo_Picasso_interior.jpg/800px-Museo_Picasso_interior.jpg', caption: 'Obras de Picasso en el palacio del siglo XVI', caption_en: 'Picasso works in the 16th-century palace' },
+  ],
+  'Teatro_romano_de_Málaga': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Teatro_romano_Malaga.jpg/800px-Teatro_romano_Malaga.jpg', caption: 'Teatro romano del siglo I a.C. en Málaga', caption_en: '1st-century BC Roman theatre in Málaga' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Teatro_romano_Malaga_2.jpg/800px-Teatro_romano_Malaga_2.jpg', caption: 'Gradas romanas al pie de la Alcazaba', caption_en: 'Roman seating at the foot of the Alcazaba' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Teatro_Romano_Malaga_vista.jpg/800px-Teatro_Romano_Malaga_vista.jpg', caption: 'Vista del teatro y la Alcazaba superpuesta', caption_en: 'View of theatre with Alcazaba superimposed' },
+  ],
+  'Centre_Pompidou_Málaga': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Centre_Pompidou_Malaga.jpg/800px-Centre_Pompidou_Malaga.jpg', caption: 'Cubo multicolor del Centre Pompidou en el puerto', caption_en: 'Multicolor cube of Centre Pompidou at the port' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Pompidou_Malaga_interior.jpg/800px-Pompidou_Malaga_interior.jpg', caption: 'Arte contemporáneo en primera línea de mar', caption_en: 'Contemporary art on the seafront' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Centre_Pompidou_Malaga_2.jpg/800px-Centre_Pompidou_Malaga_2.jpg', caption: 'El cubo de colores desde el paseo marítimo', caption_en: 'The color cube from the seafront promenade' },
+  ],
+  'Mercado_de_Atarazanas': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Mercado_Atarazanas_Malaga.jpg/800px-Mercado_Atarazanas_Malaga.jpg', caption: 'Puerta nazarí del antiguo arsenal', caption_en: 'Nasrid gate of the former arsenal' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Atarazanas_interior_Malaga.jpg/800px-Atarazanas_interior_Malaga.jpg', caption: 'Interior del mercado con la vidriera', caption_en: 'Market interior with the stained-glass window' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Mercado_Atarazanas_vidriera.jpg/800px-Mercado_Atarazanas_vidriera.jpg', caption: 'Gran vidriera con vistas a Málaga', caption_en: 'Large stained-glass window with views of Málaga' },
+  ],
+  'Casa_Natal_de_Pablo_Picasso': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Casa_Natal_Picasso_Malaga.jpg/800px-Casa_Natal_Picasso_Malaga.jpg', caption: 'Casa natal de Pablo Picasso en la Plaza de la Merced', caption_en: 'Birthplace of Pablo Picasso on Plaza de la Merced' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Picasso_birthplace_Malaga.jpg/800px-Picasso_birthplace_Malaga.jpg', caption: 'Interior del apartamento familiar', caption_en: 'Interior of the family apartment' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Casa_Picasso_museo.jpg/800px-Casa_Picasso_museo.jpg', caption: 'Exposición con los primeros dibujos de Picasso', caption_en: "Exhibition with Picasso's first drawings" },
+  ],
+  'Catedral_de_Santa_María_de_Toledo': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Cathedral_Toledo.jpg/800px-Cathedral_Toledo.jpg', caption: 'Fachada oeste de la Catedral de Toledo', caption_en: 'West facade of Toledo Cathedral' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Toledo_Cathedral_interior.jpg/800px-Toledo_Cathedral_interior.jpg', caption: 'Interior del coro con sillería gótica', caption_en: 'Interior choir with Gothic stalls' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Catedral_Toledo_transparente.jpg/800px-Catedral_Toledo_transparente.jpg', caption: 'El Transparente barroco de la catedral', caption_en: 'The Baroque Transparente of the cathedral' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Toledo_cathedral_nave.jpg/800px-Toledo_cathedral_nave.jpg', caption: 'Nave central del gótico hispánico', caption_en: 'Central nave of Hispanic Gothic' },
+  ],
+  'Sinagoga_de_Santa_María_la_Blanca': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Sinagoga_Santa_Maria_Blanca_Toledo.jpg/800px-Sinagoga_Santa_Maria_Blanca_Toledo.jpg', caption: 'Interior de Santa María la Blanca con capiteles', caption_en: 'Interior of Santa María la Blanca with capitals' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Santa_Maria_Blanca_Toledo.jpg/800px-Santa_Maria_Blanca_Toledo.jpg', caption: 'Columnas y arcos de herradura mudéjares', caption_en: 'Columns and horseshoe arches in Mudéjar style' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Sinagoga_Blanca_Toledo.jpg/800px-Sinagoga_Blanca_Toledo.jpg', caption: 'Exterior de la antigua sinagoga medieval', caption_en: 'Exterior of the former medieval synagogue' },
+  ],
+  'Sinagoga_del_Tránsito': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Sinagoga_del_Transito_Toledo.jpg/800px-Sinagoga_del_Transito_Toledo.jpg', caption: 'Interior de la Sinagoga del Tránsito', caption_en: 'Interior of the Sinagoga del Tránsito' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Sinagoga_Transito_exterior.jpg/800px-Sinagoga_Transito_exterior.jpg', caption: 'Exterior mudéjar de la sinagoga', caption_en: 'Mudéjar exterior of the synagogue' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Sinagoga_del_Transito_yeserias.jpg/800px-Sinagoga_del_Transito_yeserias.jpg', caption: 'Yeserías mudéjares con inscripciones hebreas', caption_en: 'Mudéjar plasterwork with Hebrew inscriptions' },
+  ],
+  'Mezquita_del_Cristo_de_la_Luz': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Cristo_de_la_Luz_Toledo.jpg/800px-Cristo_de_la_Luz_Toledo.jpg', caption: 'Mezquita del Cristo de la Luz, siglo X', caption_en: 'Mosque of Cristo de la Luz, 10th century' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cristo_de_la_Luz_interior.jpg/800px-Cristo_de_la_Luz_interior.jpg', caption: 'Interior de la mezquita califal', caption_en: 'Interior of the caliphal mosque' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Cristo_Luz_Toledo_2.jpg/800px-Cristo_Luz_Toledo_2.jpg', caption: 'Arquerías de herradura del interior', caption_en: 'Horseshoe arcades of the interior' },
+  ],
+  'Alcázar_de_Toledo': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Alcazar_de_Toledo.jpg/800px-Alcazar_de_Toledo.jpg', caption: 'Alcázar de Toledo sobre la colina', caption_en: 'Alcázar of Toledo on the hilltop' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Alcazar_Toledo_interior.jpg/800px-Alcazar_Toledo_interior.jpg', caption: 'Patio de Carlos V en el Alcázar', caption_en: 'Carlos V courtyard in the Alcázar' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Alcazar_Toledo_panorama.jpg/800px-Alcazar_Toledo_panorama.jpg', caption: 'Vista del Alcázar desde el Tajo', caption_en: 'View of the Alcázar from the Tagus' },
+  ],
+  'Museo_del_Greco': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Museo_del_Greco_Toledo.jpg/800px-Museo_del_Greco_Toledo.jpg', caption: 'Casa-Museo de El Greco en el barrio judío', caption_en: 'El Greco House-Museum in the Jewish quarter' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/El_Greco_Toledo_museum.jpg/800px-El_Greco_Toledo_museum.jpg', caption: 'Interior con obras originales del pintor', caption_en: 'Interior with original paintings' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Vista_y_plano_de_Toledo_El_Greco.jpg/800px-Vista_y_plano_de_Toledo_El_Greco.jpg', caption: 'Vista y Plano de Toledo (El Greco, 1610)', caption_en: 'View and Plan of Toledo (El Greco, 1610)' },
+  ],
+  'Monasterio_de_San_Juan_de_los_Reyes': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/San_Juan_de_los_Reyes_Toledo.jpg/800px-San_Juan_de_los_Reyes_Toledo.jpg', caption: 'Claustro gótico flamígero de San Juan de los Reyes', caption_en: 'Flamboyant Gothic cloister of San Juan de los Reyes' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/San_Juan_Reyes_Toledo_iglesia.jpg/800px-San_Juan_Reyes_Toledo_iglesia.jpg', caption: 'Iglesia con cadenas de prisioneros liberados', caption_en: 'Church with chains of liberated prisoners' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/San_Juan_Reyes_exterior.jpg/800px-San_Juan_Reyes_exterior.jpg', caption: 'Fachada exterior del monasterio', caption_en: 'Exterior facade of the monastery' },
+  ],
+  'Puerta_de_Bisagra_Nueva': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Puerta_de_Bisagra_Toledo.jpg/800px-Puerta_de_Bisagra_Toledo.jpg', caption: 'Puerta de Bisagra con el águila imperial', caption_en: 'Bisagra Gate with the imperial eagle' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Bisagra_Toledo_2.jpg/800px-Bisagra_Toledo_2.jpg', caption: 'Arco mudéjar de la puerta monumental', caption_en: 'Mudéjar arch of the monumental gate' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Puerta_Bisagra_Toledo.jpg/800px-Puerta_Bisagra_Toledo.jpg', caption: 'La puerta principal de la ciudad de Toledo', caption_en: 'The main city gate of Toledo' },
+  ],
+  'Puente_de_Alcántara_(Toledo)': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Puente_de_Alcantara_Toledo.jpg/800px-Puente_de_Alcantara_Toledo.jpg', caption: 'Puente de Alcántara sobre el Tajo', caption_en: 'Alcántara Bridge over the Tagus' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Toledo_Puente_Alcantara.jpg/800px-Toledo_Puente_Alcantara.jpg', caption: 'El puente con la ciudad al fondo', caption_en: 'The bridge with the city in the background' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Alcantara_bridge_Toledo_2.jpg/800px-Alcantara_bridge_Toledo_2.jpg', caption: 'Torre árabe en el extremo del puente', caption_en: 'Arab tower at the end of the bridge' },
+  ],
+  'Mirador_del_Valle': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Mirador_del_Valle_Toledo.jpg/800px-Mirador_del_Valle_Toledo.jpg', caption: 'Panorámica de Toledo desde el Mirador del Valle', caption_en: 'Panorama of Toledo from the Valle viewpoint' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Toledo_panorama.jpg/800px-Toledo_panorama.jpg', caption: 'Toledo completa sobre el Tajo al atardecer', caption_en: 'Full Toledo over the Tagus at sunset' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Mirador_Valle_Toledo_2.jpg/800px-Mirador_Valle_Toledo_2.jpg', caption: 'El skyline histórico de Toledo', caption_en: 'The historic skyline of Toledo' },
+  ],
+  'Palacio_Real_de_Madrid': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Palacio_Real_de_Madrid.jpg/800px-Palacio_Real_de_Madrid.jpg', caption: 'Fachada principal del Palacio Real de Madrid', caption_en: 'Main facade of the Royal Palace of Madrid' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Palacio_Real_Madrid_interior.jpg/800px-Palacio_Real_Madrid_interior.jpg', caption: 'Salón del Trono con pinturas de Tiépolo', caption_en: "Throne Room with Tiepolo's paintings" },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Palacio_Real_Madrid_jardines.jpg/800px-Palacio_Real_Madrid_jardines.jpg', caption: 'Jardines de Sabatini frente al palacio', caption_en: 'Sabatini Gardens in front of the palace' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Madrid_Palacio_Real_2.jpg/800px-Madrid_Palacio_Real_2.jpg', caption: 'Vista aérea del palacio y la catedral', caption_en: 'Aerial view of palace and cathedral' },
+  ],
+  'Museo_del_Prado': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Museo_del_Prado_Madrid.jpg/800px-Museo_del_Prado_Madrid.jpg', caption: 'Fachada neoclásica del Museo del Prado', caption_en: 'Neoclassical facade of the Prado Museum' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Museo_Prado_interior.jpg/800px-Museo_Prado_interior.jpg', caption: 'Salas del Prado con Velázquez y Goya', caption_en: 'Prado halls with Velázquez and Goya' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Las_Meninas_Velazquez.jpg/800px-Las_Meninas_Velazquez.jpg', caption: 'Las Meninas de Velázquez (1656)', caption_en: 'Las Meninas by Velázquez (1656)' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Museo_Prado_2.jpg/800px-Museo_Prado_2.jpg', caption: 'El edificio Villanueva del Prado', caption_en: 'The Villanueva building of the Prado' },
+  ],
+  'Plaza_Mayor_de_Madrid': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Plaza_Mayor_de_Madrid.jpg/800px-Plaza_Mayor_de_Madrid.jpg', caption: 'Plaza Mayor de Madrid con la Casa de la Panadería', caption_en: 'Plaza Mayor de Madrid with the Casa de la Panadería' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Plaza_Mayor_Madrid_noche.jpg/800px-Plaza_Mayor_Madrid_noche.jpg', caption: 'La Plaza Mayor iluminada de noche', caption_en: 'Plaza Mayor illuminated at night' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Plaza_Mayor_Madrid_2.jpg/800px-Plaza_Mayor_Madrid_2.jpg', caption: 'Estatua ecuestre de Felipe III en el centro', caption_en: 'Equestrian statue of Philip III in the center' },
+  ],
+  'Puerta_del_Sol': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Puerta_del_Sol_Madrid.jpg/800px-Puerta_del_Sol_Madrid.jpg', caption: 'Puerta del Sol, kilómetro cero de España', caption_en: 'Puerta del Sol, kilometer zero of Spain' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/El_oso_y_el_madroño_Madrid.jpg/800px-El_oso_y_el_madroño_Madrid.jpg', caption: 'El Oso y el Madroño, símbolo de Madrid', caption_en: 'The Bear and the Strawberry Tree, Madrid symbol' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Puerta_del_Sol_noche.jpg/800px-Puerta_del_Sol_noche.jpg', caption: 'Puerta del Sol de noche con el reloj', caption_en: 'Puerta del Sol at night with the clock' },
+  ],
+  'Templo_de_Debod': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Templo_de_Debod_Madrid.jpg/800px-Templo_de_Debod_Madrid.jpg', caption: 'Templo de Debod al atardecer en Madrid', caption_en: 'Temple of Debod at sunset in Madrid' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Templo_Debod_reflejo.jpg/800px-Templo_Debod_reflejo.jpg', caption: 'Reflejo del templo egipcio en el estanque', caption_en: 'Reflection of the Egyptian temple in the pond' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Templo_de_Debod_2.jpg/800px-Templo_de_Debod_2.jpg', caption: 'El templo del siglo II a.C. en Madrid', caption_en: 'The 2nd century BC temple in Madrid' },
+  ],
+  'Museo_Nacional_Centro_de_Arte_Reina_Sofía': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Museo_Reina_Sofia_Madrid.jpg/800px-Museo_Reina_Sofia_Madrid.jpg', caption: 'Fachada del Museo Reina Sofía', caption_en: 'Facade of the Reina Sofía Museum' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Guernica_Picasso.jpg/800px-Guernica_Picasso.jpg', caption: 'Guernica de Picasso (1937)', caption_en: 'Guernica by Picasso (1937)' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Reina_Sofia_interior.jpg/800px-Reina_Sofia_interior.jpg', caption: 'Salas de arte contemporáneo español', caption_en: 'Halls of Spanish contemporary art' },
+  ],
+  'Parque_del_Buen_Retiro': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Parque_del_Retiro_Madrid.jpg/800px-Parque_del_Retiro_Madrid.jpg', caption: 'Estanque del Retiro con el monumento a Alfonso XII', caption_en: 'Retiro pond with the Alfonso XII monument' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Palacio_de_Cristal_Retiro.jpg/800px-Palacio_de_Cristal_Retiro.jpg', caption: 'Palacio de Cristal en el Parque del Retiro', caption_en: 'Crystal Palace in Retiro Park' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Parque_Retiro_Madrid_2.jpg/800px-Parque_Retiro_Madrid_2.jpg', caption: 'Barcas en el estanque del Retiro', caption_en: 'Rowboats on the Retiro pond' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Retiro_park_roses.jpg/800px-Retiro_park_roses.jpg', caption: 'Rosaleda en primavera en el Retiro', caption_en: 'Rose garden in spring at the Retiro' },
+  ],
+  'Catedral_de_la_Almudena': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Catedral_de_la_Almudena_Madrid.jpg/800px-Catedral_de_la_Almudena_Madrid.jpg', caption: 'Catedral de la Almudena frente al Palacio Real', caption_en: 'Almudena Cathedral opposite the Royal Palace' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Almudena_interior_Madrid.jpg/800px-Almudena_interior_Madrid.jpg', caption: 'Interior neogótico con techos pintados', caption_en: 'Neo-Gothic interior with painted ceilings' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Almudena_cripta.jpg/800px-Almudena_cripta.jpg', caption: 'Cripta románica de la catedral', caption_en: 'Romanesque crypt of the cathedral' },
+  ],
+  'Plaza_de_la_Villa': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Plaza_de_la_Villa_Madrid.jpg/800px-Plaza_de_la_Villa_Madrid.jpg', caption: 'Plaza de la Villa con la Torre de los Lujanes', caption_en: 'Plaza de la Villa with the Tower of the Lujanes' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Casa_de_Cisneros_Madrid.jpg/800px-Casa_de_Cisneros_Madrid.jpg', caption: 'Casa de Cisneros, plateresco madrileño', caption_en: 'Casa de Cisneros, Madrid Plateresque' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Plaza_Villa_Madrid_2.jpg/800px-Plaza_Villa_Madrid_2.jpg', caption: 'El antiguo centro de la villa de Mayrit', caption_en: 'The old center of the town of Mayrit' },
+  ],
+  'Mezquita_central_de_Madrid': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Mezquita_Central_Madrid.jpg/800px-Mezquita_Central_Madrid.jpg', caption: 'Mezquita Central de Madrid en la M-30', caption_en: 'Central Mosque of Madrid on the M-30' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Islamic_Cultural_Center_Madrid.jpg/800px-Islamic_Cultural_Center_Madrid.jpg', caption: 'Centro Cultural Islámico de Madrid', caption_en: 'Islamic Cultural Centre of Madrid' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Mezquita_Madrid_interior.jpg/800px-Mezquita_Madrid_interior.jpg', caption: 'Interior de la sala de oración', caption_en: 'Interior of the prayer hall' },
+  ],
+  'Muralla_árabe_de_Madrid': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Muralla_arabe_Madrid.jpg/800px-Muralla_arabe_Madrid.jpg', caption: 'Restos de la muralla árabe junto al Palacio Real', caption_en: 'Remains of the Arab wall next to the Royal Palace' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Muralla_arabiga_Madrid.jpg/800px-Muralla_arabiga_Madrid.jpg', caption: 'Paño de muralla del siglo IX de Mayrit', caption_en: '9th-century wall section of Mayrit' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Muralla_arabe_Madrid_jardines.jpg/800px-Muralla_arabe_Madrid_jardines.jpg', caption: 'Jardines de la muralla árabe en verano', caption_en: 'Arab wall gardens in summer' },
+  ],
+  'Pampaneira': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Pampaneira_Granada.jpg/800px-Pampaneira_Granada.jpg', caption: 'Pampaneira, pueblo blanco de La Alpujarra', caption_en: 'Pampaneira, white village of La Alpujarra' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Pampaneira_2.jpg/800px-Pampaneira_2.jpg', caption: 'Calle típica con chimeneas troncocónicas', caption_en: 'Typical street with truncated-cone chimneys' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Pampaneira_jarapa.jpg/800px-Pampaneira_jarapa.jpg', caption: 'Jarapas tradicionales en los balcones', caption_en: 'Traditional jarapa textiles on balconies' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Pampaneira_vista.jpg/800px-Pampaneira_vista.jpg', caption: 'Vista del pueblo y el barranco de Poqueira', caption_en: 'View of village and Poqueira gorge' },
+  ],
+  'Bubión': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Bubion_Granada.jpg/800px-Bubion_Granada.jpg', caption: 'Bubión sobre el Barranco de Poqueira', caption_en: 'Bubión above the Poqueira gorge' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Bubion_casas.jpg/800px-Bubion_casas.jpg', caption: 'Casas de launa del pueblo morisco', caption_en: 'Launa-roofed houses of the Moorish village' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Bubion_Alpujarra.jpg/800px-Bubion_Alpujarra.jpg', caption: 'El pueblo de Bubión entre terrazas de olivos', caption_en: 'Bubión village among olive terraces' },
+  ],
+  'Capileira': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Capileira_Granada.jpg/800px-Capileira_Granada.jpg', caption: 'Capileira, el pueblo más alto del Poqueira', caption_en: 'Capileira, the highest village in Poqueira' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Capileira_Mulhacen.jpg/800px-Capileira_Mulhacen.jpg', caption: 'El Mulhacén nevado visto desde Capileira', caption_en: 'Snow-capped Mulhacén seen from Capileira' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Capileira_2.jpg/800px-Capileira_2.jpg', caption: 'Calles empedradas y terrazas de la Alpujarra', caption_en: 'Cobblestone streets and terraces of La Alpujarra' },
+  ],
+  'Trevélez': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Trevelez_Granada.jpg/800px-Trevelez_Granada.jpg', caption: 'Trevélez, el pueblo más alto de España', caption_en: 'Trevélez, the highest village in Spain' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Trevelez_jamon.jpg/800px-Trevelez_jamon.jpg', caption: 'Secaderos de jamón serrano en Trevélez', caption_en: 'Curing sheds for Serrano ham in Trevélez' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Trevelez_2.jpg/800px-Trevelez_2.jpg', caption: 'Los tres barrios escalonados de Trevélez', caption_en: 'The three terraced neighbourhoods of Trevélez' },
+  ],
+  'Lanjarón': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Lanjaron_Granada.jpg/800px-Lanjaron_Granada.jpg', caption: 'Lanjarón, puerta de la Alpujarra', caption_en: 'Lanjarón, gateway to La Alpujarra' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Lanjaron_balneario.jpg/800px-Lanjaron_balneario.jpg', caption: 'Balneario histórico de aguas medicinales', caption_en: 'Historic spa with medicinal waters' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Lanjaron_2.jpg/800px-Lanjaron_2.jpg', caption: 'El pueblo y su castillo árabe en ruinas', caption_en: 'The village and its ruined Arab castle' },
+  ],
+  'Barranco_de_Poqueira': [
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Barranco_de_Poqueira.jpg/800px-Barranco_de_Poqueira.jpg', caption: 'El Barranco de Poqueira con los tres pueblos', caption_en: 'Poqueira gorge with the three white villages' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Poqueira_valley.jpg/800px-Poqueira_valley.jpg', caption: 'Valle glaciar de la Sierra Nevada', caption_en: 'Glacial valley of the Sierra Nevada' },
+    { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Barranco_Poqueira_senderismo.jpg/800px-Barranco_Poqueira_senderismo.jpg', caption: 'Rutas de senderismo por el Barranco de Poqueira', caption_en: 'Hiking trails through the Poqueira gorge' },
+  ],
+};
+
+
 // 6 épocas históricas con polígonos aproximados del territorio andalusí
 const EPOCAS = [
   { yearStart: 711, yearEnd: 755,
@@ -8218,7 +8611,14 @@ async function openPOIModal(poi) {
   document.body.style.overflow = 'hidden';
 
   // Cargar imágenes en paralelo
-  currentModalImages = await fetchWikiMediaList(poi.wiki);
+  if (poi.wiki && POI_GALLERIES[poi.wiki] && POI_GALLERIES[poi.wiki].length > 0) {
+    currentModalImages = POI_GALLERIES[poi.wiki].map(g => ({
+      url: g.url,
+      caption: currentLang === 'en' ? (g.caption_en || g.caption) : g.caption
+    }));
+  } else {
+    currentModalImages = await fetchWikiMediaList(poi.wiki);
+  }
   if (currentModalImages.length === 0) {
     imgEl.classList.remove('loading');
     imgEl.classList.add('placeholder');
